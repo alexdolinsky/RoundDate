@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -20,8 +21,8 @@ public class SettingsActivity extends AppCompatActivity {
                                 MY_SETTINGS_RD_IN_DAYS = "rd_in_days",
                                 MY_SETTINGS_RD_IN_HOURS = "rd_in_hours",
                                 MY_SETTINGS_RD_IN_MINUTES = "rd_in_minutes",
-                                MY_SETTINGS_RD_IN_SECS = "rd_in_secs",
-                                MY_SETTINGS_VERY_IMORTANT_RD_MONTH = "very_important_rd_month",
+                                MY_SETTINGS_RD_IN_SECS = "rd_in_secs";
+                                /*MY_SETTINGS_VERY_IMORTANT_RD_MONTH = "very_important_rd_month",
                                 MY_SETTINGS_VERY_IMORTANT_RD_WEEK = "very_important_rd_week",
                                 MY_SETTINGS_VERY_IMORTANT_RD_DAY = "very_important_rd_day",
                                 MY_SETTINGS_VERY_IMORTANT_RD_HOUR = "very_important_rd_hour",
@@ -36,17 +37,17 @@ public class SettingsActivity extends AppCompatActivity {
                                 MY_SETTINGS_SMALL_IMPORTANT_RD_MONTH = "small_important_rd_month",
                                 MY_SETTINGS_SMALL_IMPORTANT_RD_WEEK = "small_important_rd_week",
                                 MY_SETTINGS_SMALL_IMPORTANT_RD_DAY = "small_important_rd_day",
-                                MY_SETTINGS_SMALL_IMPORTANT_RD_HOUR = "small_important_rd_hour";
+                                MY_SETTINGS_SMALL_IMPORTANT_RD_HOUR = "small_important_rd_hour";*/
     private SharedPreferences mSettings, mFilter;
     private int[] mTrackSetting = {0, 0, 0, 0, 0, 0, 0};
 
-    private final int IDD_RD_YEARS = 0;
-    private final int IDD_RD_MONTHS = 1;
-    private final int IDD_RD_WEEKS = 2;
-    private final int IDD_RD_DAYS = 3;
-    private final int IDD_RD_HOURS = 4;
-    private final int IDD_RD_MINUTES = 5;
-    private final int IDD_RD_SECS = 6;
+    private final static int IDD_RD_YEARS = 0;
+    private final static int IDD_RD_MONTHS = 1;
+    private final static int IDD_RD_WEEKS = 2;
+    private final static int IDD_RD_DAYS = 3;
+    private final static int IDD_RD_HOURS = 4;
+    private final static int IDD_RD_MINUTES = 5;
+    private final static int IDD_RD_SECS = 6;
 
 
     @Override
@@ -54,6 +55,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        final CharSequence[] rdVariants = getResources().getStringArray(R.array.rd_variants);
         mSettings = getSharedPreferences(MY_SETTINGS, MODE_PRIVATE);
         mTrackSetting[0] = mSettings.getInt(MY_SETTINGS_RD_IN_YEARS,
                 Integer.valueOf(getString(R.string.rd_in_years)));
@@ -69,6 +71,22 @@ public class SettingsActivity extends AppCompatActivity {
                 Integer.valueOf(getString(R.string.rd_in_minutes)));
         mTrackSetting[6] = mSettings.getInt(MY_SETTINGS_RD_IN_SECS,
                 Integer.valueOf(getString(R.string.rd_in_secs)));
+        TextView tvTrack = (TextView)findViewById(R.id.tvRoundDateInYears);
+        tvTrack.setText(rdVariants[mTrackSetting[0]]);
+        tvTrack = (TextView)findViewById(R.id.tvRoundDateInMonths);
+        tvTrack.setText(rdVariants[mTrackSetting[1]]);
+        tvTrack = (TextView)findViewById(R.id.tvRoundDateInWeeks);
+        tvTrack.setText(rdVariants[mTrackSetting[2]]);
+        tvTrack = (TextView)findViewById(R.id.tvRoundDateInDays);
+        tvTrack.setText(rdVariants[mTrackSetting[3]]);
+        tvTrack = (TextView)findViewById(R.id.tvRoundDateInHours);
+        tvTrack.setText(rdVariants[mTrackSetting[4]]);
+        tvTrack = (TextView)findViewById(R.id.tvRoundDateInMinutes);
+        tvTrack.setText(rdVariants[mTrackSetting[5]]);
+        tvTrack = (TextView)findViewById(R.id.tvRoundDateInSecs);
+        tvTrack.setText(rdVariants[mTrackSetting[6]]);
+
+
     }
 
     public void onCancel(View view) {
@@ -100,16 +118,16 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void onLoadDefaultSettings(View view) {
         // TODO: 31.05.2017 удалить файл с настройками
-        //SharedPreferences.Editor editor = mSettings.edit();
-        //editor.clear();
-        //editor.apply();
+        /*SharedPreferences.Editor editor = mSettings.edit();
+        editor.clear();
+        editor.apply();
         mTrackSetting[0] = Integer.valueOf(getString(R.string.rd_in_years));
         mTrackSetting[1] = Integer.valueOf(getString(R.string.rd_in_months));
         mTrackSetting[2] = Integer.valueOf(getString(R.string.rd_in_weeks));
         mTrackSetting[3] = Integer.valueOf(getString(R.string.rd_in_days));
         mTrackSetting[4] = Integer.valueOf(getString(R.string.rd_in_hours));
         mTrackSetting[5] = Integer.valueOf(getString(R.string.rd_in_minutes));
-        mTrackSetting[6] = Integer.valueOf(getString(R.string.rd_in_secs));
+        mTrackSetting[6] = Integer.valueOf(getString(R.string.rd_in_secs));*/
     }
 
 
@@ -151,13 +169,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected Dialog onCreateDialog(int id) {
-        CharSequence[] rdVariants;
+        final CharSequence[] rdVariants;
         switch (id) {
             case IDD_RD_YEARS:
                 AlertDialog.Builder builderYears = new AlertDialog.Builder(this);
                 rdVariants = getResources().getStringArray(R.array.rd_variants);
                 builderYears.setTitle(R.string.track)
-                        //.setCancelable(false)
+                        .setCancelable(false)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -168,7 +186,8 @@ public class SettingsActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mTrackSetting[0] = which;
-                                Toast.makeText(getApplicationContext(), Integer.toString(which), Toast.LENGTH_SHORT).show();
+                                TextView tv = (TextView)findViewById(R.id.tvRoundDateInYears);
+                                tv.setText(rdVariants[which]);
                             }
                         });
                 return builderYears.create();
@@ -176,7 +195,7 @@ public class SettingsActivity extends AppCompatActivity {
                 AlertDialog.Builder builderMonths = new AlertDialog.Builder(this);
                 rdVariants = getResources().getStringArray(R.array.rd_variants);
                 builderMonths.setTitle(R.string.track)
-                        //.setCancelable(false)
+                        .setCancelable(false)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -187,7 +206,8 @@ public class SettingsActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mTrackSetting[1] = which;
-                                Toast.makeText(getApplicationContext(), Integer.toString(which), Toast.LENGTH_SHORT).show();
+                                TextView tv = (TextView)findViewById(R.id.tvRoundDateInMonths);
+                                tv.setText(rdVariants[which]);
                             }
                         });
                 return builderMonths.create();
@@ -195,7 +215,7 @@ public class SettingsActivity extends AppCompatActivity {
                 AlertDialog.Builder builderWeeks = new AlertDialog.Builder(this);
                 rdVariants = getResources().getStringArray(R.array.rd_variants);
                 builderWeeks.setTitle(R.string.track)
-                        //.setCancelable(false)
+                        .setCancelable(false)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -206,7 +226,8 @@ public class SettingsActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mTrackSetting[2] = which;
-                                Toast.makeText(getApplicationContext(), Integer.toString(which), Toast.LENGTH_SHORT).show();
+                                TextView tv = (TextView)findViewById(R.id.tvRoundDateInWeeks);
+                                tv.setText(rdVariants[which]);
                             }
                         });
                 return builderWeeks.create();
@@ -214,7 +235,7 @@ public class SettingsActivity extends AppCompatActivity {
                 AlertDialog.Builder builderDays = new AlertDialog.Builder(this);
                 rdVariants = getResources().getStringArray(R.array.rd_variants);
                 builderDays.setTitle(R.string.track)
-                        //.setCancelable(false)
+                        .setCancelable(false)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -225,7 +246,8 @@ public class SettingsActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mTrackSetting[3] = which;
-                                Toast.makeText(getApplicationContext(), Integer.toString(which), Toast.LENGTH_SHORT).show();
+                                TextView tv = (TextView)findViewById(R.id.tvRoundDateInDays);
+                                tv.setText(rdVariants[which]);
                             }
                         });
                 return builderDays.create();
@@ -233,7 +255,7 @@ public class SettingsActivity extends AppCompatActivity {
                 AlertDialog.Builder builderHours = new AlertDialog.Builder(this);
                 rdVariants = getResources().getStringArray(R.array.rd_variants);
                 builderHours.setTitle(R.string.track)
-                        //.setCancelable(false)
+                        .setCancelable(false)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -244,7 +266,8 @@ public class SettingsActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mTrackSetting[4] = which;
-                                Toast.makeText(getApplicationContext(), Integer.toString(which), Toast.LENGTH_SHORT).show();
+                                TextView tv = (TextView)findViewById(R.id.tvRoundDateInHours);
+                                tv.setText(rdVariants[which]);
                             }
                         });
                 return builderHours.create();
@@ -252,7 +275,7 @@ public class SettingsActivity extends AppCompatActivity {
                 AlertDialog.Builder builderMinutes = new AlertDialog.Builder(this);
                 rdVariants = getResources().getStringArray(R.array.rd_variants);
                 builderMinutes.setTitle(R.string.track)
-                        //.setCancelable(false)
+                        .setCancelable(false)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -263,7 +286,8 @@ public class SettingsActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mTrackSetting[5] = which;
-                                Toast.makeText(getApplicationContext(), Integer.toString(which), Toast.LENGTH_SHORT).show();
+                                TextView tv = (TextView)findViewById(R.id.tvRoundDateInMinutes);
+                                tv.setText(rdVariants[which]);
                             }
                         });
                 return builderMinutes.create();
@@ -271,7 +295,7 @@ public class SettingsActivity extends AppCompatActivity {
                 AlertDialog.Builder builderSecs = new AlertDialog.Builder(this);
                 rdVariants = getResources().getStringArray(R.array.rd_variants);
                 builderSecs.setTitle(R.string.track)
-                        //.setCancelable(false)
+                        .setCancelable(false)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -282,7 +306,8 @@ public class SettingsActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mTrackSetting[6] = which;
-                                Toast.makeText(getApplicationContext(), Integer.toString(which), Toast.LENGTH_SHORT).show();
+                                TextView tv = (TextView)findViewById(R.id.tvRoundDateInSecs);
+                                tv.setText(rdVariants[which]);
                             }
                         });
                 return builderSecs.create();

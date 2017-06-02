@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -30,19 +31,12 @@ public class AddEditEventActivity extends AppCompatActivity {
         date.set(Calendar.MINUTE,0);
         date.set(Calendar.SECOND,0);
 
+        SimpleDateFormat sdfDate = new SimpleDateFormat("dd - MM - yyyy");
         tvCurrentDate = (TextView)findViewById(R.id.tvCurrentEventDate);
-        tvCurrentDate.setText(date.get(Calendar.DAY_OF_MONTH) + "-" + date.get(Calendar.MONTH)
-                + "-" + date.get(Calendar.YEAR));
-
+        tvCurrentDate.setText(sdfDate.format(date.getTime()));
+        SimpleDateFormat sdfTime = new SimpleDateFormat("kk : mm");
         tvCurrentTime = (TextView)findViewById(R.id.tvCurrentEventTime);
-        //tvCurrentTime.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
-
-        tvCurrentTime.setText(String.format("%02d:%02d",date.get(Calendar.HOUR_OF_DAY),
-                date.get(Calendar.MINUTE)));
-
-        //tvCurrentTime.setText(DateUtils.formatDateTime(this,
-        //        date.getTimeInMillis(),
-        //        DateUtils.HOUR_MINUTE_24));
+        tvCurrentTime.setText(sdfTime.format(date.getTime()));
     }
 
     public void onSaveEvent(View view) {
@@ -57,8 +51,7 @@ public class AddEditEventActivity extends AppCompatActivity {
     }
 
     public void onChoiceEventDate(View view) {
-        // TODO: 28.05.2017 добавить диалоговое окно выбора даты
-        // отображаем диалоговое окно для выбора даты
+        //  диалоговое окно выбора даты
 
         DatePickerDialog dtp = new DatePickerDialog(AddEditEventActivity.this, d,
                 date.get(Calendar.YEAR),
@@ -75,19 +68,16 @@ public class AddEditEventActivity extends AppCompatActivity {
             date.set(Calendar.YEAR, year);
             date.set(Calendar.MONTH, monthOfYear);
             date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-            tvCurrentDate.setText(date.get(Calendar.DAY_OF_MONTH) + "-" + date.get(Calendar.MONTH) + "-" + date.get(Calendar.YEAR));
-            Log.d("MyLog", date.get(Calendar.DAY_OF_MONTH) + "-" + date.get(Calendar.MONTH) + "-" + date.get(Calendar.YEAR));
-            date.add(Calendar.MINUTE,10000000);
-            Log.d("MyLog", date.get(Calendar.DAY_OF_MONTH) + "-" + date.get(Calendar.MONTH) + "-" + date.get(Calendar.YEAR));
-            //setInitialDateTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd - MM - yyyy");
+            tvCurrentDate.setText(sdf.format(date.getTime()));
+            //Log.d("MyLog", date.get(Calendar.DAY_OF_MONTH) + "-" + date.get(Calendar.MONTH) + "-" + date.get(Calendar.YEAR));
         }
     };
 
 
 
     public void onChoiceEventTime(View view) {
-        // TODO: 28.05.2017 добавить диалоговое окно выбора времени
+        // диалоговое окно выбора времени
         TimePickerDialog ttp = new TimePickerDialog(AddEditEventActivity.this, t,
                 date.get(Calendar.HOUR_OF_DAY),
                 date.get(Calendar.MINUTE),
@@ -96,18 +86,14 @@ public class AddEditEventActivity extends AppCompatActivity {
         Toast.makeText(this, "Всплывает окно выбора времени", Toast.LENGTH_SHORT).show();
     }
 
-    // установка обработчика выбора даты
+    // установка обработчика выбора времени
     TimePickerDialog.OnTimeSetListener t=new TimePickerDialog.OnTimeSetListener() {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             date.set(Calendar.HOUR_OF_DAY, hourOfDay);
             date.set(Calendar.MINUTE, minute);
-
-            //tvCurrentTime.setText(date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE));
-            tvCurrentTime.setText(String.format("%02d:%02d",date.get(Calendar.HOUR_OF_DAY),
-                    date.get(Calendar.MINUTE)));
-            Log.d("MyLog", String.format("%02d:%02d",date.get(Calendar.HOUR_OF_DAY),
-                    date.get(Calendar.MINUTE)));
-//            date.add(Calendar.MINUTE,10000000);
+            SimpleDateFormat sdf = new SimpleDateFormat("kk : mm");
+            tvCurrentTime.setText(sdf.format(date.getTime()));
+            Log.d("MyLog", sdf.format(date.getTime()));
 
         }
     };
