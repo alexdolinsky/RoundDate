@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">RoundDate</string>
+
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отменить</string>
+    <string name="add_event">Добавить событие</string>
+    <string name="main">Главная</string>
+    <string name="action_event">Событие</string>
+
+    <!-- Названия пунктов меню -->
+    <string name="action_event_list">События</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_filter">Фильтр</string>
+    <string name="action_about">О приложении</string>
+    <string name="action_exit">Выйти</string>
+
+
+    <string name="about_text">
+        Чаще всего, у продукта какое-то абстрактное название, которое совсем не намекает пользователю на то, для чего он предназначен.
+        Поэтому в полное название для апп стора должно входить прямое предназначение приложения. Это важно не только для улучшения понимания
+        продукта, а в первую очередь, для того, чтобы пользователи могли найти ваш продукт и скачать его. \n\n
+
+        Предназначение продукта – это ключевое слово, по которому пользователи находят приложение в апп сторах или google.
+        Забив в google “app development company” мы найдем Yalantis, потому что наше полное название –
+        Yalantis is a native iOS and Android app development company.\n\n
+
+        А если мы загуглим travel app, то поиск выдаст нам TripIt (с полным названием TripIt Travel Organizer – Free),
+        TripAdvisor (TripAdvisor Hotels Flights Restaurants), TripCase (TripCase – Travel Organizer) и прочие приложения туристической тематики.\n
+
+        Возьмем, к примеру My Day. Его название на апп сторах звучит так:\n\n
+
+        My Day – Countdown Timer\n
+
+        Именно countdown timer, countdown app в данном случае, ключевое слово, по которому наше приложение находят пользователи.\n
+
+        Flipboard: Your Social News Magazine\n
+
+        Четко и понятно зачем нам нужен Flipboard, и сразу 3 ключевика: news, social и magazine.\n
+
+        Один из наших недавних проектов, Vochi, назвается на App Store:\n
+
+        Vochi messaging – Future Delivery\n
+
+        В данном случае, мы даем понять пользователю не только то, что это месенджер, а и его преимущество перед похожими продуктами.\n
+
+        Вот еще примеры названий продуктов, которые акцентируют внимание пользователя на своем отличии от других подобных приложений:
+    </string>
+    <string name="addeditevent">Добавление/редактирование события</string>
+    <string name="enter_event_name">Введите название события</string>
+    <string name="enter_event_comment">Введите комментарий к событию</string>
+    <string name="events_group">Группа событий</string>
+    <string name="add_to_events_group">Добавить в группу событий</string>
+    <string name="current_events_group">Мои события</string>
+    <string name="new_events_group">Введите название группы событий</string>
+    <string name="use_app_settings">Использовать настройки приложения</string>
+    <string name="use_events_group_settings">Использовать настройки группы событий</string>
+    <string name="use_event_settings">Использовать настройки события</string>
+    <string name="tv_new_event">Новое событие</string>
+    <string name="event_date">Дата события</string>
+    <string name="event_time">Время события</string>
+    <string name="track_settings">Настройки отслеживания</string>
+    <string name="small_important_round_date">Маловажные круглые даты</string>
+    <string name="standart_round_date">Стандартные круглые даты</string>
+    <string name="important_round_date">Важные круглые даты</string>
+    <string name="very_important_round_date">Очень важные круглые даты</string>
+    <string name="notification_settings">Настройки уведомлений</string>
+    <string name="round_date_in_secs">Круглые даты в секундах</string>
+    <string name="round_date_in_minutes">Круглые даты в минутах</string>
+    <string name="round_date_in_hours">Круглые даты в часах</string>
+    <string name="round_date_in_days">Круглые даты в днях</string>
+    <string name="round_date_in_weeks">Круглые даты в неделях</string>
+    <string name="round_date_in_months">Круглые даты в месяцах</string>
+    <string name="round_date_in_years">Круглые даты в годах</string>
+    <string name="tv_default">TextView</string>
+    <string name="load_drault_settings">Сбросить настройки по умолчанию</string>
+    <string name="track">Отслеживать</string>
+    <string name="confirm">Подтвердить</string>
+
+
+</resources>

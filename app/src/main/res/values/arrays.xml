@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="rd_variants">
+        <item>Стандартный набор</item>
+        <item>Только редкие</item>
+        <item>Только очень редкие</item>
+        <item>Не отслеживать</item>
+    </string-array>
+</resources>
