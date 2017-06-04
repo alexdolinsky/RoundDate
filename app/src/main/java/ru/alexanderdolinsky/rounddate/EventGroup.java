@@ -2,51 +2,52 @@ package ru.alexanderdolinsky.rounddate;
 
 /**
  * Created by Alexsvet on 04.06.2017.
+ * Класс Группа событий
  */
 
 class EventGroup {
     // Идентификатор Группы событий и БД
     // -1 - значение не определено
-    private long idEventGroup;
+    private long id;
     // наименования Группы событий
-    private String nameEventGroup;
+    private String name;
     // источник настроек отслеживания
     // 0 - общие настройки отслеживания приложения
     // 1 - индивидуальные настройки отслеживания Группы событий
     private int sourceTrackSettings;
     // индивидуальные настройки отслеживания Группы событий
-    private TrackSettings eventGroupTrackSettings;
+    private TrackSettings trackSettings;
 
 
     // конструктор по умолчанию
     EventGroup() {
-        this.idEventGroup = -1;
-        this.nameEventGroup = "Мои события";
+        this.id = -1;
+        this.name = "Мои события";
         this.sourceTrackSettings = 0;
-        this.eventGroupTrackSettings = new TrackSettings(0,0,0,0,0,0,0);
+        this.trackSettings = new TrackSettings(0,0,0,0,0,0,0);
     }
     // конструктор при создании новой Группы событий
-    EventGroup(long idEventGroup, String nameEventGroup, int sourceTrackSettings, TrackSettings eventGroupTrackSettings) {
-        this.idEventGroup = idEventGroup;
-        this.nameEventGroup = nameEventGroup;
+    EventGroup(long id, String name, int sourceTrackSettings, TrackSettings trackSettings) {
+        this.id = id;
+        this.name = name;
         this.sourceTrackSettings = sourceTrackSettings;
-        this.eventGroupTrackSettings = eventGroupTrackSettings;
+        this.trackSettings = trackSettings;
     }
 
-    public long getIdEventGroup() {
-        return idEventGroup;
+    public long getId() {
+        return id;
     }
 
-    public void setIdEventGroup(long idEventGroup) {
-        this.idEventGroup = idEventGroup;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public String getNameEventGroup() {
-        return nameEventGroup;
+    public String getName() {
+        return name;
     }
 
-    public void setNameEventGroup(String nameEventGroup) {
-        this.nameEventGroup = nameEventGroup;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getSourceTrackSettings() {
@@ -57,11 +58,11 @@ class EventGroup {
         this.sourceTrackSettings = sourceTrackSettings;
     }
 
-    public TrackSettings getEventGroupTrackSettings() {
-        return eventGroupTrackSettings;
+    public TrackSettings getTrackSettings() {
+        return trackSettings;
     }
 
-    public void setEventGroupTrackSettings(TrackSettings eventGroupTrackSettings) {
-        this.eventGroupTrackSettings = eventGroupTrackSettings;
+    public void setTrackSettings(TrackSettings trackSettings) {
+        this.trackSettings = trackSettings;
     }
 }

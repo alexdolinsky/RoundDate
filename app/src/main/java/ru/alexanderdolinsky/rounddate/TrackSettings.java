@@ -6,6 +6,7 @@ import static android.provider.Settings.Global.getString;
 
 /**
  * Created by Alexsvet on 04.06.2017.
+ * Класс Настройки отслеживания
  */
 
 class TrackSettings {

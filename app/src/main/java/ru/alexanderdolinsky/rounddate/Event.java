@@ -6,83 +6,84 @@ import java.util.GregorianCalendar;
 
 /**
  * Created by Alexsvet on 04.06.2017.
+ * Класс Событие
  */
 
 class Event {
     // идентификатор События в БД
     // - 1 - значение не определено
-    private long idEvent;
+    private long id;
     // наименование события
-    private String nameEvent;
+    private String name;
     // комментарий к событию
-    private String commentEvent;
+    private String comment;
     // id связанной Группы событий
     private long idEventGroup;
     // наименование связанной группы событий
     private String nameEventGroup;
     // Дата/время события
-    private Calendar dtEvent;
+    private Calendar dateAndTime;
     // источник настроек отслеживания
     // 0 - общие настройки отслеживания приложения
     // 1 - настройки отслеживания Группы событий
     // 2 - индивидуальные настройки отслеживания События
     private int sourceTrackSettings;
     // индивидуальные настройки отслеживания События
-    private TrackSettings eventTrackSettings;
+    private TrackSettings trackSettings;
 
     // конструктор по умолчанию
     Event() {
-        this.idEvent = -1; // - 1 - значение не определено
-        this.nameEvent = "Событие по умолчанию";
-        this.commentEvent = "Комментарий по умолчанию";
+        this.id = -1; // - 1 - значение не определено
+        this.name = "Событие по умолчанию";
+        this.comment = "Комментарий по умолчанию";
         this.idEventGroup = -1; // - 1 - значение не определено
         this.nameEventGroup = "Группа событий по умолчанию";
-        this.dtEvent = new GregorianCalendar();
+        this.dateAndTime = new GregorianCalendar();
         this.sourceTrackSettings = 1;
-        this.eventTrackSettings = new TrackSettings(0,0,0,0,0,0,0);
+        this.trackSettings = new TrackSettings(0,0,0,0,0,0,0);
     }
 
     // конструктор при создании нового События
-    Event(long idEvent,
-          String nameEvent,
-          String commentEvent,
+    Event(long id,
+          String name,
+          String comment,
           long idEventGroup,
           String nameEventGroup,
-          Calendar dtEvent,
+          Calendar dateAndTime,
           int sourceTrackSettings,
-          TrackSettings eventTrackSettings) {
-        this.idEvent = idEvent;
-        this.nameEvent = nameEvent;
-        this.commentEvent = commentEvent;
+          TrackSettings trackSettings) {
+        this.id = id;
+        this.name = name;
+        this.comment = comment;
         this.idEventGroup = idEventGroup;
         this.nameEventGroup = nameEventGroup;
-        this.dtEvent = dtEvent;
+        this.dateAndTime = dateAndTime;
         this.sourceTrackSettings = sourceTrackSettings;
-        this.eventTrackSettings = eventTrackSettings;
+        this.trackSettings = trackSettings;
     }
 
-    public long getIdEvent() {
-        return idEvent;
+    public long getId() {
+        return id;
     }
 
-    public void setIdEvent(long idEvent) {
-        this.idEvent = idEvent;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public String getNameEvent() {
-        return nameEvent;
+    public String getName() {
+        return name;
     }
 
-    public void setNameEvent(String nameEvent) {
-        this.nameEvent = nameEvent;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getCommentEvent() {
-        return commentEvent;
+    public String getComment() {
+        return comment;
     }
 
-    public void setCommentEvent(String commentEvent) {
-        this.commentEvent = commentEvent;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public long getIdEventGroup() {
@@ -101,12 +102,12 @@ class Event {
         this.nameEventGroup = nameEventGroup;
     }
 
-    public Calendar getDtEvent() {
-        return dtEvent;
+    public Calendar getDateAndTime() {
+        return dateAndTime;
     }
 
-    public void setDtEvent(Calendar dtEvent) {
-        this.dtEvent = dtEvent;
+    public void setDateAndTime(Calendar dateAndTime) {
+        this.dateAndTime = dateAndTime;
     }
 
     public int getSourceTrackSettings() {
@@ -117,11 +118,11 @@ class Event {
         this.sourceTrackSettings = sourceTrackSettings;
     }
 
-    public TrackSettings getEventTrackSettings() {
-        return eventTrackSettings;
+    public TrackSettings getTrackSettings() {
+        return trackSettings;
     }
 
-    public void setEventTrackSettings(TrackSettings eventTrackSettings) {
-        this.eventTrackSettings = eventTrackSettings;
+    public void setTrackSettings(TrackSettings trackSettings) {
+        this.trackSettings = trackSettings;
     }
 }
