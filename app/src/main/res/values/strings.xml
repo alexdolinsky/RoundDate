@@ -75,6 +75,7 @@
     <string name="load_drault_settings">Сбросить настройки по умолчанию</string>
     <string name="track">Отслеживать</string>
     <string name="confirm">Подтвердить</string>
+    <string name="my_events">Мои события</string>
 
 
 </resources>

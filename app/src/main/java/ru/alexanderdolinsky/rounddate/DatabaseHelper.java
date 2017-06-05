@@ -1,8 +1,14 @@
 package ru.alexanderdolinsky.rounddate;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
+
+
+
 
 /**
  * Created by Alexsvet on 04.06.2017.
@@ -51,52 +57,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ROUNDDATES_ID_EVENT = "id event";
     public static final String COLUMN_ROUNDDATES_RARE = "rare of round date";
     public static final String COLUMN_ROUNDDATES_IMPORTANT = "important of round date";
-
+    private static String myEvents;
 
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, SCHEMA);
+        myEvents = context.getString(R.string.my_events);
+        Log.d("MyLog", "myEvents - " + myEvents);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+
         db.execSQL("CREATE TABLE " + TABLE_EVENT_GROUPS + " ("
                 + COLUMN_EVENTGROUPS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COLUMN_EVENTGROUPS_NAME + " TEXT, "
-                + COLUMN_EVENTGROUPS_SOURCETRACKSETTINGS + " INTEGER, "
-                + COLUMN_EVENTGROUPS_RDINYEARS + " INTEGER, "
-                + COLUMN_EVENTGROUPS_RDINMONTHS + " INTEGER, "
-                + COLUMN_EVENTGROUPS_RDINWEEKS + " INTEGER, "
-                + COLUMN_EVENTGROUPS_RDINDAYS + " INTEGER, "
-                + COLUMN_EVENTGROUPS_RDINHOURS + " INTEGER, "
-                + COLUMN_EVENTGROUPS_RDINMINUTES + " INTEGER, "
-                + COLUMN_EVENTGROUPS_RDINSECS + " INTEGER);"
+                + COLUMN_EVENTGROUPS_NAME + " TEXT UNIQUE, "
+                + COLUMN_EVENTGROUPS_SOURCETRACKSETTINGS + " INTEGER NOT NULL, "
+                + COLUMN_EVENTGROUPS_RDINYEARS + " INTEGER NOT NULL, "
+                + COLUMN_EVENTGROUPS_RDINMONTHS + " INTEGER NOT NULL, "
+                + COLUMN_EVENTGROUPS_RDINWEEKS + " INTEGER NOT NULL, "
+                + COLUMN_EVENTGROUPS_RDINDAYS + " INTEGER NOT NULL, "
+                + COLUMN_EVENTGROUPS_RDINHOURS + " INTEGER NOT NULL, "
+                + COLUMN_EVENTGROUPS_RDINMINUTES + " INTEGER NOT NULL, "
+                + COLUMN_EVENTGROUPS_RDINSECS + " INTEGER NOT NULL);"
         );
 
         db.execSQL("CREATE TABLE " + TABLE_EVENTS + " ("
                 + COLUMN_EVENTS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COLUMN_EVENTS_NAME + " TEXT, "
-                + COLUMN_EVENTS_COMMENT + " TEXT, "
-                + COLUMN_EVENTS_ID_EVENTGROUP + " INTEGER, "
-                + COLUMN_EVENTS_DATEANDTIME + " INTEGER, "
-                + COLUMN_EVENTS_SOURCETRACKSETTINGS + " INTEGER, "
-                + COLUMN_EVENTS_RDINYEARS + " INTEGER, "
-                + COLUMN_EVENTS_RDINMONTHS + " INTEGER, "
-                + COLUMN_EVENTS_RDINWEEKS + " INTEGER, "
-                + COLUMN_EVENTS_RDINDAYS + " INTEGER, "
-                + COLUMN_EVENTS_RDINHOURS + " INTEGER, "
-                + COLUMN_EVENTS_RDINMINUTES + " INTEGER, "
-                + COLUMN_EVENTS_RDINSECS + " INTEGER);"
+                + COLUMN_EVENTS_NAME + " TEXT UNIQUE, "
+                + COLUMN_EVENTS_COMMENT + " TEXT NOT NULL, "
+                + COLUMN_EVENTS_ID_EVENTGROUP + " INTEGER REFERENCES " + TABLE_EVENT_GROUPS + "("
+                        + COLUMN_EVENTGROUPS_ID + ") ON DELETE CASCADE, "
+                + COLUMN_EVENTS_DATEANDTIME + " INTEGER NOT NULL, "
+                + COLUMN_EVENTS_SOURCETRACKSETTINGS + " INTEGER NOT NULL, "
+                + COLUMN_EVENTS_RDINYEARS + " INTEGER NOT NULL, "
+                + COLUMN_EVENTS_RDINMONTHS + " INTEGER NOT NULL, "
+                + COLUMN_EVENTS_RDINWEEKS + " INTEGER NOT NULL, "
+                + COLUMN_EVENTS_RDINDAYS + " INTEGER NOT NULL, "
+                + COLUMN_EVENTS_RDINHOURS + " INTEGER NOT NULL, "
+                + COLUMN_EVENTS_RDINMINUTES + " INTEGER NOT NULL, "
+                + COLUMN_EVENTS_RDINSECS + " INTEGER NOT NULL);"
         );
 
         db.execSQL("CREATE TABLE " + TABLE_ROUNDDATES + " ("
                 + COLUMN_ROUNDDATES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COLUMN_ROUNDDATES_VALUE + " INTEGER, "
-                + COLUMN_ROUNDDATES_UNIT + " INTEGER, "
-                + COLUMN_ROUNDDATES_DATEANDTIME + " INTEGER, "
-                + COLUMN_ROUNDDATES_ID_EVENT + " INTEGER, "
-                + COLUMN_ROUNDDATES_RARE + " INTEGER, "
-                + COLUMN_ROUNDDATES_IMPORTANT + " INTEGER);");
+                + COLUMN_ROUNDDATES_VALUE + " INTEGER NOT NULL, "
+                + COLUMN_ROUNDDATES_UNIT + " INTEGER NOT NULL, "
+                + COLUMN_ROUNDDATES_DATEANDTIME + " INTEGER NOT NULL, "
+                + COLUMN_ROUNDDATES_ID_EVENT + " INTEGER REFERENCES " + TABLE_EVENTS + "("
+                    + COLUMN_EVENTS_ID + ") ON DELETE CASCADE, "
+                + COLUMN_ROUNDDATES_RARE + " INTEGER NOT NULL, "
+                + COLUMN_ROUNDDATES_IMPORTANT + " INTEGER NOT NULL);");
+
 
         db.execSQL("INSERT INTO " + TABLE_EVENT_GROUPS + " ("
                 + COLUMN_EVENTGROUPS_NAME + ", "
