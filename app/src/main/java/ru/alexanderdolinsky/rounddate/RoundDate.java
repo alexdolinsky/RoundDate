@@ -14,7 +14,7 @@ class RoundDate {
     // значение Круглой даты
     private long valueOf;
     // размерность Круглой даты
-    private String unit;
+    private int unit;
     // дата/время Круглой даты
     private Calendar dateAndTime;
     // id События
@@ -40,7 +40,7 @@ class RoundDate {
     RoundDate() {
         this.id = -1;
         this.valueOf = 1;
-        this.unit = "days";
+        this.unit = 3;
         this.dateAndTime = new GregorianCalendar();
         this.idEvent = -1;
         this.nameEvent = "Standart Event";
@@ -50,7 +50,7 @@ class RoundDate {
 
     RoundDate(long id,
               long valueOf,
-              String unit,
+              int unit,
               Calendar dateAndTime,
               long idEvent,
               String nameEvent,
@@ -82,11 +82,11 @@ class RoundDate {
         this.valueOf = valueOf;
     }
 
-    public String getUnit() {
+    public int getUnit() {
         return unit;
     }
 
-    public void setUnit(String unit) {
+    public void setUnit(int unit) {
         this.unit = unit;
     }
 

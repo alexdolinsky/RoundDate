@@ -1,11 +1,9 @@
 package ru.alexanderdolinsky.rounddate;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 
 
@@ -22,41 +20,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     static final String TABLE_EVENT_GROUPS = "event groups"; // название таблицы Групп событий
     // столбцы таблицы "event groups"
     public static final String COLUMN_EVENTGROUPS_ID = "_id";
-    public static final String COLUMN_EVENTGROUPS_NAME = "name of event group";
-    public static final String COLUMN_EVENTGROUPS_SOURCETRACKSETTINGS = "source of track settings event group";
-    public static final String COLUMN_EVENTGROUPS_RDINYEARS = "rd in years event group";
-    public static final String COLUMN_EVENTGROUPS_RDINMONTHS = "rd in months event group";
-    public static final String COLUMN_EVENTGROUPS_RDINWEEKS = "rd in weeks event group";
-    public static final String COLUMN_EVENTGROUPS_RDINDAYS = "rd in days event group";
-    public static final String COLUMN_EVENTGROUPS_RDINHOURS = "rd in hours event group";
-    public static final String COLUMN_EVENTGROUPS_RDINMINUTES = "rd in minutes event group";
-    public static final String COLUMN_EVENTGROUPS_RDINSECS = "rd in secs event group";
+    public static final String COLUMN_EVENTGROUPS_NAME = "name";
+    public static final String COLUMN_EVENTGROUPS_SOURCETRACKSETTINGS = "source_track_settings";
+    public static final String COLUMN_EVENTGROUPS_RDINYEARS = "rd_in_years";
+    public static final String COLUMN_EVENTGROUPS_RDINMONTHS = "rd_in_months";
+    public static final String COLUMN_EVENTGROUPS_RDINWEEKS = "rd_in_weeks";
+    public static final String COLUMN_EVENTGROUPS_RDINDAYS = "rd_in_days";
+    public static final String COLUMN_EVENTGROUPS_RDINHOURS = "rd_in_hours";
+    public static final String COLUMN_EVENTGROUPS_RDINMINUTES = "rd_in_minutes";
+    public static final String COLUMN_EVENTGROUPS_RDINSECS = "rd_in_secs";
 
     static final String TABLE_EVENTS = "events"; // название таблицы Событий
     // столбцы таблицы "events"
     public static final String COLUMN_EVENTS_ID = "_id";
-    public static final String COLUMN_EVENTS_NAME = "name of event";
-    public static final String COLUMN_EVENTS_COMMENT = "comment of event";
-    public static final String COLUMN_EVENTS_ID_EVENTGROUP = "id event group";
-    public static final String COLUMN_EVENTS_DATEANDTIME = "date and time of event";
-    public static final String COLUMN_EVENTS_SOURCETRACKSETTINGS = "source of track settings event";
-    public static final String COLUMN_EVENTS_RDINYEARS = "rd in years event";
-    public static final String COLUMN_EVENTS_RDINMONTHS = "rd in months event";
-    public static final String COLUMN_EVENTS_RDINWEEKS = "rd in weeks event";
-    public static final String COLUMN_EVENTS_RDINDAYS = "rd in days event";
-    public static final String COLUMN_EVENTS_RDINHOURS = "rd in hours event";
-    public static final String COLUMN_EVENTS_RDINMINUTES = "rd in minutes event";
-    public static final String COLUMN_EVENTS_RDINSECS = "rd in secs event";
+    public static final String COLUMN_EVENTS_NAME = "name";
+    public static final String COLUMN_EVENTS_COMMENT = "comment";
+    public static final String COLUMN_EVENTS_ID_EVENTGROUP = "id_event_group";
+    public static final String COLUMN_EVENTS_DATEANDTIME = "date_and_time";
+    public static final String COLUMN_EVENTS_SOURCETRACKSETTINGS = "source_track_settings";
+    public static final String COLUMN_EVENTS_RDINYEARS = "rd_in_years";
+    public static final String COLUMN_EVENTS_RDINMONTHS = "rd_in_months";
+    public static final String COLUMN_EVENTS_RDINWEEKS = "rd_in_weeks";
+    public static final String COLUMN_EVENTS_RDINDAYS = "rd_in_days";
+    public static final String COLUMN_EVENTS_RDINHOURS = "rd_in_hours";
+    public static final String COLUMN_EVENTS_RDINMINUTES = "rd_in_minutes";
+    public static final String COLUMN_EVENTS_RDINSECS = "rd_in_secs";
 
     static final String TABLE_ROUNDDATES = "round dates"; //название таблицы Круглые даты
     // столбцы таблицы "round dates"
     public static final String COLUMN_ROUNDDATES_ID = "_id";
-    public static final String COLUMN_ROUNDDATES_VALUE = "value of round date";
-    public static final String COLUMN_ROUNDDATES_UNIT = "unit of round date"; //0 - года, 1 - месяцы, 2 - недели, 3 - дни, 4 - часы, 5 - минуты, 6 - секунды
-    public static final String COLUMN_ROUNDDATES_DATEANDTIME = "date and time of round date";
-    public static final String COLUMN_ROUNDDATES_ID_EVENT = "id event";
-    public static final String COLUMN_ROUNDDATES_RARE = "rare of round date";
-    public static final String COLUMN_ROUNDDATES_IMPORTANT = "important of round date";
+    public static final String COLUMN_ROUNDDATES_VALUE = "value";
+    public static final String COLUMN_ROUNDDATES_UNIT = "unit"; //0 - года, 1 - месяцы, 2 - недели, 3 - дни, 4 - часы, 5 - минуты, 6 - секунды
+    public static final String COLUMN_ROUNDDATES_DATEANDTIME = "date_and_time";
+    public static final String COLUMN_ROUNDDATES_ID_EVENT = "id_event";
+    public static final String COLUMN_ROUNDDATES_RARE = "rare";
+    public static final String COLUMN_ROUNDDATES_IMPORTANT = "important";
     private static String myEvents;
 
 
@@ -120,14 +118,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_EVENTGROUPS_RDINDAYS + ", "
                 + COLUMN_EVENTGROUPS_RDINHOURS + ", "
                 + COLUMN_EVENTGROUPS_RDINMINUTES + ", "
-                + COLUMN_EVENTGROUPS_RDINSECS + ") VALUES (" +
-                "'Мои события', 0, 0, 0, 0, 0, 0, 0, 0);"
+                + COLUMN_EVENTGROUPS_RDINSECS + ") VALUES ("
+                + myEvents + ", 0, 0, 0, 0, 0, 0, 0, 0);"
         );
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS" + TABLE_EVENT_GROUPS + ";");
+        db.execSQL("DROP TABLE IF EXISTS" + TABLE_EVENTS + ";");
+        db.execSQL("DROP TABLE IF EXISTS" + TABLE_ROUNDDATES + ";");
+        onCreate(db);
     }
 }
