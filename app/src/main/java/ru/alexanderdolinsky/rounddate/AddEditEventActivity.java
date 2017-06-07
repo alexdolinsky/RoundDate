@@ -2,11 +2,15 @@ package ru.alexanderdolinsky.rounddate;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -20,6 +24,7 @@ public class AddEditEventActivity extends AppCompatActivity {
 
     private Calendar date;
     private TextView tvCurrentDate, tvCurrentTime;
+    private RadioGroup rdTrackSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,27 @@ public class AddEditEventActivity extends AppCompatActivity {
         SimpleDateFormat sdfTime = new SimpleDateFormat("kk : mm");
         tvCurrentTime = (TextView)findViewById(R.id.tvCurrentEventTime);
         tvCurrentTime.setText(sdfTime.format(date.getTime()));
+
+        rdTrackSettings = (RadioGroup)findViewById(R.id.rgTracksettings);
+        rdTrackSettings.check(R.id.rbUseEventsGroupSettings);
+        rdTrackSettings.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                LinearLayout llTrackSettings = (LinearLayout)findViewById(R.id.llTrackSettings);
+                ScrollView sv = (ScrollView)findViewById(R.id.svAddEditEvent);
+                switch (checkedId){
+                    case R.id.rbUseEventSettings:
+                        llTrackSettings.setVisibility(View.VISIBLE);
+                        // TODO: 07.06.2017 сделать скролл вниз до настроек слежения 
+                        //sv.smoothScrollBy(0,400);
+                        break;
+                    default:
+                        llTrackSettings.setVisibility(View.GONE);
+                        break;
+                }
+
+            }
+        });
     }
 
     public void onSaveEvent(View view) {

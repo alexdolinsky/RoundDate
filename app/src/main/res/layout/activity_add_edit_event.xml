@@ -7,6 +7,7 @@
     tools:context="ru.alexanderdolinsky.rounddate.AddEditEventActivity">
 
     <ScrollView
+        android:id="@+id/svAddEditEvent"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginRight="8dp"
@@ -83,6 +84,12 @@
                     android:textAlignment="center"
                     android:textSize="@dimen/large_size" />
 
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
                 <EditText
                     android:id="@+id/etNewEventsGroup"
                     android:layout_width="match_parent"
@@ -156,12 +163,12 @@
                 android:background="@color/colorDivider" />
 
             <RadioGroup
+                android:id="@+id/rgTracksettings"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <RadioButton
                     android:id="@+id/rbUseAppSettings"
-                    style="@style/Widget.AppCompat.CompoundButton.RadioButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -171,7 +178,6 @@
 
                 <RadioButton
                     android:id="@+id/rbUseEventsGroupSettings"
-                    style="@android:style/Widget.CompoundButton.RadioButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -181,7 +187,6 @@
 
                 <RadioButton
                     android:id="@+id/rbUseEventSettings"
-                    style="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -192,10 +197,285 @@
             </RadioGroup>
 
             <LinearLayout
+                android:id="@+id/llTrackSettings"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvTrackSettings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/track_settings"
+                        android:textSize="@dimen/text_title" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/divider_size"
+                        android:background="@color/colorDivider" />
+
+                    <LinearLayout
+                        android:id="@+id/llRoundDateYear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="onClick"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="4dp"
+                            android:paddingEnd="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="8dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/round_date_in_years"
+                            android:textSize="@dimen/large_size" />
+
+                        <TextView
+                            android:id="@+id/tvRoundDateInYears"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="4dp"
+                            android:text="@string/tv_default" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="@color/colorDivider" />
+
+                    <LinearLayout
+                        android:id="@+id/llRoundDateMonth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="onClick"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="4dp"
+                            android:paddingEnd="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="8dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/round_date_in_months"
+                            android:textSize="@dimen/large_size" />
+
+                        <TextView
+                            android:id="@+id/tvRoundDateInMonths"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="4dp"
+                            android:text="@string/tv_default" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="@color/colorDivider" />
+
+                    <LinearLayout
+                        android:id="@+id/llRoundDateWeek"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="onClick"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="4dp"
+                            android:paddingEnd="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="8dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/round_date_in_weeks"
+                            android:textSize="@dimen/large_size" />
+
+                        <TextView
+                            android:id="@+id/tvRoundDateInWeeks"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="4dp"
+                            android:text="@string/tv_default" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="@color/colorDivider" />
+
+                    <LinearLayout
+                        android:id="@+id/llRoundDateDay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="onClick"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="4dp"
+                            android:paddingEnd="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="8dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/round_date_in_days"
+                            android:textSize="@dimen/large_size" />
+
+                        <TextView
+                            android:id="@+id/tvRoundDateInDays"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="4dp"
+                            android:text="@string/tv_default" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="@color/colorDivider" />
+
+                    <LinearLayout
+                        android:id="@+id/llRoundDateHour"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="onClick"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="4dp"
+                            android:paddingEnd="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="8dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/round_date_in_hours"
+                            android:textSize="@dimen/large_size" />
+
+                        <TextView
+                            android:id="@+id/tvRoundDateInHours"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="4dp"
+                            android:text="@string/tv_default" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="@color/colorDivider" />
+
+                    <LinearLayout
+                        android:id="@+id/llRoundDateMinute"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="onClick"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="4dp"
+                            android:paddingEnd="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="8dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/round_date_in_minutes"
+                            android:textSize="@dimen/large_size" />
+
+                        <TextView
+                            android:id="@+id/tvRoundDateInMinutes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="4dp"
+                            android:text="@string/tv_default" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="@color/colorDivider" />
+
+                    <LinearLayout
+                        android:id="@+id/llRoundDateSec"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="onClick"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="4dp"
+                            android:paddingEnd="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="8dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/round_date_in_secs"
+                            android:textSize="@dimen/large_size" />
+
+                        <TextView
+                            android:id="@+id/tvRoundDateInSecs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="4dp"
+                            android:text="@string/tv_default" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
