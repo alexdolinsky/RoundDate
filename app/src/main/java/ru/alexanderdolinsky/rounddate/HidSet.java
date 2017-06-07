@@ -7,7 +7,7 @@ package ru.alexanderdolinsky.rounddate;
 
 public  class HidSet {
     // периоды расчета в годах, месяцах, ...
-    public static final long PERIOD_IN_YEARS = 100;
+    public static final long PERIOD_IN_YEARS = 100L;
     public static final long PERIOD_IN_MONTHS = PERIOD_IN_YEARS*12;
     public static final long PERIOD_IN_WEEKS = PERIOD_IN_YEARS*52;
     public static final long PERIOD_IN_DAYS = PERIOD_IN_WEEKS*7;
