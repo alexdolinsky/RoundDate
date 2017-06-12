@@ -28,10 +28,12 @@ public class DialogScreen {
         this.IDD_dialog = ID;
     }
 
-    public AlertDialog getDialog(final AddEditEventActivity activity) {
+    public AlertDialog getDialog(final Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         final CharSequence[] rdVariants = activity.getResources().getStringArray(R.array.rd_variants);
+
+        final AddEditEventActivity aeActivity = (AddEditEventActivity) activity;
 
         switch (getIDD_dialog()) {
             case IDD_RD_YEARS:
@@ -40,14 +42,14 @@ public class DialogScreen {
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.setTvYears(rdVariants[activity.getEventTrackSettings().getRdInYears()]);
+                                aeActivity.setTvYears(rdVariants[aeActivity.getEventTrackSettings().getRdInYears()]);
                                 dialog.dismiss();
                             }
                         })
-                        .setSingleChoiceItems(rdVariants, activity.getEventTrackSettings().getRdInYears(), new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(rdVariants, aeActivity.getEventTrackSettings().getRdInYears(), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.getEventTrackSettings().setRdInYears(which);
+                                aeActivity.getEventTrackSettings().setRdInYears(which);
                             }
                         });
                 return builder.create();
@@ -59,14 +61,14 @@ public class DialogScreen {
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.setTvMonths(rdVariants[activity.getEventTrackSettings().getRdInMonths()]);
+                                aeActivity.setTvMonths(rdVariants[aeActivity.getEventTrackSettings().getRdInMonths()]);
                                 dialog.dismiss();
                             }
                         })
-                        .setSingleChoiceItems(rdVariants, activity.getEventTrackSettings().getRdInMonths(), new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(rdVariants, aeActivity.getEventTrackSettings().getRdInMonths(), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.getEventTrackSettings().setRdInMonths(which);
+                                aeActivity.getEventTrackSettings().setRdInMonths(which);
                             }
                         });
                 return builder.create();
@@ -78,14 +80,14 @@ public class DialogScreen {
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.setTvWeeks(rdVariants[activity.getEventTrackSettings().getRdInWeeks()]);
+                                aeActivity.setTvWeeks(rdVariants[aeActivity.getEventTrackSettings().getRdInWeeks()]);
                                 dialog.dismiss();
                             }
                         })
-                        .setSingleChoiceItems(rdVariants, activity.getEventTrackSettings().getRdInWeeks(), new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(rdVariants, aeActivity.getEventTrackSettings().getRdInWeeks(), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.getEventTrackSettings().setRdInWeeks(which);
+                                aeActivity.getEventTrackSettings().setRdInWeeks(which);
                             }
                         });
                 return builder.create();
@@ -97,14 +99,14 @@ public class DialogScreen {
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.setTvDays(rdVariants[activity.getEventTrackSettings().getRdInDays()]);
+                                aeActivity.setTvDays(rdVariants[aeActivity.getEventTrackSettings().getRdInDays()]);
                                 dialog.dismiss();
                             }
                         })
-                        .setSingleChoiceItems(rdVariants, activity.getEventTrackSettings().getRdInDays(), new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(rdVariants, aeActivity.getEventTrackSettings().getRdInDays(), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.getEventTrackSettings().setRdInDays(which);
+                                aeActivity.getEventTrackSettings().setRdInDays(which);
                             }
                         });
                 return builder.create();
@@ -116,14 +118,14 @@ public class DialogScreen {
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.setTvHours(rdVariants[activity.getEventTrackSettings().getRdInHours()]);
+                                aeActivity.setTvHours(rdVariants[aeActivity.getEventTrackSettings().getRdInHours()]);
                                 dialog.dismiss();
                             }
                         })
-                        .setSingleChoiceItems(rdVariants, activity.getEventTrackSettings().getRdInHours(), new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(rdVariants, aeActivity.getEventTrackSettings().getRdInHours(), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.getEventTrackSettings().setRdInHours(which);
+                                aeActivity.getEventTrackSettings().setRdInHours(which);
                             }
                         });
                 return builder.create();
@@ -135,14 +137,14 @@ public class DialogScreen {
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.setTvMinutes(rdVariants[activity.getEventTrackSettings().getRdInMinutes()]);
+                                aeActivity.setTvMinutes(rdVariants[aeActivity.getEventTrackSettings().getRdInMinutes()]);
                                 dialog.dismiss();
                             }
                         })
-                        .setSingleChoiceItems(rdVariants, activity.getEventTrackSettings().getRdInMinutes(), new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(rdVariants, aeActivity.getEventTrackSettings().getRdInMinutes(), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.getEventTrackSettings().setRdInMinutes(which);
+                                aeActivity.getEventTrackSettings().setRdInMinutes(which);
                             }
                         });
                 return builder.create();
@@ -154,14 +156,14 @@ public class DialogScreen {
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.setTvSecs(rdVariants[activity.getEventTrackSettings().getRdInSecs()]);
+                                aeActivity.setTvSecs(rdVariants[aeActivity.getEventTrackSettings().getRdInSecs()]);
                                 dialog.dismiss();
                             }
                         })
-                        .setSingleChoiceItems(rdVariants, activity.getEventTrackSettings().getRdInSecs(), new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(rdVariants, aeActivity.getEventTrackSettings().getRdInSecs(), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                activity.getEventTrackSettings().setRdInSecs(which);
+                                aeActivity.getEventTrackSettings().setRdInSecs(which);
                             }
                         });
                 return builder.create();

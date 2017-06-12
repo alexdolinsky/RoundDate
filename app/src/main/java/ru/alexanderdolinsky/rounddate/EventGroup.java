@@ -65,4 +65,9 @@ class EventGroup {
     public void setTrackSettings(TrackSettings trackSettings) {
         this.trackSettings = trackSettings;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

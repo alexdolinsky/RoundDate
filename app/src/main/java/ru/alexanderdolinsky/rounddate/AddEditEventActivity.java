@@ -2,16 +2,19 @@ package ru.alexanderdolinsky.rounddate;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.support.annotation.IdRes;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -19,21 +22,30 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 
 public class AddEditEventActivity extends AppCompatActivity {
 
     private Calendar date;
-    private TextView tvCurrentDate, tvCurrentTime;
-    private RadioGroup rdTrackSettings;
     private TrackSettings eventTrackSettings;
+    private TrackSettings eventGroupTrackSettings;
+
+    private RadioGroup rdTrackSettings;
+    private TextView tvCurrentDate, tvCurrentTime;
     private TextView tvYears, tvMonths, tvWeeks, tvDays, tvHours, tvMinutes, tvSecs;
 
+    private EditText etNameEvent, etCommentEvent, etNameNewEventGroup;
+
+    //private DatabaseAdapter adapter;
+
+    ArrayAdapter<EventGroup> arrayAdapter;
+    private Spinner eventGroupsSpinner;
+    private EventGroup selectedEventGroup;
 
 
-
-    public void setEventTrackSettings(TrackSettings eTrackSettings) {
-        eventTrackSettings = eTrackSettings;
+    public void setEventTrackSettings(TrackSettings eventTrackSettings) {
+        this.eventTrackSettings = eventTrackSettings;
     }
 
     public  TrackSettings getEventTrackSettings() {
@@ -69,12 +81,47 @@ public class AddEditEventActivity extends AppCompatActivity {
     }
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_event);
+
+        //adapter = new DatabaseAdapter(this);
+
+        eventGroupsSpinner = (Spinner) findViewById(R.id.spinnerEventGroups);
+
+        DatabaseAdapter adapter = new DatabaseAdapter(this);
+        adapter.open();
+
+        final List<EventGroup> eventGroups = adapter.getEventGroups();
+
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventGroups);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        eventGroupsSpinner.setAdapter(arrayAdapter);
+
+
+        eventGroupsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setSelectedEventGroup(eventGroups.get(position));
+                EditText et = (EditText) findViewById(R.id.etNewEventsGroup);
+                switch ((int) getSelectedEventGroup().getId()) {
+                    case -1:
+                        et.setVisibility(View.VISIBLE);
+                        break;
+                    default:
+                        et.setVisibility(View.GONE);
+                        break;
+                }
+                Log.d("MyLog", "selectedEventGroup=" + selectedEventGroup.getId() + selectedEventGroup.getName());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        adapter.close();
 
         date = new GregorianCalendar();
         date.set(Calendar.HOUR_OF_DAY,12);
@@ -129,16 +176,92 @@ public class AddEditEventActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+    }
+
     public void onSaveEvent(View view) {
-        // TODO: 28.05.2017 сохранить событие, сделать расчеты, все записать в БД
+        //  Проверка правильности ввода названия события
+        // TODO: 12.06.2017 Сделать проверку на ввод опасных символов
+        EditText etEventName = (EditText) findViewById(R.id.etEventName);
+        String eventName = etEventName.getText().toString().trim();
+        if (eventName.isEmpty()) {
+            Toast.makeText(this, R.string.event_name_not_fill, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ;
+
+        // TODO: 12.06.2017 Проверка корректности ввода комментария, Сделать проверку на ввод опасных символов
+
+        EditText etEventComment = (EditText) findViewById(R.id.etEventComment);
+        String eventComment = etEventComment.getText().toString().trim();
+
+        //Log.d("MyLog", "eventComment="+eventComment);
+
+        // Связь с БД и ее открытие
+        DatabaseAdapter adapter = new DatabaseAdapter(this);
+        adapter.open();
+
+        // Проверка на уникальность названия события
+        if (adapter.isEventExists(eventName)) {
+            Toast.makeText(this, R.string.event_name_is_exists, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        EditText etNewEventsGroupName = (EditText) findViewById(R.id.etNewEventsGroup);
+        String newEventsGroupName = etNewEventsGroupName.getText().toString();
+        if (getSelectedEventGroup().getId() == -1) {
+            // Проверка корректности ввода новой группы событий, если выбрана новая группа
+            if (newEventsGroupName.isEmpty()) {
+                Toast.makeText(this, R.string.events_group_name_not_fill, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Проверка на уникальность названия группы событий
+            if (adapter.isEventGroupExists(newEventsGroupName)) {
+                Toast.makeText(this, R.string.events_group_is_exists, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Запись группы событий в БД, если выбрана новая группа и название уникально
+
+            EventGroup eventGroup = new EventGroup(-1, newEventsGroupName, 0, new TrackSettings(0, 0, 0, 0, 0, 0, 0));
+            getSelectedEventGroup().setId(adapter.addEventsGroup(eventGroup));
+
+            //Log.d("MyLog", "id группы событий=" + getSelectedEventGroup().getId());
+
+        }
+
+
+        // TODO: 12.06.2017 Запись события в БД
+
+        Event event = new Event(-1, eventName,
+                eventComment,
+                getSelectedEventGroup().getId(),
+                getSelectedEventGroup().getName(),
+                getDate(),
+                rdTrackSettings.getCheckedRadioButtonId(),
+                getEventTrackSettings());
+
+        event.setId(adapter.addEvent(event));
+
+        Log.d("MyLog", "id=" + event.getId() + " nameEvent=" + event.getName());
+
+        // TODO: 12.06.2017 Расчет Круглых дат
+
+        // TODO: 12.06.2017 Запись круглых дат в БД
+
+        // Закрытие соединения с БД
+        adapter.close();
+
         Toast.makeText(this, "Сохранение события и расчеты", Toast.LENGTH_SHORT).show();
         finish();
     }
 
-    public void onChoiceEventGroup(View view) {
-        // TODO: 28.05.2017 добавить выбор группы событий
-        Toast.makeText(this, "Выбирается группа событий", Toast.LENGTH_SHORT).show();
-    }
+
 
     public void onChoiceEventDate(View view) {
         //  диалоговое окно выбора даты
@@ -183,7 +306,7 @@ public class AddEditEventActivity extends AppCompatActivity {
             date.set(Calendar.MINUTE, minute);
             SimpleDateFormat sdf = new SimpleDateFormat("kk : mm");
             tvCurrentTime.setText(sdf.format(date.getTime()));
-            Log.d("MyLog", sdf.format(date.getTime()));
+            //Log.d("MyLog", sdf.format(date.getTime()));
 
         }
     };
@@ -237,5 +360,50 @@ public class AddEditEventActivity extends AppCompatActivity {
 
         }
 
+    }
+
+
+    public TrackSettings getEventGroupTrackSettings() {
+        return eventGroupTrackSettings;
+    }
+
+    public void setEventGroupTrackSettings(TrackSettings eventGroupTrackSettings) {
+        this.eventGroupTrackSettings = eventGroupTrackSettings;
+    }
+
+    public EditText getEtNameEvent() {
+        return etNameEvent;
+    }
+
+    public void setEtNameEvent(EditText etNameEvent) {
+        this.etNameEvent = etNameEvent;
+    }
+
+    public EditText getEtCommentEvent() {
+        return etCommentEvent;
+    }
+
+    public void setEtCommentEvent(EditText etCommentEvent) {
+        this.etCommentEvent = etCommentEvent;
+    }
+
+    public EditText getEtNameNewEventGroup() {
+        return etNameNewEventGroup;
+    }
+
+    public void setEtNameNewEventGroup(EditText etNameNewEventGroup) {
+        this.etNameNewEventGroup = etNameNewEventGroup;
+    }
+
+    public EventGroup getSelectedEventGroup() {
+        return selectedEventGroup;
+    }
+
+    public void setSelectedEventGroup(EventGroup selectedEventGroup) {
+        this.selectedEventGroup = selectedEventGroup;
+    }
+
+    public Calendar getDate() {
+        return date;
     }
 }

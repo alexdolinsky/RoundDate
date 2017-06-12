@@ -17,7 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "RoundDate.db"; // название базы данных
     private static final int SCHEMA = 1; // версия базы данных
-    static final String TABLE_EVENT_GROUPS = "event groups"; // название таблицы Групп событий
+    static final String TABLE_EVENT_GROUPS = "event_groups"; // название таблицы Групп событий
     // столбцы таблицы "event groups"
     public static final String COLUMN_EVENTGROUPS_ID = "_id";
     public static final String COLUMN_EVENTGROUPS_NAME = "name";
@@ -46,7 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_EVENTS_RDINMINUTES = "rd_in_minutes";
     public static final String COLUMN_EVENTS_RDINSECS = "rd_in_secs";
 
-    static final String TABLE_ROUNDDATES = "round dates"; //название таблицы Круглые даты
+    static final String TABLE_ROUNDDATES = "round_dates"; //название таблицы Круглые даты
     // столбцы таблицы "round dates"
     public static final String COLUMN_ROUNDDATES_ID = "_id";
     public static final String COLUMN_ROUNDDATES_VALUE = "value";
@@ -61,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, SCHEMA);
         myEvents = context.getString(R.string.my_events);
-        Log.d("MyLog", "myEvents - " + myEvents);
+        //Log.d("MyLog", "myEvents - " + myEvents);
     }
 
     @Override
@@ -118,8 +118,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_EVENTGROUPS_RDINDAYS + ", "
                 + COLUMN_EVENTGROUPS_RDINHOURS + ", "
                 + COLUMN_EVENTGROUPS_RDINMINUTES + ", "
-                + COLUMN_EVENTGROUPS_RDINSECS + ") VALUES ("
-                + myEvents + ", 0, 0, 0, 0, 0, 0, 0, 0);"
+                + COLUMN_EVENTGROUPS_RDINSECS + ") VALUES ('"
+                + myEvents + "', 0, 0, 0, 0, 0, 0, 0, 0);"
         );
 
     }
