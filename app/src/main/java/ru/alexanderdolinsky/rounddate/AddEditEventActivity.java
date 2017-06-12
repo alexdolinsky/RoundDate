@@ -3,6 +3,7 @@ package ru.alexanderdolinsky.rounddate;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.support.annotation.IdRes;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,50 @@ public class AddEditEventActivity extends AppCompatActivity {
     private Calendar date;
     private TextView tvCurrentDate, tvCurrentTime;
     private RadioGroup rdTrackSettings;
+    private TrackSettings eventTrackSettings;
+    private TextView tvYears, tvMonths, tvWeeks, tvDays, tvHours, tvMinutes, tvSecs;
+
+
+
+
+    public void setEventTrackSettings(TrackSettings eTrackSettings) {
+        eventTrackSettings = eTrackSettings;
+    }
+
+    public  TrackSettings getEventTrackSettings() {
+        return eventTrackSettings;
+    }
+
+    public void setTvYears(CharSequence rdVariant) {
+        this.tvYears.setText(rdVariant);
+    }
+
+     public void setTvMonths(CharSequence rdVariant) {
+         this.tvMonths.setText(rdVariant);
+    }
+
+     public void setTvWeeks(CharSequence rdVariant) {
+         this.tvWeeks.setText(rdVariant);
+    }
+
+     public void setTvDays(CharSequence rdVariant) {
+         this.tvDays.setText(rdVariant);
+    }
+
+     public void setTvHours(CharSequence rdVariant) {
+         this.tvHours.setText(rdVariant);
+    }
+
+     public void setTvMinutes(CharSequence rdVariant) {
+         this.tvMinutes.setText(rdVariant);
+    }
+
+     public void setTvSecs(CharSequence rdVariant) {
+         this.tvSecs.setText(rdVariant);
+    }
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +87,25 @@ public class AddEditEventActivity extends AppCompatActivity {
         SimpleDateFormat sdfTime = new SimpleDateFormat("kk : mm");
         tvCurrentTime = (TextView)findViewById(R.id.tvCurrentEventTime);
         tvCurrentTime.setText(sdfTime.format(date.getTime()));
+
+        final CharSequence[] rdVariants = getResources().getStringArray(R.array.rd_variants);
+
+        eventTrackSettings = new TrackSettings(0,0,0,0,0,0,0);
+        tvYears = (TextView)findViewById(R.id.tvRoundDateInYears);
+        tvYears.setText(rdVariants[eventTrackSettings.getRdInYears()]);
+        tvMonths = (TextView)findViewById(R.id.tvRoundDateInMonths);
+        tvMonths.setText(rdVariants[eventTrackSettings.getRdInMonths()]);
+        tvWeeks = (TextView)findViewById(R.id.tvRoundDateInWeeks);
+        tvWeeks.setText(rdVariants[eventTrackSettings.getRdInWeeks()]);
+        tvDays = (TextView)findViewById(R.id.tvRoundDateInDays);
+        tvDays.setText(rdVariants[eventTrackSettings.getRdInDays()]);
+        tvHours = (TextView)findViewById(R.id.tvRoundDateInHours);
+        tvHours.setText(rdVariants[eventTrackSettings.getRdInHours()]);
+        tvMinutes = (TextView)findViewById(R.id.tvRoundDateInMinutes);
+        tvMinutes.setText(rdVariants[eventTrackSettings.getRdInMinutes()]);
+        tvSecs = (TextView)findViewById(R.id.tvRoundDateInSecs);
+        tvSecs.setText(rdVariants[eventTrackSettings.getRdInSecs()]);
+
 
         rdTrackSettings = (RadioGroup)findViewById(R.id.rgTracksettings);
         rdTrackSettings.check(R.id.rbUseEventsGroupSettings);
@@ -129,7 +193,49 @@ public class AddEditEventActivity extends AppCompatActivity {
     }
 
 
+    public void onClick(View view) {
+        DialogScreen ds;
+        android.app.AlertDialog dialog;
+
+        switch (view.getId()) {
+            case R.id.llRoundDateYear:
+                ds = new DialogScreen(0);
+                dialog = ds.getDialog(this);
+                dialog.show();
+                break;
+            case R.id.llRoundDateMonth:
+                ds = new DialogScreen(1);
+                dialog = ds.getDialog(this);
+                dialog.show();
+                break;
+            case R.id.llRoundDateWeek:
+                ds = new DialogScreen(2);
+                dialog = ds.getDialog(this);
+                dialog.show();
+                break;
+            case R.id.llRoundDateDay:
+                ds = new DialogScreen(3);
+                dialog = ds.getDialog(this);
+                dialog.show();
+                break;
+            case R.id.llRoundDateHour:
+                ds = new DialogScreen(4);
+                dialog = ds.getDialog(this);
+                dialog.show();
+                break;
+            case R.id.llRoundDateMinute:
+                ds = new DialogScreen(5);
+                dialog = ds.getDialog(this);
+                dialog.show();
+                break;
+            case R.id.llRoundDateSec:
+                ds = new DialogScreen(6);
+                dialog = ds.getDialog(this);
+                dialog.show();
+                break;
 
 
+        }
 
+    }
 }

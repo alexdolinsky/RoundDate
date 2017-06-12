@@ -45,7 +45,7 @@
 
         Вот еще примеры названий продуктов, которые акцентируют внимание пользователя на своем отличии от других подобных приложений:
     </string>
-    <string name="addeditevent">Добавление/редактирование события</string>
+    <string name="addeditevent">Добавление события</string>
     <string name="enter_event_name">Введите название события</string>
     <string name="enter_event_comment">Введите комментарий к событию</string>
     <string name="events_group">Группа событий</string>
