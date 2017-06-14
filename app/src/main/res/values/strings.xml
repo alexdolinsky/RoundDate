@@ -82,6 +82,8 @@
     <string name="events_group_name_not_fill">Поле названия группы событий не заполнено</string>
     <string name="events_group_is_exists">Группа событий с таким именем уже существует</string>
     <string name="event_name_is_exists">Событие с таким именем уже существует</string>
+    <string name="all_events">Все события</string>
+    <string name="edit_events_group">Редактирование группы событий</string>
 
 
 </resources>
