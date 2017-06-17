@@ -21,6 +21,10 @@ public class DialogScreen {
     private final static int IDD_RD_HOURS = 4;
     private final static int IDD_RD_MINUTES = 5;
     private final static int IDD_RD_SECS = 6;
+
+    private final static int IDD_CHOICE_EVENT_GROUP = 20;
+
+
     private final int IDD_dialog;
 
 
@@ -33,10 +37,12 @@ public class DialogScreen {
 
         final CharSequence[] rdVariants = activity.getResources().getStringArray(R.array.rd_variants);
 
-        final AddEditEventActivity aeActivity = (AddEditEventActivity) activity;
+        final AddEditEventActivity aeActivity;// = (AddEditEventActivity) activity;
+        final EventListActivity elActivity;
 
         switch (getIDD_dialog()) {
             case IDD_RD_YEARS:
+                aeActivity = (AddEditEventActivity) activity;
                 builder.setTitle(R.string.track)
                         .setCancelable(false)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
@@ -56,6 +62,7 @@ public class DialogScreen {
 
 
             case IDD_RD_MONTHS:
+                aeActivity = (AddEditEventActivity) activity;
                 builder.setTitle(R.string.track)
                         .setCancelable(false)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
@@ -75,6 +82,7 @@ public class DialogScreen {
 
 
             case IDD_RD_WEEKS:
+                aeActivity = (AddEditEventActivity) activity;
                 builder.setTitle(R.string.track)
                         .setCancelable(false)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
@@ -94,6 +102,7 @@ public class DialogScreen {
 
 
             case IDD_RD_DAYS:
+                aeActivity = (AddEditEventActivity) activity;
                 builder.setTitle(R.string.track)
                         .setCancelable(false)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
@@ -113,6 +122,7 @@ public class DialogScreen {
 
 
             case IDD_RD_HOURS:
+                aeActivity = (AddEditEventActivity) activity;
                 builder.setTitle(R.string.track)
                         .setCancelable(false)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
@@ -130,8 +140,8 @@ public class DialogScreen {
                         });
                 return builder.create();
 
-
             case IDD_RD_MINUTES:
+                aeActivity = (AddEditEventActivity) activity;
                 builder.setTitle(R.string.track)
                         .setCancelable(false)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
@@ -151,6 +161,7 @@ public class DialogScreen {
 
 
             case IDD_RD_SECS:
+                aeActivity = (AddEditEventActivity) activity;
                 builder.setTitle(R.string.track)
                         .setCancelable(false)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
@@ -167,6 +178,21 @@ public class DialogScreen {
                             }
                         });
                 return builder.create();
+
+
+            case IDD_CHOICE_EVENT_GROUP:
+                elActivity = (EventListActivity) activity;
+                builder.setTitle(R.string.choice_event_group)
+                        .setCancelable(true)
+                        .setItems(elActivity.getEventsGroupName(), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                elActivity.setSelectedEventsGroupId(which);
+                            }
+                        });
+                return builder.create();
+
+
+
 
 
 

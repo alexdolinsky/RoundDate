@@ -4,8 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -14,11 +17,13 @@ import java.util.List;
  */
 
 public class DatabaseAdapter {
+    final static int FIRST_ELEMENT_ID = -2;
+    final static int LAST_ELEMENT_ID = -1;
     private DatabaseHelper dbHelper;
     private SQLiteDatabase database;
     private Context context;
 
-    public DatabaseAdapter (Context context) {
+    public DatabaseAdapter(Context context) {
         dbHelper = new DatabaseHelper(context.getApplicationContext());
         this.context = context;
     }
@@ -33,7 +38,7 @@ public class DatabaseAdapter {
     }
 
 
-    public List<EventGroup> getEventGroups() {
+    public List<EventGroup> getEventGroups(boolean firstElement, boolean lastElement) {
         ArrayList<EventGroup> eventGroups = new ArrayList<>();
         String[] columns = new String[]{DatabaseHelper.COLUMN_EVENTGROUPS_ID,
                 DatabaseHelper.COLUMN_EVENTGROUPS_NAME,
@@ -45,9 +50,13 @@ public class DatabaseAdapter {
                 DatabaseHelper.COLUMN_EVENTGROUPS_RDINHOURS,
                 DatabaseHelper.COLUMN_EVENTGROUPS_RDINMINUTES,
                 DatabaseHelper.COLUMN_EVENTGROUPS_RDINSECS};
+        //добавляем первый элемент "Все события"
+        if (firstElement) {
+            eventGroups.add(new EventGroup(DatabaseAdapter.FIRST_ELEMENT_ID, getContext().getString(R.string.all_events), 1, new TrackSettings(0, 0, 0, 0, 0, 0, 0)));
+        }
 
         Cursor cursor = database.query(DatabaseHelper.TABLE_EVENT_GROUPS, columns, null, null, null, null, DatabaseHelper.COLUMN_EVENTGROUPS_ID);
-
+        // TODO: 17.06.2017 сделать сортировку по алфавиту, при этом первым должна идти группа Мои события
         if (cursor.moveToFirst()) {
             do {
                 long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_ID));
@@ -64,7 +73,9 @@ public class DatabaseAdapter {
             }
             while (cursor.moveToNext());
             //добавляем последний элемент "Новая группа событий"
-            eventGroups.add(new EventGroup(-1, getContext().getString(R.string.new_event_group), 1, new TrackSettings(0, 0, 0, 0, 0, 0, 0)));
+            if (lastElement) {
+                eventGroups.add(new EventGroup(DatabaseAdapter.LAST_ELEMENT_ID, getContext().getString(R.string.new_event_group), 1, new TrackSettings(0, 0, 0, 0, 0, 0, 0)));
+            }
         }
         cursor.close();
         return eventGroups;
@@ -136,6 +147,121 @@ public class DatabaseAdapter {
         }
         cursor.close();
         return b;
+    }
+
+
+    public List<Event> getAllEvents() {
+        {
+            ArrayList<Event> events = new ArrayList<>();
+        /*String[] columns = new String[]{DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_ID,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_NAME,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_COMMENT,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_ID_EVENTGROUP,
+                DatabaseHelper.TABLE_EVENT_GROUPS + "." + DatabaseHelper.COLUMN_EVENTGROUPS_NAME,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_DATEANDTIME,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_SOURCETRACKSETTINGS,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINYEARS,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINMONTHS,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINWEEKS,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINDAYS,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINHOURS,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINMINUTES,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINSECS};*/
+
+
+            Cursor cursor = database.query(DatabaseHelper.VIEW_EVENTS, null, null, null, null, null, null);
+            //Calendar dateAndTime = new GregorianCalendar();
+            //long id, idEventGroup;
+            //int sourceTrackSettings, rdInYears, rdInMonths, rdInWeeks, rdInDays, rdInHours, rdInMinutes, rdInSecs;
+            //String name, comment, nameEventGroup;
+            if (cursor.moveToFirst()) {
+                do {
+                    long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_ID));
+                    String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_NAME));
+                    String comment = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_COMMENT));
+                    long idEventGroup = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_ID_EVENTGROUP));
+                    String nameEventGroup = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENT_GROUPS + "." + DatabaseHelper.COLUMN_EVENTGROUPS_NAME));
+                    Calendar dateAndTime = new GregorianCalendar();
+                    dateAndTime.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_DATEANDTIME)));
+                    int sourceTrackSettings = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_SOURCETRACKSETTINGS));
+                    int rdInYears = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINYEARS));
+                    int rdInMonths = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINMONTHS));
+                    int rdInWeeks = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINWEEKS));
+                    int rdInDays = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINDAYS));
+                    int rdInHours = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINHOURS));
+                    int rdInMinutes = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINMINUTES));
+                    int rdInSecs = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINSECS));
+                    events.add(new Event(id, name, comment, idEventGroup, nameEventGroup, dateAndTime, sourceTrackSettings,
+                            new TrackSettings(rdInYears, rdInMonths, rdInWeeks, rdInDays, rdInHours, rdInMinutes, rdInSecs)));
+                }
+                while (cursor.moveToNext());
+                //Log.d("MyLog", cursor.toString());
+                /*for (Event event : events) {
+                    Log.d("MyLog", "ID: " + event.getId() + " Имя события: " + event.getName() +
+                            " Комментарий: " + event.getComment() +
+                            " Группа событий: " + event.getNameEventGroup() +
+                            " Дата: " + event.getDate() +
+                            " Время: " + event.getTime());
+                }*/
+
+            }
+            cursor.close();
+            return events;
+        }
+    }
+
+    public List<Event> getEvents() {
+        {
+            ArrayList<Event> events = new ArrayList<>();
+        /*String[] columns = new String[]{DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_ID,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_NAME,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_COMMENT,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_ID_EVENTGROUP,
+                DatabaseHelper.TABLE_EVENT_GROUPS + "." + DatabaseHelper.COLUMN_EVENTGROUPS_NAME,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_DATEANDTIME,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_SOURCETRACKSETTINGS,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINYEARS,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINMONTHS,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINWEEKS,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINDAYS,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINHOURS,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINMINUTES,
+                DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINSECS};*/
+
+
+            Cursor cursor = database.query(DatabaseHelper.TABLE_EVENTS, null, null, null, null, null, null);
+            //Calendar dateAndTime = new GregorianCalendar();
+            //long id, idEventGroup;
+            //int sourceTrackSettings, rdInYears, rdInMonths, rdInWeeks, rdInDays, rdInHours, rdInMinutes, rdInSecs;
+            //String name, comment, nameEventGroup;
+            if (cursor.moveToFirst()) {
+                do {
+                    long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_ID));
+                    String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_NAME));
+                    String comment = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_COMMENT));
+                    long idEventGroup = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_ID_EVENTGROUP));
+                    //nameEventGroup = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENT_GROUPS + "." + DatabaseHelper.COLUMN_EVENTGROUPS_NAME));
+                    //Log.d("MyLog", "Группа событий" + nameEventGroup);
+                    Calendar dateAndTime = new GregorianCalendar();
+                    dateAndTime.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_DATEANDTIME)));
+                    int sourceTrackSettings = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_SOURCETRACKSETTINGS));
+                    int rdInYears = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINYEARS));
+                    int rdInMonths = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINMONTHS));
+                    int rdInWeeks = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINWEEKS));
+                    int rdInDays = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINDAYS));
+                    int rdInHours = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINHOURS));
+                    int rdInMinutes = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINMINUTES));
+                    int rdInSecs = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINSECS));
+                    events.add(new Event(id, name, comment, idEventGroup, ""/*nameEventGroup*/, dateAndTime, sourceTrackSettings,
+                            new TrackSettings(rdInYears, rdInMonths, rdInWeeks, rdInDays, rdInHours, rdInMinutes, rdInSecs)));
+                }
+                while (cursor.moveToNext());
+                //Log.d("MyLog", cursor.toString());
+
+            }
+            cursor.close();
+            return events;
+        }
     }
 
 

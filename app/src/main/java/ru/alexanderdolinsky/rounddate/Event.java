@@ -1,6 +1,7 @@
 package ru.alexanderdolinsky.rounddate;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -124,5 +125,16 @@ class Event {
 
     public void setTrackSettings(TrackSettings trackSettings) {
         this.trackSettings = trackSettings;
+    }
+
+    public String getDate() {
+
+        SimpleDateFormat sdfDate = new SimpleDateFormat("dd - MM - yyyy");
+        return sdfDate.format(this.getDateAndTime().getTime());
+    }
+
+    public String getTime() {
+        SimpleDateFormat sdfTime = new SimpleDateFormat("kk : mm");
+        return sdfTime.format(this.getDateAndTime().getTime());
     }
 }

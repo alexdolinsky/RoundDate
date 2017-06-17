@@ -55,6 +55,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ROUNDDATES_ID_EVENT = "id_event";
     public static final String COLUMN_ROUNDDATES_RARE = "rare";
     public static final String COLUMN_ROUNDDATES_IMPORTANT = "important";
+
+    public static final String VIEW_EVENTS = "view_events";
     private static String myEvents;
 
 
@@ -122,6 +124,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + myEvents + "', 0, 0, 0, 0, 0, 0, 0, 0);"
         );
 
+        db.execSQL("CREATE VIEW " + VIEW_EVENTS + " AS SELECT "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_ID + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_NAME + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_COMMENT + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_ID_EVENTGROUP + ", "
+                + TABLE_EVENT_GROUPS + "." + COLUMN_EVENTGROUPS_NAME + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_DATEANDTIME + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_SOURCETRACKSETTINGS + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINYEARS + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINMONTHS + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINWEEKS + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINDAYS + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINHOURS + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINMINUTES + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINSECS +
+                " FROM " + TABLE_EVENTS + " INNER JOIN " + TABLE_EVENT_GROUPS +
+                " ON " + TABLE_EVENTS + "." + COLUMN_EVENTS_ID_EVENTGROUP + "="
+                + TABLE_EVENT_GROUPS + "." + COLUMN_EVENTGROUPS_ID + ";"
+        );
+
+
+
     }
 
     @Override
@@ -129,6 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS" + TABLE_EVENT_GROUPS + ";");
         db.execSQL("DROP TABLE IF EXISTS" + TABLE_EVENTS + ";");
         db.execSQL("DROP TABLE IF EXISTS" + TABLE_ROUNDDATES + ";");
+        db.execSQL("DROP VIEW IF EXISTS" + VIEW_EVENTS + ";");
         onCreate(db);
     }
 }

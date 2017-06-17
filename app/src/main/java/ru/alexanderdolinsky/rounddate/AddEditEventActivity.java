@@ -93,7 +93,7 @@ public class AddEditEventActivity extends AppCompatActivity {
         DatabaseAdapter adapter = new DatabaseAdapter(this);
         adapter.open();
 
-        final List<EventGroup> eventGroups = adapter.getEventGroups();
+        final List<EventGroup> eventGroups = adapter.getEventGroups(false, true);
 
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventGroups);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -106,7 +106,7 @@ public class AddEditEventActivity extends AppCompatActivity {
                 setSelectedEventGroup(eventGroups.get(position));
                 EditText et = (EditText) findViewById(R.id.etNewEventsGroup);
                 switch ((int) getSelectedEventGroup().getId()) {
-                    case -1:
+                    case DatabaseAdapter.LAST_ELEMENT_ID:
                         et.setVisibility(View.VISIBLE);
                         break;
                     default:
