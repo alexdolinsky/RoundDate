@@ -32,12 +32,6 @@ public class EventListActivity extends AppCompatActivity {
 
         setEventsGroupName(getEventsGroup());
 
-        for (EventGroup eGroup : eventsGroup
-                ) {
-            Log.d("MyLog", "ID: " + eGroup.getId() + " Имя группы: " + eGroup.getName() +
-                    " Источник настроей слежения: " + eGroup.getSourceTrackSettings());
-
-        }
 
         setSelectedEventsGroupId(DatabaseAdapter.FIRST_ELEMENT_ID);
 
