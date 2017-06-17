@@ -56,7 +56,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ROUNDDATES_RARE = "rare";
     public static final String COLUMN_ROUNDDATES_IMPORTANT = "important";
 
-    public static final String VIEW_EVENTS = "view_events";
+    public static final String VIEW_EVENTS = "view_events"; // название представления Событий
+    // столбцы-алиасы представления событий
+    // столбцы таблицы "events"
+    public static final String COLUMN_VIEWEVENTS_ID = "_id";
+    public static final String COLUMN_VIEWEVENTS_NAME = "name";
+    public static final String COLUMN_VIEWEVENTS_COMMENT = "comment";
+    public static final String COLUMN_VIEWEVENTS_ID_EVENTGROUP = "id_event_group";
+    public static final String COLUMN_VIEWEVENTS_EVENTGROUPNAME = "event_group_name";
+    public static final String COLUMN_VIEWEVENTS_DATEANDTIME = "date_and_time";
+    public static final String COLUMN_VIEWEVENTS_SOURCETRACKSETTINGS = "source_track_settings";
+    public static final String COLUMN_VIEWEVENTS_RDINYEARS = "rd_in_years";
+    public static final String COLUMN_VIEWEVENTS_RDINMONTHS = "rd_in_months";
+    public static final String COLUMN_VIEWEVENTS_RDINWEEKS = "rd_in_weeks";
+    public static final String COLUMN_VIEWEVENTS_RDINDAYS = "rd_in_days";
+    public static final String COLUMN_VIEWEVENTS_RDINHOURS = "rd_in_hours";
+    public static final String COLUMN_VIEWEVENTS_RDINMINUTES = "rd_in_minutes";
+    public static final String COLUMN_VIEWEVENTS_RDINSECS = "rd_in_secs";
+
     private static String myEvents;
 
 
@@ -125,24 +142,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
 
         db.execSQL("CREATE VIEW " + VIEW_EVENTS + " AS SELECT "
-                + TABLE_EVENTS + "." + COLUMN_EVENTS_ID + ", "
-                + TABLE_EVENTS + "." + COLUMN_EVENTS_NAME + ", "
-                + TABLE_EVENTS + "." + COLUMN_EVENTS_COMMENT + ", "
-                + TABLE_EVENTS + "." + COLUMN_EVENTS_ID_EVENTGROUP + ", "
-                + TABLE_EVENT_GROUPS + "." + COLUMN_EVENTGROUPS_NAME + ", "
-                + TABLE_EVENTS + "." + COLUMN_EVENTS_DATEANDTIME + ", "
-                + TABLE_EVENTS + "." + COLUMN_EVENTS_SOURCETRACKSETTINGS + ", "
-                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINYEARS + ", "
-                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINMONTHS + ", "
-                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINWEEKS + ", "
-                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINDAYS + ", "
-                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINHOURS + ", "
-                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINMINUTES + ", "
-                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINSECS +
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_ID + " AS " + COLUMN_VIEWEVENTS_ID + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_NAME + " AS " + COLUMN_VIEWEVENTS_NAME + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_COMMENT + " AS " + COLUMN_VIEWEVENTS_COMMENT + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_ID_EVENTGROUP + " AS " + COLUMN_VIEWEVENTS_ID_EVENTGROUP + ", "
+                + TABLE_EVENT_GROUPS + "." + COLUMN_EVENTGROUPS_NAME + " AS " + COLUMN_VIEWEVENTS_EVENTGROUPNAME + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_DATEANDTIME + " AS " + COLUMN_VIEWEVENTS_DATEANDTIME + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_SOURCETRACKSETTINGS + " AS " + COLUMN_VIEWEVENTS_SOURCETRACKSETTINGS + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINYEARS + " AS " + COLUMN_VIEWEVENTS_RDINYEARS + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINMONTHS + " AS " + COLUMN_VIEWEVENTS_RDINMONTHS + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINWEEKS + " AS " + COLUMN_VIEWEVENTS_RDINWEEKS + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINDAYS + " AS " + COLUMN_VIEWEVENTS_RDINDAYS + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINHOURS + " AS " + COLUMN_VIEWEVENTS_RDINHOURS + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINMINUTES + " AS " + COLUMN_VIEWEVENTS_RDINMINUTES + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINSECS + " AS " + COLUMN_VIEWEVENTS_RDINSECS +
                 " FROM " + TABLE_EVENTS + " INNER JOIN " + TABLE_EVENT_GROUPS +
                 " ON " + TABLE_EVENTS + "." + COLUMN_EVENTS_ID_EVENTGROUP + "="
                 + TABLE_EVENT_GROUPS + "." + COLUMN_EVENTGROUPS_ID + ";"
         );
+        db.execSQL("PRAGMA foreign_keys=on;");
 
 
 
@@ -150,10 +168,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS" + TABLE_EVENT_GROUPS + ";");
-        db.execSQL("DROP TABLE IF EXISTS" + TABLE_EVENTS + ";");
-        db.execSQL("DROP TABLE IF EXISTS" + TABLE_ROUNDDATES + ";");
-        db.execSQL("DROP VIEW IF EXISTS" + VIEW_EVENTS + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT_GROUPS + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ROUNDDATES + ";");
+        db.execSQL("DROP VIEW IF EXISTS " + VIEW_EVENTS + ";");
         onCreate(db);
     }
 }

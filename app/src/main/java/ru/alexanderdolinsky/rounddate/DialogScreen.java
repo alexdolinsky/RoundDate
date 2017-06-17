@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -14,15 +17,15 @@ import android.widget.TextView;
 
 public class DialogScreen {
 
-    private final static int IDD_RD_YEARS = 0;
-    private final static int IDD_RD_MONTHS = 1;
-    private final static int IDD_RD_WEEKS = 2;
-    private final static int IDD_RD_DAYS = 3;
-    private final static int IDD_RD_HOURS = 4;
-    private final static int IDD_RD_MINUTES = 5;
-    private final static int IDD_RD_SECS = 6;
+    public final static int IDD_RD_YEARS = 0;
+    public final static int IDD_RD_MONTHS = 1;
+    public final static int IDD_RD_WEEKS = 2;
+    public final static int IDD_RD_DAYS = 3;
+    public final static int IDD_RD_HOURS = 4;
+    public final static int IDD_RD_MINUTES = 5;
+    public final static int IDD_RD_SECS = 6;
 
-    private final static int IDD_CHOICE_EVENT_GROUP = 20;
+    public final static int IDD_CHOICE_EVENT_GROUP = 20;
 
 
     private final int IDD_dialog;
@@ -187,16 +190,34 @@ public class DialogScreen {
                         .setItems(elActivity.getEventsGroupName(), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 elActivity.setSelectedEventsGroupId(which);
+
+                                DatabaseAdapter adapter = new DatabaseAdapter(elActivity);
+                                adapter.open();
+
+                                // устанавливаем имя выбранной группы событий
+                                TextView tvGroupName = (TextView) elActivity.findViewById(R.id.tvEventsGroup);
+                                tvGroupName.setText(elActivity.getEventsGroupName()[which]);
+                                ImageButton imageButton = (ImageButton) elActivity.findViewById(R.id.btnEditEventsGroup);
+                                // получаем список событий по ID группы событий или же все события, если выбраны все события
+                                if (which == 0) {
+                                    elActivity.setEvents(adapter.getAllEvents());
+                                    //imageButton.setEnabled(false);
+                                    imageButton.setVisibility(View.INVISIBLE);
+                                } else {
+                                    elActivity.setEvents(adapter.getEventsById(elActivity.getEventsGroup().get(which).getId()));
+                                    //imageButton.setEnabled(true);
+                                    imageButton.setVisibility(View.VISIBLE);
+                                }
+
+
+                                // выводим события в список
+                                elActivity.eventsList = (ListView) elActivity.findViewById(R.id.lvEvents);
+                                EventAdapter eventAdapter = new EventAdapter(elActivity, R.layout.event_item, elActivity.getEvents());
+                                elActivity.eventsList.setAdapter(eventAdapter);
+                                adapter.close();
                             }
                         });
                 return builder.create();
-
-
-
-
-
-
-
 
 
             default:

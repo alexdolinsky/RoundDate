@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,6 +30,8 @@ public class EventListActivity extends AppCompatActivity {
 
         setEventsGroup(adapter.getEventGroups(true, false));
 
+        setEventsGroupName(getEventsGroup());
+
         for (EventGroup eGroup : eventsGroup
                 ) {
             Log.d("MyLog", "ID: " + eGroup.getId() + " Имя группы: " + eGroup.getName() +
@@ -42,15 +45,13 @@ public class EventListActivity extends AppCompatActivity {
         TextView tvGroupName = (TextView) findViewById(R.id.tvEventsGroup);
         tvGroupName.setText(R.string.all_events);
 
+        // деактивация кнопки редактирование группы событий
+        ImageButton imageButton = (ImageButton) findViewById(R.id.btnEditEventsGroup);
+        //imageButton.setEnabled(false);
+        imageButton.setVisibility(View.INVISIBLE);
+
         // получаем список всех событий
         setEvents(adapter.getAllEvents());
-
-        for (Event event : events) {
-            Log.d("MyLog", "ID: " + event.getId() + " Имя события: " + event.getName() +
-                    " Комментарий: " + event.getComment() +
-                    " Группа событий: " + event.getNameEventGroup() +
-                    " Дата: " + event.getDateAndTime());
-        }
 
 
         // выводим события в список
@@ -58,8 +59,6 @@ public class EventListActivity extends AppCompatActivity {
         EventAdapter eventAdapter = new EventAdapter(this, R.layout.event_item, getEvents());
         eventsList.setAdapter(eventAdapter);
         adapter.close();
-
-
 
 
 
@@ -73,13 +72,22 @@ public class EventListActivity extends AppCompatActivity {
         DialogScreen ds;
         android.app.AlertDialog dialog;
 
-        ds = new DialogScreen(0);
+        ds = new DialogScreen(DialogScreen.IDD_CHOICE_EVENT_GROUP);
         dialog = ds.getDialog(this);
         dialog.show();
     }
 
     public CharSequence[] getEventsGroupName() {
         return eventsGroupName;
+    }
+
+    public void setEventsGroupName(List<EventGroup> eventsGroup) {
+        int i = 0;
+        this.eventsGroupName = new CharSequence[eventsGroup.size()];
+        for (EventGroup eventGroup : eventsGroup) {
+            this.eventsGroupName[i] = eventGroup.getName();
+            i++;
+        }
     }
 
     public long getSelectedEventsGroupId() {
@@ -105,4 +113,6 @@ public class EventListActivity extends AppCompatActivity {
     public void setEvents(List<Event> events) {
         this.events = events;
     }
+
+
 }

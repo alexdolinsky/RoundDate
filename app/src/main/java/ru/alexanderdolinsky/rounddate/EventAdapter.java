@@ -42,8 +42,6 @@ public class EventAdapter extends ArrayAdapter<Event> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        //View view = inflater.inflate(this.layout,parent,false);
-
 
         Event event = events.get(position);
 
@@ -51,10 +49,7 @@ public class EventAdapter extends ArrayAdapter<Event> {
         viewHolder.tvEventGroupName.setText(event.getNameEventGroup());
         viewHolder.tvDate.setText(event.getDate());
         viewHolder.tvTime.setText(event.getTime());
-        /*Log.d("MyLog", "ID: " + event.getId() + " Имя события: " + event.getName() +
-        " Группа событий: " + event.getNameEventGroup() +
-        " Дата: " + event.getDate() +
-        " Время: " + event.getTime());*/
+
 
         return convertView;
     }

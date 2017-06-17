@@ -18,7 +18,7 @@
             android:id="@+id/tvEventName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="День рождения"
+            android:text="День рождения hfueuehfu udeuh uhuidfg uhdvdugh"
             android:textSize="@dimen/large_size" />
 
         <TextView
@@ -26,13 +26,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="4dp"
-            android:text="Мои события" />
+            android:text="Мои событияd dgfdfigh difg idfgu idugfi du uidufg " />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="10"
+        android:gravity="center"
         android:orientation="vertical">
 
         <TextView
