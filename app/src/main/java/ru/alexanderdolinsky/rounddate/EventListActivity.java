@@ -1,9 +1,10 @@
 package ru.alexanderdolinsky.rounddate;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,14 +47,29 @@ public class EventListActivity extends AppCompatActivity {
 
         // получаем список всех событий
         setEvents(adapter.getAllEvents());
-
+        adapter.close();
 
         // выводим события в список
         eventsList = (ListView) findViewById(R.id.lvEvents);
         EventAdapter eventAdapter = new EventAdapter(this, R.layout.event_item, getEvents());
         eventsList.setAdapter(eventAdapter);
-        adapter.close();
 
+        // устанавливаем слушателя на список и переход к активити события по ID события
+
+        AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // получаем выбранное событие
+                Event selectedEvent = (Event) parent.getItemAtPosition(position);
+                // передаем ID события в активити события
+                Intent intent = new Intent(EventListActivity.this, EventActivity.class);
+                intent.putExtra("ID", selectedEvent.getId());
+                startActivity(intent);
+
+            }
+        };
+
+        eventsList.setOnItemClickListener(itemListener);
 
 
     }

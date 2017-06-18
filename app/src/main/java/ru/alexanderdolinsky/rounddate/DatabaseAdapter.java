@@ -255,4 +255,33 @@ public class DatabaseAdapter {
         cursor.close();
         return events;
     }
+
+    public Event getEventById(long idEvent) {
+        Event event = new Event();
+        String selection = "" + DatabaseHelper.COLUMN_VIEWEVENTS_ID + "=" + idEvent;
+
+        Cursor cursor = database.query(DatabaseHelper.VIEW_EVENTS, null, selection, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            event.setId(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_ID)));
+            event.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_NAME)));
+            event.setComment(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_COMMENT)));
+            event.setIdEventGroup(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_ID_EVENTGROUP)));
+            event.setNameEventGroup(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_EVENTGROUPNAME)));
+            Calendar dateAndTime = new GregorianCalendar();
+            dateAndTime.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_DATEANDTIME)));
+            event.setDateAndTime(dateAndTime);
+            event.setSourceTrackSettings(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_SOURCETRACKSETTINGS)));
+            event.setTrackSettings(new TrackSettings(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINYEARS)),
+                    cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINMONTHS)),
+                    cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINWEEKS)),
+                    cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINDAYS)),
+                    cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINHOURS)),
+                    cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINMINUTES)),
+                    cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINSECS))));
+        }
+
+        cursor.close();
+        return event;
+    }
 }

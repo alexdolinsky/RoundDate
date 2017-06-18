@@ -129,12 +129,12 @@ class Event {
 
     public String getDate() {
 
-        SimpleDateFormat sdfDate = new SimpleDateFormat("dd - MM - yyyy");
+        SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
         return sdfDate.format(this.getDateAndTime().getTime());
     }
 
     public String getTime() {
-        SimpleDateFormat sdfTime = new SimpleDateFormat("kk : mm");
+        SimpleDateFormat sdfTime = new SimpleDateFormat("kk:mm");
         return sdfTime.format(this.getDateAndTime().getTime());
     }
 }

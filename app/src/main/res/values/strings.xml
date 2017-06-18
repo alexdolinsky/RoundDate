@@ -84,6 +84,37 @@
     <string name="event_name_is_exists">Событие с таким именем уже существует</string>
     <string name="all_events">Все события</string>
     <string name="edit_events_group">Редактирование группы событий</string>
+    <string name="edit_event">Редактировать событие</string>
+    <string name="since_the_event_time_has_passed">с момента события прошло времени</string>
+    <string name="in_years">в годах:</string>
+    <string name="in_months">в месяцах:</string>
+    <string name="in_weeks">в неделях:</string>
+    <string name="in_days">в днях:</string>
+    <string name="in_hours">в часах:</string>
+    <string name="in_minutes">в минутах:</string>
+    <string name="in_secs">в секундах:</string>
+    <string name="event_has_not_yet_occurred">Событие еще не наступило</string>
+    <string name="years_1">год</string>
+    <string name="years_2">года</string>
+    <string name="years_3">лет</string>
+    <string name="months_1">месяц</string>
+    <string name="months_2">месяца</string>
+    <string name="months_3">месяцев</string>
+    <string name="weeks_1">неделя</string>
+    <string name="weeks_2">недели</string>
+    <string name="weeks_3">недель</string>
+    <string name="days_1">день</string>
+    <string name="days_2">дня</string>
+    <string name="days_3">дней</string>
+    <string name="hours_1">час</string>
+    <string name="hours_2">часа</string>
+    <string name="hours_3">часов</string>
+    <string name="minutes_1">минута</string>
+    <string name="minutes_2">минуты</string>
+    <string name="minutes_3">минут</string>
+    <string name="secs_1">секунда</string>
+    <string name="secs_2">секунды</string>
+    <string name="secs_3">секунд</string>
 
 
 </resources>
