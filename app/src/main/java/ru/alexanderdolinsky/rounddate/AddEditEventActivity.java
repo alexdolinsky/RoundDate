@@ -20,6 +20,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -113,7 +114,7 @@ public class AddEditEventActivity extends AppCompatActivity {
                         et.setVisibility(View.GONE);
                         break;
                 }
-                Log.d("MyLog", "selectedEventGroup=" + selectedEventGroup.getId() + selectedEventGroup.getName());
+                // Log.d("MyLog", "selectedEventGroup=" + selectedEventGroup.getId() + selectedEventGroup.getName());
             }
 
             @Override
@@ -248,9 +249,45 @@ public class AddEditEventActivity extends AppCompatActivity {
 
         event.setId(adapter.addEvent(event));
 
-        Log.d("MyLog", "id=" + event.getId() + " nameEvent=" + event.getName());
+        //Log.d("MyLog", "id=" + event.getId() + " nameEvent=" + event.getName());
 
         // TODO: 12.06.2017 Расчет Круглых дат
+
+        List<RoundDate> roundDates;
+
+        //определение действующих настроек слежения
+        TrackSettings trackSettings;
+        switch (event.getSourceTrackSettings()) {
+            case Event.SOURCE_TRACK_SETTINGS_APP:
+                trackSettings = new TrackSettings(this);
+                break;
+            case Event.SOURCE_TRACK_SETTINGS_GROUP:
+                trackSettings = adapter.getGroupTrackSettingsById(event.getIdEventGroup());
+                break;
+            case Event.SOURCE_TRACK_SETTINGS_EVENT:
+                trackSettings = event.getTrackSettings();
+                break;
+            default:
+                trackSettings = new TrackSettings(this);
+                break;
+        }
+
+        if (trackSettings.getRdInYears() != TrackSettings.NOT_TRACK) {
+            roundDates = event.getRoundDates(Event.YEAR, trackSettings.getRdInYears());
+
+            for (RoundDate roundDate : roundDates) {
+                Log.d("MyLog", "ID = " + roundDate.getId() +
+                        " valueOf = " + roundDate.getValueOf() +
+                        " dateAndTime = " + roundDate.getDateAndTime() +
+                        " idEvent = " + roundDate.getIdEvent() +
+                        " NameEvent = " + roundDate.getNameEvent() +
+                        " rare = " + roundDate.getRare() +
+                        " important = " + roundDate.getImportant()
+                );
+            }
+        }
+
+
 
         // TODO: 12.06.2017 Запись круглых дат в БД
 

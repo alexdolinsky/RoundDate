@@ -46,12 +46,19 @@ class RoundDate {
     public final static int UNIT_MINUTES = 6;
     public final static int UNIT_SECS = 7;
 
+    public final static int STANDART = 0;
+    public final static int RARE = 1;
+    public final static int VERY_RARE = 2;
+    public final static int IMPORTANT = 1;
+    public final static int VERY_IMPORTANT = 2;
+    public final static int NOT_IMPORTANT = 3;
+
 
 
     RoundDate() {
         this.id = -1;
         this.valueOf = 1;
-        this.unit = 3;
+        this.unit = 4;
         this.dateAndTime = new GregorianCalendar();
         this.idEvent = -1;
         this.nameEvent = "Standart Event";

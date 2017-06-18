@@ -19,7 +19,7 @@ public  class HidSet {
     // кратности круглых дат в зависимости от их редкости
     public static final long MULT_STANDART_RD_IN_YEARS = 1;
     public static final long MULT_RARE_RD_IN_YEARS = 5;
-    public static final long MULT_VERY_RARE_RD_IN_YEARS = 10;
+    public static final long MULT_VERY_RARE_RD_IN_YEARS = 25;
 
     public static final long MULT_STANDART_RD_IN_MONTHS = 10;
     public static final long MULT_RARE_RD_IN_MONTHS = 50;

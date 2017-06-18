@@ -182,43 +182,6 @@ public class DatabaseAdapter {
             return events;
         }
     }
-/*
-    public List<Event> getEvents() {
-        {
-            ArrayList<Event> events = new ArrayList<>();
-
-            Cursor cursor = database.query(DatabaseHelper.TABLE_EVENTS, null, null, null, null, null, null);
-
-            if (cursor.moveToFirst()) {
-                do {
-                    long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_ID));
-                    String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_NAME));
-                    String comment = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_COMMENT));
-                    long idEventGroup = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_ID_EVENTGROUP));
-                    //nameEventGroup = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENT_GROUPS + "." + DatabaseHelper.COLUMN_EVENTGROUPS_NAME));
-                    //Log.d("MyLog", "Группа событий" + nameEventGroup);
-                    Calendar dateAndTime = new GregorianCalendar();
-                    dateAndTime.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_DATEANDTIME)));
-                    int sourceTrackSettings = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_SOURCETRACKSETTINGS));
-                    int rdInYears = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINYEARS));
-                    int rdInMonths = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINMONTHS));
-                    int rdInWeeks = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINWEEKS));
-                    int rdInDays = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINDAYS));
-                    int rdInHours = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINHOURS));
-                    int rdInMinutes = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINMINUTES));
-                    int rdInSecs = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TABLE_EVENTS + "." + DatabaseHelper.COLUMN_EVENTS_RDINSECS));
-                    events.add(new Event(id, name, comment, idEventGroup, ""nameEventGroup, dateAndTime, sourceTrackSettings,
-                            new TrackSettings(rdInYears, rdInMonths, rdInWeeks, rdInDays, rdInHours, rdInMinutes, rdInSecs)));
-                }
-                while (cursor.moveToNext());
-                //Log.d("MyLog", cursor.toString());
-
-            }
-            cursor.close();
-            return events;
-        }
-    }
-*/
 
     public List<Event> getEventsById(long idEventsGroup) {
 
@@ -283,5 +246,23 @@ public class DatabaseAdapter {
 
         cursor.close();
         return event;
+    }
+
+    public TrackSettings getGroupTrackSettingsById(long idEventGroup) {
+        TrackSettings trackSettings;
+        String selection = "" + DatabaseHelper.COLUMN_EVENTGROUPS_ID + "=" + idEventGroup;
+
+        Cursor cursor = database.query(DatabaseHelper.TABLE_EVENT_GROUPS, null, selection, null, null, null, null);
+
+        cursor.moveToFirst();
+        trackSettings = new TrackSettings(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINYEARS)),
+                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINMONTHS)),
+                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINWEEKS)),
+                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINDAYS)),
+                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINHOURS)),
+                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINMINUTES)),
+                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINSECS)));
+        cursor.close();
+        return trackSettings;
     }
 }
