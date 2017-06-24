@@ -1,9 +1,13 @@
 package ru.alexanderdolinsky.rounddate;
 
+
 import android.content.Context;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by Alexsvet on 04.06.2017.
@@ -201,4 +205,70 @@ class RoundDate {
         }
     }
 
+    public static String getStringOfDateAndTime(Calendar dateAndTime) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy kk:mm");
+        return sdf.format(dateAndTime.getTime());
+    }
+
+    public static String getTimeToWait(Context context, Calendar dateAndTime) {
+        Calendar currentDateAndTime = new GregorianCalendar();
+        long duration = dateAndTime.getTimeInMillis() - currentDateAndTime.getTimeInMillis();
+
+        if (duration > 31557600000L) { //если разница более 1 года
+            long value = duration / 31557600000L;
+            return context.getString(R.string.over) + " " + value + " " + getGenitiveUnit(context, value, RoundDate.UNIT_YEARS);
+        } else if (duration > 2629800000L) { //если разница более 1 месяца
+            long value = duration / 2629800000L;
+            return context.getString(R.string.over) + " " + value + " " + getGenitiveUnit(context, value, RoundDate.UNIT_MONTHS);
+        } else if (duration > 86400000L) { //если разница более 1 дня
+            long value = duration / 86400000L;
+            return value + " " + getUnit(context, value, RoundDate.UNIT_DAYS);
+        } else if (duration > 3600000L) { //если разница более 1 часа
+            long value = duration / 3600000L;
+            return value + " " + getUnit(context, value, RoundDate.UNIT_HOURS);
+        } else if (duration > 0L) { //если разница менее 1 часа
+            long value = 1L;
+            return context.getString(R.string.less) + " " + value + " " + getUnit(context, value, RoundDate.UNIT_HOURS);
+        } else { //если разница отрицательная
+            return context.getString(R.string.already_passed);
+        }
+    }
+
+    private static String getGenitiveUnit(Context context, long value, int unit) {
+        int value10 = (int) value % 10;
+        int value100 = (int) value % 100;
+
+        switch (unit) {
+            case UNIT_YEARS:
+                if ((value10 == 1) && (value100 != 11)) {
+                    return context.getString(R.string.years_4);
+                } else return context.getString(R.string.years_3);
+            case UNIT_MONTHS:
+                if ((value10 == 1) && (value100 != 11)) {
+                    return context.getString(R.string.months_4);
+                } else return context.getString(R.string.months_3);
+            case UNIT_WEEKS:
+                if ((value10 == 1) && (value100 != 11)) {
+                    return context.getString(R.string.weeks_4);
+                } else return context.getString(R.string.weeks_3);
+            case UNIT_DAYS:
+                if ((value10 == 1) && (value100 != 11)) {
+                    return context.getString(R.string.days_4);
+                } else return context.getString(R.string.days_3);
+            case UNIT_HOURS:
+                if ((value10 == 1) && (value100 != 11)) {
+                    return context.getString(R.string.hours_4);
+                } else return context.getString(R.string.hours_3);
+            case UNIT_MINUTES:
+                if ((value10 == 1) && (value100 != 11)) {
+                    return context.getString(R.string.minutes_4);
+                } else return context.getString(R.string.minutes_3);
+            case UNIT_SECS:
+                if ((value10 == 1) && (value100 != 11)) {
+                    return context.getString(R.string.secs_4);
+                } else return context.getString(R.string.secs_3);
+            default:
+                return "";
+        }
+    }
 }

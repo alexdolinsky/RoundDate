@@ -1,6 +1,8 @@
 package ru.alexanderdolinsky.rounddate;
 
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -156,15 +158,18 @@ class Event {
 
         ArrayList<RoundDate> roundDates = new ArrayList<>();
 
+        int i;
+
         switch (unit) {
             case YEAR:
-                int i;
+
                 switch (value) {
                     case TrackSettings.STANDART:
                         i = 1;
                         while (i * HidSet.MULT_STANDART_RD_IN_YEARS <= HidSet.PERIOD_IN_YEARS) {
                             long valueOf = i * HidSet.MULT_STANDART_RD_IN_YEARS;
-                            Calendar dateAndTime = this.getDateAndTime();
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis());
                             dateAndTime.add(Calendar.YEAR, (int) valueOf);
                             int rare = RoundDate.STANDART;
                             if (valueOf % HidSet.MULT_RARE_RD_IN_YEARS == 0) {
@@ -173,15 +178,22 @@ class Event {
                             if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_YEARS == 0) {
                                 rare = RoundDate.VERY_RARE;
                             }
+
+                            Log.d("MyLog", " valueOf = " + valueOf +
+                                    " dateAndTime = " + dateAndTime.getTimeInMillis() / 31557600000L
+                            );
+
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_YEARS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
 
+
                     case TrackSettings.RARE:
                         i = 1;
-                        while (i * HidSet.MULT_RARE_RD_IN_YEARS > HidSet.PERIOD_IN_YEARS) {
+                        while (i * HidSet.MULT_RARE_RD_IN_YEARS <= HidSet.PERIOD_IN_YEARS) {
                             long valueOf = i * HidSet.MULT_RARE_RD_IN_YEARS;
-                            Calendar dateAndTime = this.getDateAndTime();
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis());
                             dateAndTime.add(Calendar.YEAR, (int) valueOf);
                             int rare = RoundDate.RARE;
                             if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_YEARS == 0) {
@@ -193,9 +205,10 @@ class Event {
 
                     case TrackSettings.VERY_RARE:
                         i = 1;
-                        while (i * HidSet.MULT_VERY_RARE_RD_IN_YEARS > HidSet.PERIOD_IN_YEARS) {
+                        while (i * HidSet.MULT_VERY_RARE_RD_IN_YEARS <= HidSet.PERIOD_IN_YEARS) {
                             long valueOf = i * HidSet.MULT_VERY_RARE_RD_IN_YEARS;
-                            Calendar dateAndTime = this.getDateAndTime();
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis());
                             dateAndTime.add(Calendar.YEAR, (int) valueOf);
                             int rare = RoundDate.VERY_RARE;
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_YEARS, dateAndTime, this.getId(), this.getName(), rare, rare));
@@ -205,6 +218,311 @@ class Event {
                 }
 
                 return roundDates;
+
+
+            case MONTH:
+                switch (value) {
+                    case TrackSettings.STANDART:
+                        i = 1;
+                        while (i * HidSet.MULT_STANDART_RD_IN_MONTHS <= HidSet.PERIOD_IN_MONTHS) {
+                            long valueOf = i * HidSet.MULT_STANDART_RD_IN_MONTHS;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis());
+                            dateAndTime.add(Calendar.MONTH, (int) valueOf);
+                            int rare = RoundDate.STANDART;
+                            if (valueOf % HidSet.MULT_RARE_RD_IN_MONTHS == 0) {
+                                rare = RoundDate.RARE;
+                            }
+                            if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_MONTHS == 0) {
+                                rare = RoundDate.VERY_RARE;
+                            }
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_MONTHS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                    case TrackSettings.RARE:
+                        i = 1;
+                        while (i * HidSet.MULT_RARE_RD_IN_MONTHS <= HidSet.PERIOD_IN_MONTHS) {
+                            long valueOf = i * HidSet.MULT_RARE_RD_IN_MONTHS;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis());
+                            dateAndTime.add(Calendar.MONTH, (int) valueOf);
+                            int rare = RoundDate.RARE;
+                            if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_MONTHS == 0) {
+                                rare = RoundDate.VERY_RARE;
+                            }
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_MONTHS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                    case TrackSettings.VERY_RARE:
+                        i = 1;
+                        while (i * HidSet.MULT_VERY_RARE_RD_IN_MONTHS <= HidSet.PERIOD_IN_MONTHS) {
+                            long valueOf = i * HidSet.MULT_VERY_RARE_RD_IN_MONTHS;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis());
+                            dateAndTime.add(Calendar.MONTH, (int) valueOf);
+                            int rare = RoundDate.VERY_RARE;
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_MONTHS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                }
+
+                return roundDates;
+
+
+            case WEEK:
+                switch (value) {
+                    case TrackSettings.STANDART:
+                        i = 1;
+                        while (i * HidSet.MULT_STANDART_RD_IN_WEEKS <= HidSet.PERIOD_IN_WEEKS) {
+                            long valueOf = i * HidSet.MULT_STANDART_RD_IN_WEEKS;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis());
+                            dateAndTime.add(Calendar.WEEK_OF_MONTH, (int) valueOf);
+                            int rare = RoundDate.STANDART;
+                            if (valueOf % HidSet.MULT_RARE_RD_IN_WEEKS == 0) {
+                                rare = RoundDate.RARE;
+                            }
+                            if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_WEEKS == 0) {
+                                rare = RoundDate.VERY_RARE;
+                            }
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_WEEKS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                    case TrackSettings.RARE:
+                        i = 1;
+                        while (i * HidSet.MULT_RARE_RD_IN_WEEKS <= HidSet.PERIOD_IN_WEEKS) {
+                            long valueOf = i * HidSet.MULT_RARE_RD_IN_WEEKS;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis());
+                            dateAndTime.add(Calendar.WEEK_OF_MONTH, (int) valueOf);
+                            int rare = RoundDate.RARE;
+                            if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_WEEKS == 0) {
+                                rare = RoundDate.VERY_RARE;
+                            }
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_WEEKS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                    case TrackSettings.VERY_RARE:
+                        i = 1;
+                        while (i * HidSet.MULT_VERY_RARE_RD_IN_WEEKS <= HidSet.PERIOD_IN_WEEKS) {
+                            long valueOf = i * HidSet.MULT_VERY_RARE_RD_IN_WEEKS;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis());
+                            dateAndTime.add(Calendar.WEEK_OF_MONTH, (int) valueOf);
+                            int rare = RoundDate.VERY_RARE;
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_WEEKS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                }
+
+                return roundDates;
+
+
+            case DAY:
+                switch (value) {
+                    case TrackSettings.STANDART:
+                        i = 1;
+                        while (i * HidSet.MULT_STANDART_RD_IN_DAYS <= HidSet.PERIOD_IN_DAYS) {
+                            long valueOf = i * HidSet.MULT_STANDART_RD_IN_DAYS;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis());
+                            dateAndTime.add(Calendar.DAY_OF_MONTH, (int) valueOf);
+                            int rare = RoundDate.STANDART;
+                            if (valueOf % HidSet.MULT_RARE_RD_IN_DAYS == 0) {
+                                rare = RoundDate.RARE;
+                            }
+                            if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_DAYS == 0) {
+                                rare = RoundDate.VERY_RARE;
+                            }
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_DAYS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                    case TrackSettings.RARE:
+                        i = 1;
+                        while (i * HidSet.MULT_RARE_RD_IN_DAYS <= HidSet.PERIOD_IN_DAYS) {
+                            long valueOf = i * HidSet.MULT_RARE_RD_IN_DAYS;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis());
+                            dateAndTime.add(Calendar.DAY_OF_MONTH, (int) valueOf);
+                            int rare = RoundDate.RARE;
+                            if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_DAYS == 0) {
+                                rare = RoundDate.VERY_RARE;
+                            }
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_DAYS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                    case TrackSettings.VERY_RARE:
+                        i = 1;
+                        while (i * HidSet.MULT_VERY_RARE_RD_IN_DAYS <= HidSet.PERIOD_IN_DAYS) {
+                            long valueOf = i * HidSet.MULT_VERY_RARE_RD_IN_DAYS;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis());
+                            dateAndTime.add(Calendar.DAY_OF_MONTH, (int) valueOf);
+                            int rare = RoundDate.VERY_RARE;
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_DAYS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                }
+
+                return roundDates;
+
+
+            case HOUR:
+                switch (value) {
+                    case TrackSettings.STANDART:
+                        i = 1;
+                        while (i * HidSet.MULT_STANDART_RD_IN_HOURS <= HidSet.PERIOD_IN_HOURS) {
+                            long valueOf = i * HidSet.MULT_STANDART_RD_IN_HOURS;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis() + valueOf * 3600000);
+                            int rare = RoundDate.STANDART;
+                            if (valueOf % HidSet.MULT_RARE_RD_IN_HOURS == 0) {
+                                rare = RoundDate.RARE;
+                            }
+                            if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_HOURS == 0) {
+                                rare = RoundDate.VERY_RARE;
+                            }
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_HOURS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                    case TrackSettings.RARE:
+                        i = 1;
+                        while (i * HidSet.MULT_RARE_RD_IN_HOURS <= HidSet.PERIOD_IN_HOURS) {
+                            long valueOf = i * HidSet.MULT_RARE_RD_IN_HOURS;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis() + valueOf * 3600000);
+                            int rare = RoundDate.RARE;
+                            if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_HOURS == 0) {
+                                rare = RoundDate.VERY_RARE;
+                            }
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_HOURS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                    case TrackSettings.VERY_RARE:
+                        i = 1;
+                        while (i * HidSet.MULT_VERY_RARE_RD_IN_HOURS <= HidSet.PERIOD_IN_HOURS) {
+                            long valueOf = i * HidSet.MULT_VERY_RARE_RD_IN_HOURS;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis() + valueOf * 3600000);
+                            int rare = RoundDate.VERY_RARE;
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_HOURS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                }
+
+                return roundDates;
+
+
+            case MINUTE:
+                switch (value) {
+                    case TrackSettings.STANDART:
+                        i = 1;
+                        while (i * HidSet.MULT_STANDART_RD_IN_MINUTES <= HidSet.PERIOD_IN_MINUTES) {
+                            long valueOf = i * HidSet.MULT_STANDART_RD_IN_MINUTES;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis() + valueOf * 60000);
+                            int rare = RoundDate.STANDART;
+                            if (valueOf % HidSet.MULT_RARE_RD_IN_MINUTES == 0) {
+                                rare = RoundDate.RARE;
+                            }
+                            if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_MINUTES == 0) {
+                                rare = RoundDate.VERY_RARE;
+                            }
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_MINUTES, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                    case TrackSettings.RARE:
+                        i = 1;
+                        while (i * HidSet.MULT_RARE_RD_IN_MINUTES <= HidSet.PERIOD_IN_MINUTES) {
+                            long valueOf = i * HidSet.MULT_RARE_RD_IN_MINUTES;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis() + valueOf * 60000);
+                            int rare = RoundDate.RARE;
+                            if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_MINUTES == 0) {
+                                rare = RoundDate.VERY_RARE;
+                            }
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_MINUTES, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                    case TrackSettings.VERY_RARE:
+                        i = 1;
+                        while (i * HidSet.MULT_VERY_RARE_RD_IN_MINUTES <= HidSet.PERIOD_IN_MINUTES) {
+                            long valueOf = i * HidSet.MULT_VERY_RARE_RD_IN_MINUTES;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis() + valueOf * 60000);
+                            int rare = RoundDate.VERY_RARE;
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_MINUTES, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                }
+
+                return roundDates;
+
+
+            case SEC:
+                switch (value) {
+                    case TrackSettings.STANDART:
+                        i = 1;
+                        while (i * HidSet.MULT_STANDART_RD_IN_SECS <= HidSet.PERIOD_IN_SECS) {
+                            long valueOf = i * HidSet.MULT_STANDART_RD_IN_SECS;
+                            Calendar dateAndTime = this.getDateAndTime();
+                            dateAndTime.setTimeInMillis(dateAndTime.getTimeInMillis() + valueOf * 1000);
+                            int rare = RoundDate.STANDART;
+                            if (valueOf % HidSet.MULT_RARE_RD_IN_SECS == 0) {
+                                rare = RoundDate.RARE;
+                            }
+                            if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_SECS == 0) {
+                                rare = RoundDate.VERY_RARE;
+                            }
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_SECS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                    case TrackSettings.RARE:
+                        i = 1;
+                        while (i * HidSet.MULT_RARE_RD_IN_SECS <= HidSet.PERIOD_IN_SECS) {
+                            long valueOf = i * HidSet.MULT_RARE_RD_IN_SECS;
+                            Calendar dateAndTime = this.getDateAndTime();
+                            dateAndTime.setTimeInMillis(dateAndTime.getTimeInMillis() + valueOf * 1000);
+                            int rare = RoundDate.RARE;
+                            if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_SECS == 0) {
+                                rare = RoundDate.VERY_RARE;
+                            }
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_SECS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                    case TrackSettings.VERY_RARE:
+                        i = 1;
+                        while (i * HidSet.MULT_VERY_RARE_RD_IN_SECS <= HidSet.PERIOD_IN_SECS) {
+                            long valueOf = i * HidSet.MULT_VERY_RARE_RD_IN_SECS;
+                            Calendar dateAndTime = this.getDateAndTime();
+                            dateAndTime.setTimeInMillis(dateAndTime.getTimeInMillis() + valueOf * 1000);
+                            int rare = RoundDate.VERY_RARE;
+                            roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_SECS, dateAndTime, this.getId(), this.getName(), rare, rare));
+                            i++;
+                        }
+
+                }
+
+                return roundDates;
+
+
             default:
                 return null;
         }

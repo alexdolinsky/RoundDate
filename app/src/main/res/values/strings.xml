@@ -115,6 +115,16 @@
     <string name="secs_1">секунда</string>
     <string name="secs_2">секунды</string>
     <string name="secs_3">секунд</string>
+    <string name="over">более</string>
+    <string name="less">менее</string>
+    <string name="already_passed">уже прошло</string>
+    <string name="years_4">года</string>
+    <string name="months_4">месяца</string>
+    <string name="weeks_4">недели</string>
+    <string name="days_4">дня</string>
+    <string name="hours_4">часа</string>
+    <string name="minutes_4">минуты</string>
+    <string name="secs_4">секунды</string>
 
 
 </resources>

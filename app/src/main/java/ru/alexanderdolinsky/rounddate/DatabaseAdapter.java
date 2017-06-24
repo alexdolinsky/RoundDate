@@ -37,6 +37,18 @@ public class DatabaseAdapter {
         dbHelper.close();
     }
 
+    public void beginTransaction() {
+        database.beginTransaction();
+    }
+
+    public void endTransaction() {
+        database.endTransaction();
+    }
+
+    public void setTransactionSuccessful() {
+        database.setTransactionSuccessful();
+    }
+
 
     public List<EventGroup> getEventGroups(boolean firstElement, boolean lastElement) {
         ArrayList<EventGroup> eventGroups = new ArrayList<>();
@@ -151,7 +163,6 @@ public class DatabaseAdapter {
 
 
     public List<Event> getAllEvents() {
-        {
             ArrayList<Event> events = new ArrayList<>();
 
             Cursor cursor = database.query(DatabaseHelper.VIEW_EVENTS, null, null, null, null, null, null);
@@ -180,7 +191,6 @@ public class DatabaseAdapter {
             }
             cursor.close();
             return events;
-        }
     }
 
     public List<Event> getEventsById(long idEventsGroup) {
@@ -264,5 +274,52 @@ public class DatabaseAdapter {
                 cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINSECS)));
         cursor.close();
         return trackSettings;
+    }
+
+    public void addRoundDates(List<RoundDate> roundDates) {
+
+        if (!roundDates.isEmpty()) {
+            for (RoundDate roundDate : roundDates) {
+                ContentValues cv = new ContentValues();
+                cv.put(DatabaseHelper.COLUMN_ROUNDDATES_VALUE, roundDate.getValueOf());
+                cv.put(DatabaseHelper.COLUMN_ROUNDDATES_UNIT, roundDate.getUnit());
+                cv.put(DatabaseHelper.COLUMN_ROUNDDATES_DATEANDTIME, roundDate.getDateAndTime().getTimeInMillis());
+                cv.put(DatabaseHelper.COLUMN_ROUNDDATES_ID_EVENT, roundDate.getIdEvent());
+                cv.put(DatabaseHelper.COLUMN_ROUNDDATES_RARE, roundDate.getRare());
+                cv.put(DatabaseHelper.COLUMN_ROUNDDATES_IMPORTANT, roundDate.getImportant());
+                // TODO: 24.06.2017 проверка на ошибки при вставке 
+                database.insert(DatabaseHelper.TABLE_ROUNDDATES, null, cv);
+            }
+        }
+
+    }
+
+
+    public List<RoundDate> getRoundDates() {
+        ArrayList<RoundDate> roundDates = new ArrayList<>();
+
+        Calendar currentDateAndTime = new GregorianCalendar();
+        String selection = DatabaseHelper.COLUMN_VIEWROUNDDATES_DATEANDTIME + ">" + currentDateAndTime.getTimeInMillis();
+        String order = DatabaseHelper.COLUMN_VIEWROUNDDATES_DATEANDTIME;
+
+        Cursor cursor = database.query(DatabaseHelper.VIEW_ROUNDDATES, null, selection, null, null, null, order);
+
+        if (cursor.moveToFirst()) {
+            do {
+                long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_ID));
+                long value = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_VALUE));
+                int unit = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_UNIT));
+                Calendar dateAndTime = new GregorianCalendar();
+                dateAndTime.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_DATEANDTIME)));
+                long idEvent = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_ID_EVENT));
+                String eventName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_EVENTNAME));
+                int rare = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_RARE));
+                int important = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_IMPORTANT));
+                roundDates.add(new RoundDate(id, value, unit, dateAndTime, idEvent, eventName, rare, important));
+            }
+            while (cursor.moveToNext());
+        }
+        cursor.close();
+        return roundDates;
     }
 }

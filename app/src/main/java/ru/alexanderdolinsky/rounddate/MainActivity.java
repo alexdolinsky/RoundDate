@@ -6,13 +6,51 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private List<RoundDate> roundDates;
+
+    ListView roundDatesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DatabaseAdapter adapter = new DatabaseAdapter(this);
+        adapter.open();
+
+
+        // получаем список всех круглых дат
+        setRoundDates(adapter.getRoundDates());
+        adapter.close();
+
+        // выводим круглые даты в список
+        roundDatesList = (ListView) findViewById(R.id.lvRoundDates);
+        RoundDateAdapter roundDateAdapter = new RoundDateAdapter(this, R.layout.round_date_item, getRoundDates());
+        roundDatesList.setAdapter(roundDateAdapter);
+
+        // устанавливаем слушателя на список и вывод диалогового окна по ID круглой даты
+
+        AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // получаем выбранное событие
+                RoundDate selectedRoundDate = (RoundDate) parent.getItemAtPosition(position);
+                // диалоговое окно с выбором важности круглой даты по ID
+                Toast.makeText(MainActivity.this, "Выбрана круглая дата номер " + position, Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        roundDatesList.setOnItemClickListener(itemListener);
     }
 
 
@@ -60,5 +98,13 @@ public class MainActivity extends AppCompatActivity {
     public void onAddEvent(View view) {
         Intent intent = new Intent(MainActivity.this,AddEditEventActivity.class);
         startActivity(intent);
+    }
+
+    public List<RoundDate> getRoundDates() {
+        return roundDates;
+    }
+
+    public void setRoundDates(List<RoundDate> roundDates) {
+        this.roundDates = roundDates;
     }
 }
