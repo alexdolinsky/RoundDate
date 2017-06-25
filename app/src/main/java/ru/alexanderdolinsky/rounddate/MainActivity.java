@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onAddEvent(View view) {
         Intent intent = new Intent(MainActivity.this,AddEditEventActivity.class);
+        intent.putExtra(AddEditEventActivity.ISNEWEVENT, true);
         startActivity(intent);
     }
 

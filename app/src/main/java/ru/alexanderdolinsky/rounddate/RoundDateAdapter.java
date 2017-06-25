@@ -14,14 +14,14 @@ import java.util.List;
  * Created by Alexsvet on 24.06.2017.
  */
 
-public class RoundDateAdapter extends ArrayAdapter<RoundDate> {
+class RoundDateAdapter extends ArrayAdapter<RoundDate> {
 
     private LayoutInflater inflater;
     private int layout;
     private List<RoundDate> roundDates;
     private Context context;
 
-    public RoundDateAdapter(Context context, int resource, List<RoundDate> roundDates) {
+    RoundDateAdapter(Context context, int resource, List<RoundDate> roundDates) {
         super(context, resource, roundDates);
         this.roundDates = roundDates;
         this.layout = resource;
@@ -43,8 +43,13 @@ public class RoundDateAdapter extends ArrayAdapter<RoundDate> {
 
 
         RoundDate roundDate = roundDates.get(position);
-
-        viewHolder.tvValue.setText(Long.toString(roundDate.getValueOf()) + " " + RoundDate.getUnit(getContext(), roundDate.getValueOf(), roundDate.getUnit()));
+        String str = String.format("%,d %s", roundDate.getValueOf(), RoundDate.getUnit(getContext(), roundDate.getValueOf(), roundDate.getUnit()));
+        if (roundDate.getImportant() == RoundDate.VERY_IMPORTANT) {
+            str = "*** " + str + " ***";
+        } else if (roundDate.getImportant() == RoundDate.IMPORTANT) {
+            str = "* " + str + " *";
+        }
+        viewHolder.tvValue.setText(str);
         viewHolder.tvEventName.setText(roundDate.getNameEvent());
         viewHolder.tvDateAndTime.setText(RoundDate.getStringOfDateAndTime(roundDate.getDateAndTime()));
         viewHolder.tvHaveToWait.setText(RoundDate.getTimeToWait(getContext(), roundDate.getDateAndTime()));

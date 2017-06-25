@@ -64,7 +64,7 @@
                 android:id="@+id/tvAddEditEvent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/tv_new_event"
+                android:text="@string/new_event"
                 android:textSize="@dimen/text_title" />
 
             <View

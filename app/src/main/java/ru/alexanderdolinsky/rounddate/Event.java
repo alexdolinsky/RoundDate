@@ -178,14 +178,10 @@ class Event {
                             if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_YEARS == 0) {
                                 rare = RoundDate.VERY_RARE;
                             }
-
-                            Log.d("MyLog", " valueOf = " + valueOf +
-                                    " dateAndTime = " + dateAndTime.getTimeInMillis() / 31557600000L
-                            );
-
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_YEARS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
 
                     case TrackSettings.RARE:
@@ -202,6 +198,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_YEARS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                     case TrackSettings.VERY_RARE:
                         i = 1;
@@ -214,6 +211,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_YEARS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                 }
 
@@ -239,6 +237,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_MONTHS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                     case TrackSettings.RARE:
                         i = 1;
@@ -254,6 +253,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_MONTHS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                     case TrackSettings.VERY_RARE:
                         i = 1;
@@ -266,6 +266,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_MONTHS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                 }
 
@@ -291,6 +292,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_WEEKS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                     case TrackSettings.RARE:
                         i = 1;
@@ -306,6 +308,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_WEEKS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                     case TrackSettings.VERY_RARE:
                         i = 1;
@@ -318,6 +321,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_WEEKS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                 }
 
@@ -343,6 +347,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_DAYS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                     case TrackSettings.RARE:
                         i = 1;
@@ -358,6 +363,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_DAYS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                     case TrackSettings.VERY_RARE:
                         i = 1;
@@ -370,6 +376,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_DAYS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                 }
 
@@ -394,6 +401,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_HOURS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                     case TrackSettings.RARE:
                         i = 1;
@@ -408,6 +416,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_HOURS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                     case TrackSettings.VERY_RARE:
                         i = 1;
@@ -419,6 +428,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_HOURS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                 }
 
@@ -443,6 +453,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_MINUTES, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                     case TrackSettings.RARE:
                         i = 1;
@@ -457,6 +468,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_MINUTES, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                     case TrackSettings.VERY_RARE:
                         i = 1;
@@ -468,6 +480,7 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_MINUTES, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                 }
 
@@ -480,8 +493,8 @@ class Event {
                         i = 1;
                         while (i * HidSet.MULT_STANDART_RD_IN_SECS <= HidSet.PERIOD_IN_SECS) {
                             long valueOf = i * HidSet.MULT_STANDART_RD_IN_SECS;
-                            Calendar dateAndTime = this.getDateAndTime();
-                            dateAndTime.setTimeInMillis(dateAndTime.getTimeInMillis() + valueOf * 1000);
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis() + valueOf * 1000);
                             int rare = RoundDate.STANDART;
                             if (valueOf % HidSet.MULT_RARE_RD_IN_SECS == 0) {
                                 rare = RoundDate.RARE;
@@ -492,13 +505,14 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_SECS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                     case TrackSettings.RARE:
                         i = 1;
                         while (i * HidSet.MULT_RARE_RD_IN_SECS <= HidSet.PERIOD_IN_SECS) {
                             long valueOf = i * HidSet.MULT_RARE_RD_IN_SECS;
-                            Calendar dateAndTime = this.getDateAndTime();
-                            dateAndTime.setTimeInMillis(dateAndTime.getTimeInMillis() + valueOf * 1000);
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis() + valueOf * 1000);
                             int rare = RoundDate.RARE;
                             if (valueOf % HidSet.MULT_VERY_RARE_RD_IN_SECS == 0) {
                                 rare = RoundDate.VERY_RARE;
@@ -506,17 +520,19 @@ class Event {
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_SECS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                     case TrackSettings.VERY_RARE:
                         i = 1;
                         while (i * HidSet.MULT_VERY_RARE_RD_IN_SECS <= HidSet.PERIOD_IN_SECS) {
-                            long valueOf = i * HidSet.MULT_VERY_RARE_RD_IN_SECS;
-                            Calendar dateAndTime = this.getDateAndTime();
-                            dateAndTime.setTimeInMillis(dateAndTime.getTimeInMillis() + valueOf * 1000);
+                            long valueOf = (long) i * HidSet.MULT_VERY_RARE_RD_IN_SECS;
+                            Calendar dateAndTime = new GregorianCalendar();
+                            dateAndTime.setTimeInMillis(this.getDateAndTime().getTimeInMillis() + valueOf * 1000);
                             int rare = RoundDate.VERY_RARE;
                             roundDates.add(new RoundDate(-1, valueOf, RoundDate.UNIT_SECS, dateAndTime, this.getId(), this.getName(), rare, rare));
                             i++;
                         }
+                        break;
 
                 }
 

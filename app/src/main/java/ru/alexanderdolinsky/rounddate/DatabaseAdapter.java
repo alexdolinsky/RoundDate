@@ -147,10 +147,14 @@ public class DatabaseAdapter {
         return b;
     }
 
-    public boolean isEventExists(String eventName) {
+    boolean isEventExists(String eventName, long id) {
+
+        String selection = DatabaseHelper.COLUMN_EVENTS_NAME + "= '" + eventName + "' AND " +
+                DatabaseHelper.COLUMN_EVENTS_ID + "<>" + id;
+
         Cursor cursor = database.query(DatabaseHelper.TABLE_EVENTS,
                 new String[]{DatabaseHelper.COLUMN_EVENTS_NAME},
-                DatabaseHelper.COLUMN_EVENTS_NAME + "= '" + eventName + "'", null, null, null, null);
+                selection, null, null, null, null);
         boolean b;
         if (cursor.getCount() == 0) {
             b = false;
@@ -162,7 +166,7 @@ public class DatabaseAdapter {
     }
 
 
-    public List<Event> getAllEvents() {
+    List<Event> getAllEvents() {
             ArrayList<Event> events = new ArrayList<>();
 
             Cursor cursor = database.query(DatabaseHelper.VIEW_EVENTS, null, null, null, null, null, null);
@@ -321,5 +325,30 @@ public class DatabaseAdapter {
         }
         cursor.close();
         return roundDates;
+    }
+
+    public void deleteRoundDates(long id, int unit) {
+        String table = DatabaseHelper.TABLE_ROUNDDATES;
+        String where = DatabaseHelper.COLUMN_ROUNDDATES_ID_EVENT + "=" + id + " AND " +
+                DatabaseHelper.COLUMN_ROUNDDATES_UNIT + "=" + unit;
+        database.delete(table, where, null);
+    }
+
+    public int updateEvent(Event event) {
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.COLUMN_EVENTS_NAME, event.getName());
+        cv.put(DatabaseHelper.COLUMN_EVENTS_COMMENT, event.getComment());
+        cv.put(DatabaseHelper.COLUMN_EVENTS_ID_EVENTGROUP, event.getIdEventGroup());
+        cv.put(DatabaseHelper.COLUMN_EVENTS_DATEANDTIME, event.getDateAndTime().getTimeInMillis());
+        cv.put(DatabaseHelper.COLUMN_EVENTS_SOURCETRACKSETTINGS, event.getSourceTrackSettings());
+        cv.put(DatabaseHelper.COLUMN_EVENTS_RDINYEARS, event.getTrackSettings().getRdInYears());
+        cv.put(DatabaseHelper.COLUMN_EVENTS_RDINMONTHS, event.getTrackSettings().getRdInMonths());
+        cv.put(DatabaseHelper.COLUMN_EVENTS_RDINWEEKS, event.getTrackSettings().getRdInWeeks());
+        cv.put(DatabaseHelper.COLUMN_EVENTS_RDINDAYS, event.getTrackSettings().getRdInDays());
+        cv.put(DatabaseHelper.COLUMN_EVENTS_RDINHOURS, event.getTrackSettings().getRdInHours());
+        cv.put(DatabaseHelper.COLUMN_EVENTS_RDINMINUTES, event.getTrackSettings().getRdInMinutes());
+        cv.put(DatabaseHelper.COLUMN_EVENTS_RDINSECS, event.getTrackSettings().getRdInSecs());
+        String where = DatabaseHelper.COLUMN_EVENTS_ID + "=" + event.getId();
+        return database.update(DatabaseHelper.TABLE_EVENTS, cv, where, null);
     }
 }

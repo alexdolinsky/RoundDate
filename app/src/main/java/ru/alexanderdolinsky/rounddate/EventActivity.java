@@ -1,5 +1,6 @@
 package ru.alexanderdolinsky.rounddate;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,7 +53,7 @@ public class EventActivity extends AppCompatActivity {
             }
             tvEventsGroupName.setText(event.getNameEventGroup());
             tvDateAndTime.setText(event.getDate() + " " + event.getTime());
-
+            // TODO: 25.06.2017 настроить часовые пояса при вызове текущего времени
             Calendar currentDateAndTime = new GregorianCalendar();
             long duration = currentDateAndTime.getTimeInMillis() - event.getDateAndTime().getTimeInMillis();
 
@@ -107,6 +108,10 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void onEditEvent(View view) {
+        Intent intent = new Intent(EventActivity.this, AddEditEventActivity.class);
+        intent.putExtra(AddEditEventActivity.ISNEWEVENT, false);
+        intent.putExtra(AddEditEventActivity.EVENT_ID, getEvent().getId());
+        startActivity(intent);
     }
 
     public Event getEvent() {

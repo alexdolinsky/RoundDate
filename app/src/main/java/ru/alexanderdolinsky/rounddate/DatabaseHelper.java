@@ -32,7 +32,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     static final String TABLE_EVENTS = "events"; // название таблицы Событий
     // столбцы таблицы "events"
-    private static final String COLUMN_EVENTS_ID = "_id";
+    static final String COLUMN_EVENTS_ID = "_id";
     static final String COLUMN_EVENTS_NAME = "name";
     static final String COLUMN_EVENTS_COMMENT = "comment";
     static final String COLUMN_EVENTS_ID_EVENTGROUP = "id_event_group";
