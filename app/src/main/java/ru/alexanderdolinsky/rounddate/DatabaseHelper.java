@@ -86,15 +86,21 @@ class DatabaseHelper extends SQLiteOpenHelper {
     static final String COLUMN_VIEWROUNDDATES_IMPORTANT = "important";
 
     private static String myEvents;
+    private TrackSettings trackSettings;
 
 
     DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, SCHEMA);
         myEvents = context.getString(R.string.my_events);
+        trackSettings = new TrackSettings(context);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        // включаем внешние ключи
+        db.execSQL("PRAGMA foreign_keys=on;");
+        //db.setForeignKeyConstraintsEnabled(true);
 
 
         db.execSQL("CREATE TABLE " + TABLE_EVENT_GROUPS + " ("
@@ -114,7 +120,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_EVENTS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_EVENTS_NAME + " TEXT UNIQUE, "
                 + COLUMN_EVENTS_COMMENT + " TEXT NOT NULL, "
-                + COLUMN_EVENTS_ID_EVENTGROUP + " INTEGER REFERENCES " + TABLE_EVENT_GROUPS + "("
+                + COLUMN_EVENTS_ID_EVENTGROUP + " INTEGER CONSTRAINT bbb REFERENCES " + TABLE_EVENT_GROUPS + "("
                         + COLUMN_EVENTGROUPS_ID + ") ON DELETE CASCADE, "
                 + COLUMN_EVENTS_DATEANDTIME + " INTEGER NOT NULL, "
                 + COLUMN_EVENTS_SOURCETRACKSETTINGS + " INTEGER NOT NULL, "
@@ -132,7 +138,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_ROUNDDATES_VALUE + " INTEGER NOT NULL, "
                 + COLUMN_ROUNDDATES_UNIT + " INTEGER NOT NULL, "
                 + COLUMN_ROUNDDATES_DATEANDTIME + " INTEGER NOT NULL, "
-                + COLUMN_ROUNDDATES_ID_EVENT + " INTEGER REFERENCES " + TABLE_EVENTS + "("
+                + COLUMN_ROUNDDATES_ID_EVENT + " INTEGER CONSTRAINT aaa REFERENCES " + TABLE_EVENTS + "("
                     + COLUMN_EVENTS_ID + ") ON DELETE CASCADE, "
                 + COLUMN_ROUNDDATES_RARE + " INTEGER NOT NULL, "
                 + COLUMN_ROUNDDATES_IMPORTANT + " INTEGER NOT NULL);");
@@ -148,7 +154,14 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_EVENTGROUPS_RDINHOURS + ", "
                 + COLUMN_EVENTGROUPS_RDINMINUTES + ", "
                 + COLUMN_EVENTGROUPS_RDINSECS + ") VALUES ('"
-                + myEvents + "', 0, 0, 0, 0, 0, 0, 0, 0);"
+                + myEvents + "', " + EventGroup.SOURCE_TRACK_SETTINGS_APP + ", " +
+                trackSettings.getRdInYears() + ", " +
+                trackSettings.getRdInMonths() + ", " +
+                trackSettings.getRdInWeeks() + ", " +
+                trackSettings.getRdInDays() + ", " +
+                trackSettings.getRdInHours() + ", " +
+                trackSettings.getRdInMinutes() + ", " +
+                trackSettings.getRdInSecs() + ");"
         );
 
         db.execSQL("CREATE VIEW " + VIEW_EVENTS + " AS SELECT "
@@ -184,10 +197,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 " ON " + TABLE_ROUNDDATES + "." + COLUMN_ROUNDDATES_ID_EVENT + "="
                 + TABLE_EVENTS + "." + COLUMN_EVENTS_ID + ";"
         );
-
-        // включаем внешние ключи
-        db.execSQL("PRAGMA foreign_keys=on;");
-
 
 
     }

@@ -1,19 +1,21 @@
 package ru.alexanderdolinsky.rounddate;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class EventActivity extends AppCompatActivity {
 
+    private static final int EDITEVENTREQUESTCODE = 1;
     private Event event;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,6 @@ public class EventActivity extends AppCompatActivity {
             }
             tvEventsGroupName.setText(event.getNameEventGroup());
             tvDateAndTime.setText(event.getDate() + " " + event.getTime());
-            // TODO: 25.06.2017 настроить часовые пояса при вызове текущего времени
             Calendar currentDateAndTime = new GregorianCalendar();
             long duration = currentDateAndTime.getTimeInMillis() - event.getDateAndTime().getTimeInMillis();
 
@@ -67,31 +68,31 @@ public class EventActivity extends AppCompatActivity {
                 tvInSecs.setText(R.string.event_has_not_yet_occurred);
             } else {
                 long secs = duration / 1000;
-                String sSecs = String.format("%,d %s", secs, RoundDate.getUnit(this, secs, RoundDate.UNIT_SECS));
+                String sSecs = String.format(Locale.getDefault(), "%,d %s", secs, RoundDate.getUnit(this, secs, RoundDate.UNIT_SECS));
                 tvInSecs.setText(sSecs);
 
                 long minutes = secs / 60;
-                String sMinutes = String.format("%,d %s", minutes, RoundDate.getUnit(this, minutes, RoundDate.UNIT_MINUTES));
+                String sMinutes = String.format(Locale.getDefault(), "%,d %s", minutes, RoundDate.getUnit(this, minutes, RoundDate.UNIT_MINUTES));
                 tvInMinutes.setText(sMinutes);
 
                 long hours = minutes / 60;
-                String sHours = String.format("%,d %s", hours, RoundDate.getUnit(this, hours, RoundDate.UNIT_HOURS));
+                String sHours = String.format(Locale.getDefault(), "%,d %s", hours, RoundDate.getUnit(this, hours, RoundDate.UNIT_HOURS));
                 tvInHours.setText(sHours);
 
                 long days = hours / 24;
-                String sDays = String.format("%,d %s", days, RoundDate.getUnit(this, days, RoundDate.UNIT_DAYS));
+                String sDays = String.format(Locale.getDefault(), "%,d %s", days, RoundDate.getUnit(this, days, RoundDate.UNIT_DAYS));
                 tvInDays.setText(sDays);
 
                 long weeks = days / 7;
-                String sWeeks = String.format("%,d %s", weeks, RoundDate.getUnit(this, weeks, RoundDate.UNIT_WEEKS));
+                String sWeeks = String.format(Locale.getDefault(), "%,d %s", weeks, RoundDate.getUnit(this, weeks, RoundDate.UNIT_WEEKS));
                 tvInWeeks.setText(sWeeks);
 
                 long months = secs / 2629800;
-                String sMonths = String.format("%,d %s", months, RoundDate.getUnit(this, months, RoundDate.UNIT_MONTHS));
+                String sMonths = String.format(Locale.getDefault(), "%,d %s", months, RoundDate.getUnit(this, months, RoundDate.UNIT_MONTHS));
                 tvInMonths.setText(sMonths);
 
                 long years = secs / 31557600;
-                String sYears = String.format("%,d %s", years, RoundDate.getUnit(this, years, RoundDate.UNIT_YEARS));
+                String sYears = String.format(Locale.getDefault(), "%,d %s", years, RoundDate.getUnit(this, years, RoundDate.UNIT_YEARS));
                 tvInYears.setText(sYears);
             }
 
@@ -111,7 +112,22 @@ public class EventActivity extends AppCompatActivity {
         Intent intent = new Intent(EventActivity.this, AddEditEventActivity.class);
         intent.putExtra(AddEditEventActivity.ISNEWEVENT, false);
         intent.putExtra(AddEditEventActivity.EVENT_ID, getEvent().getId());
-        startActivity(intent);
+        startActivityForResult(intent, EDITEVENTREQUESTCODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == EDITEVENTREQUESTCODE) {
+            if (resultCode == RESULT_OK) {
+                this.recreate();
+            } else {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
     }
 
     public Event getEvent() {
@@ -121,4 +137,14 @@ public class EventActivity extends AppCompatActivity {
     public void setEvent(Event event) {
         this.event = event;
     }
+
+    public void onDeleteEvent(View view) {
+        DialogScreen ds;
+        android.app.AlertDialog dialog;
+        ds = new DialogScreen(DialogScreen.DELETE_EVENT_CONFIRM);
+        dialog = ds.getDialog(this);
+        dialog.show();
+    }
+
+
 }

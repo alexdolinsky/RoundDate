@@ -1,15 +1,13 @@
 package ru.alexanderdolinsky.rounddate;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -19,6 +17,10 @@ public class MainActivity extends AppCompatActivity {
     private List<RoundDate> roundDates;
 
     ListView roundDatesList;
+
+    public static final String ISNEWEVENT = "IS_NEW_EVENT";
+    public static final int ADDEVENTREQUESTCODE = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +100,22 @@ public class MainActivity extends AppCompatActivity {
     public void onAddEvent(View view) {
         Intent intent = new Intent(MainActivity.this,AddEditEventActivity.class);
         intent.putExtra(AddEditEventActivity.ISNEWEVENT, true);
-        startActivity(intent);
+        startActivityForResult(intent, ADDEVENTREQUESTCODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == ADDEVENTREQUESTCODE) {
+            if (resultCode == RESULT_OK) {
+                this.recreate();
+            } else {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
     }
 
     public List<RoundDate> getRoundDates() {

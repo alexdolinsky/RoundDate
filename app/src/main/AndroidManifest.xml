@@ -27,9 +27,12 @@
         <activity
             android:name=".AddEditEventActivity"
             android:label="@string/adding_event"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AddEditEventGroupActivity"
+            android:name=".EditEventGroupActivity"
+            android:label="@string/editing_events_group"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name=".EventListActivity"

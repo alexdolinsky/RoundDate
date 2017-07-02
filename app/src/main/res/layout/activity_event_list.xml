@@ -22,9 +22,9 @@
 
         <TextView
             android:id="@+id/tvEventsGroup"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
+            android:layout_weight="2"
             android:clickable="true"
             android:onClick="onChoiceEventGroup"
             android:paddingBottom="12dp"
@@ -38,12 +38,21 @@
 
         <ImageButton
             android:id="@+id/btnEditEventsGroup"
-            android:layout_width="25dp"
+            android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:contentDescription="@string/edit_events_group"
             android:onClick="onEditEventsGroup"
             app:srcCompat="@android:drawable/ic_menu_edit" />
+
+        <ImageButton
+            android:id="@+id/btnDeleteEventsGroup"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/delete_event_group"
+            android:onClick="onDeleteEventsGroup"
+            app:srcCompat="@android:drawable/ic_delete" />
     </LinearLayout>
 
     <LinearLayout

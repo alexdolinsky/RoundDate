@@ -1,8 +1,6 @@
 package ru.alexanderdolinsky.rounddate;
 
 
-import android.util.Log;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,17 +34,17 @@ class Event {
     // индивидуальные настройки отслеживания События
     private TrackSettings trackSettings;
 
-    public static final int SOURCE_TRACK_SETTINGS_APP = 0;
-    public static final int SOURCE_TRACK_SETTINGS_GROUP = 1;
-    public static final int SOURCE_TRACK_SETTINGS_EVENT = 2;
+    static final int SOURCE_TRACK_SETTINGS_APP = 0;
+    static final int SOURCE_TRACK_SETTINGS_GROUP = 1;
+    static final int SOURCE_TRACK_SETTINGS_EVENT = 2;
 
-    public static final int YEAR = 0;
-    public static final int MONTH = 1;
-    public static final int WEEK = 2;
-    public static final int DAY = 3;
-    public static final int HOUR = 4;
-    public static final int MINUTE = 5;
-    public static final int SEC = 6;
+    static final int YEAR = 0;
+    static final int MONTH = 1;
+    static final int WEEK = 2;
+    static final int DAY = 3;
+    static final int HOUR = 4;
+    static final int MINUTE = 5;
+    static final int SEC = 6;
 
     // конструктор по умолчанию
     Event() {

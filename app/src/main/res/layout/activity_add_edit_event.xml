@@ -79,7 +79,8 @@
                 android:layout_marginBottom="@dimen/space_top_bottom"
                 android:layout_marginTop="@dimen/space_top_bottom"
                 android:hint="@string/enter_event_name"
-                android:inputType="textPersonName" />
+                android:inputType="textCapSentences|textPersonName"
+                android:maxLength="35" />
 
             <EditText
                 android:id="@+id/etEventComment"
@@ -88,7 +89,8 @@
                 android:layout_marginBottom="@dimen/space_top_bottom"
                 android:layout_marginTop="@dimen/space_top_bottom"
                 android:hint="@string/enter_event_comment"
-                android:inputType="textPersonName" />
+                android:inputType="textCapSentences|textPersonName"
+                android:maxLength="75" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -142,7 +144,8 @@
                     android:layout_marginBottom="@dimen/space_top_bottom"
                     android:layout_marginTop="@dimen/space_top_bottom"
                     android:hint="@string/new_events_group"
-                    android:inputType="textPersonName"
+                    android:inputType="textCapSentences|textPersonName"
+                    android:maxLength="25"
                     android:visibility="gone" />
 
             </LinearLayout>

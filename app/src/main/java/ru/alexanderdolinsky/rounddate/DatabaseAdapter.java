@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -133,10 +132,13 @@ public class DatabaseAdapter {
 
     }
 
-    public boolean isEventGroupExists(String newEventsGroupName) {
+    boolean isEventGroupExists(String eventsGroupName, long id) {
+
+        String selection = DatabaseHelper.COLUMN_EVENTGROUPS_NAME + "= '" + eventsGroupName + "' AND " +
+                DatabaseHelper.COLUMN_EVENTGROUPS_ID + "<>" + id;
+
         Cursor cursor = database.query(DatabaseHelper.TABLE_EVENT_GROUPS,
-                new String[]{DatabaseHelper.COLUMN_EVENTGROUPS_NAME},
-                DatabaseHelper.COLUMN_EVENTGROUPS_NAME + "= '" + newEventsGroupName + "'", null, null, null, null);
+                new String[]{DatabaseHelper.COLUMN_EVENTGROUPS_NAME}, selection, null, null, null, null);
         boolean b;
         if (cursor.getCount() == 0) {
             b = false;
@@ -233,7 +235,7 @@ public class DatabaseAdapter {
         return events;
     }
 
-    public Event getEventById(long idEvent) {
+    Event getEventById(long idEvent) {
         Event event = new Event();
         String selection = "" + DatabaseHelper.COLUMN_VIEWEVENTS_ID + "=" + idEvent;
 
@@ -262,7 +264,44 @@ public class DatabaseAdapter {
         return event;
     }
 
-    public TrackSettings getGroupTrackSettingsById(long idEventGroup) {
+    List<Event> getEventsById(long idEG, int sourceTrackSettingsGroup) {
+
+        ArrayList<Event> events = new ArrayList<>();
+
+        String selection = "" + DatabaseHelper.COLUMN_VIEWEVENTS_ID_EVENTGROUP + "=" + idEG + " AND " +
+                DatabaseHelper.COLUMN_VIEWEVENTS_SOURCETRACKSETTINGS + "=" + sourceTrackSettingsGroup;
+
+        Cursor cursor = database.query(DatabaseHelper.VIEW_EVENTS, null, selection, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_ID));
+                String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_NAME));
+                String comment = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_COMMENT));
+                long idEventGroup = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_ID_EVENTGROUP));
+                String nameEventGroup = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_EVENTGROUPNAME));
+                Calendar dateAndTime = new GregorianCalendar();
+                dateAndTime.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_DATEANDTIME)));
+                int sourceTrackSettings = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_SOURCETRACKSETTINGS));
+                int rdInYears = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINYEARS));
+                int rdInMonths = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINMONTHS));
+                int rdInWeeks = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINWEEKS));
+                int rdInDays = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINDAYS));
+                int rdInHours = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINHOURS));
+                int rdInMinutes = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINMINUTES));
+                int rdInSecs = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINSECS));
+                events.add(new Event(id, name, comment, idEventGroup, nameEventGroup, dateAndTime, sourceTrackSettings,
+                        new TrackSettings(rdInYears, rdInMonths, rdInWeeks, rdInDays, rdInHours, rdInMinutes, rdInSecs)));
+            }
+            while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return events;
+    }
+
+
+    TrackSettings getGroupTrackSettingsById(long idEventGroup) {
         TrackSettings trackSettings;
         String selection = "" + DatabaseHelper.COLUMN_EVENTGROUPS_ID + "=" + idEventGroup;
 
@@ -303,10 +342,10 @@ public class DatabaseAdapter {
         ArrayList<RoundDate> roundDates = new ArrayList<>();
 
         Calendar currentDateAndTime = new GregorianCalendar();
-        String selection = DatabaseHelper.COLUMN_VIEWROUNDDATES_DATEANDTIME + ">" + currentDateAndTime.getTimeInMillis();
+        //String selection = DatabaseHelper.COLUMN_VIEWROUNDDATES_DATEANDTIME + ">" + currentDateAndTime.getTimeInMillis();
         String order = DatabaseHelper.COLUMN_VIEWROUNDDATES_DATEANDTIME;
 
-        Cursor cursor = database.query(DatabaseHelper.VIEW_ROUNDDATES, null, selection, null, null, null, order);
+        Cursor cursor = database.query(DatabaseHelper.VIEW_ROUNDDATES, null, null, null, null, null, order);
 
         if (cursor.moveToFirst()) {
             do {
@@ -351,4 +390,61 @@ public class DatabaseAdapter {
         String where = DatabaseHelper.COLUMN_EVENTS_ID + "=" + event.getId();
         return database.update(DatabaseHelper.TABLE_EVENTS, cv, where, null);
     }
+
+    void deleteEvent(long id) {
+        database.execSQL("PRAGMA foreign_keys=on;");
+        String table = DatabaseHelper.TABLE_EVENTS;
+        String where = DatabaseHelper.COLUMN_EVENTS_ID + "=" + id;
+        database.delete(table, where, null);
+    }
+
+
+    void deleteEventsGroup(long id) {
+        database.execSQL("PRAGMA foreign_keys=on;");
+        String table = DatabaseHelper.TABLE_EVENT_GROUPS;
+        String where = DatabaseHelper.COLUMN_EVENTGROUPS_ID + "=" + id;
+        database.delete(table, where, null);
+    }
+
+    EventGroup getEventGroupById(long id) {
+
+        String selection = DatabaseHelper.COLUMN_EVENTGROUPS_ID + "=" + id;
+        Cursor cursor = database.query(DatabaseHelper.TABLE_EVENT_GROUPS, null, selection, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            EventGroup eventGroup = new EventGroup(id,
+                    cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_NAME)),
+                    cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_SOURCETRACKSETTINGS)),
+                    new TrackSettings(
+                            cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINYEARS)),
+                            cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINMONTHS)),
+                            cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINWEEKS)),
+                            cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINDAYS)),
+                            cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINHOURS)),
+                            cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINMINUTES)),
+                            cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_EVENTGROUPS_RDINSECS))));
+            cursor.close();
+            return eventGroup;
+        } else {
+            return new EventGroup();
+        }
+
+
+    }
+
+    int updateEventGroup(EventGroup eventGroup) {
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.COLUMN_EVENTGROUPS_NAME, eventGroup.getName());
+        cv.put(DatabaseHelper.COLUMN_EVENTGROUPS_SOURCETRACKSETTINGS, eventGroup.getSourceTrackSettings());
+        cv.put(DatabaseHelper.COLUMN_EVENTGROUPS_RDINYEARS, eventGroup.getTrackSettings().getRdInYears());
+        cv.put(DatabaseHelper.COLUMN_EVENTGROUPS_RDINMONTHS, eventGroup.getTrackSettings().getRdInMonths());
+        cv.put(DatabaseHelper.COLUMN_EVENTGROUPS_RDINWEEKS, eventGroup.getTrackSettings().getRdInWeeks());
+        cv.put(DatabaseHelper.COLUMN_EVENTGROUPS_RDINDAYS, eventGroup.getTrackSettings().getRdInDays());
+        cv.put(DatabaseHelper.COLUMN_EVENTGROUPS_RDINHOURS, eventGroup.getTrackSettings().getRdInHours());
+        cv.put(DatabaseHelper.COLUMN_EVENTGROUPS_RDINMINUTES, eventGroup.getTrackSettings().getRdInMinutes());
+        cv.put(DatabaseHelper.COLUMN_EVENTGROUPS_RDINSECS, eventGroup.getTrackSettings().getRdInSecs());
+        String where = DatabaseHelper.COLUMN_EVENTGROUPS_ID + "=" + eventGroup.getId();
+        return database.update(DatabaseHelper.TABLE_EVENT_GROUPS, cv, where, null);
+    }
+
+
 }

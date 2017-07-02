@@ -2,10 +2,7 @@ package ru.alexanderdolinsky.rounddate;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -17,31 +14,42 @@ import android.widget.TextView;
 
 public class DialogScreen {
 
-    public final static int IDD_RD_YEARS = 0;
-    public final static int IDD_RD_MONTHS = 1;
-    public final static int IDD_RD_WEEKS = 2;
-    public final static int IDD_RD_DAYS = 3;
-    public final static int IDD_RD_HOURS = 4;
-    public final static int IDD_RD_MINUTES = 5;
-    public final static int IDD_RD_SECS = 6;
+    final static int IDD_RD_YEARS = 0;
+    final static int IDD_RD_MONTHS = 1;
+    final static int IDD_RD_WEEKS = 2;
+    final static int IDD_RD_DAYS = 3;
+    final static int IDD_RD_HOURS = 4;
+    final static int IDD_RD_MINUTES = 5;
+    final static int IDD_RD_SECS = 6;
+    final static int IDD_RD_YEARS_2 = 10;
+    final static int IDD_RD_MONTHS_2 = 11;
+    final static int IDD_RD_WEEKS_2 = 12;
+    final static int IDD_RD_DAYS_2 = 13;
+    final static int IDD_RD_HOURS_2 = 14;
+    final static int IDD_RD_MINUTES_2 = 15;
+    final static int IDD_RD_SECS_2 = 16;
 
-    public final static int IDD_CHOICE_EVENT_GROUP = 20;
+    final static int IDD_CHOICE_EVENT_GROUP = 30;
+    static final int DELETE_EVENT_CONFIRM = 40;
+    static final int DELETE_EVENTS_GROUP_CONFIRM = 41;
 
 
     private final int IDD_dialog;
 
 
-    public DialogScreen (int ID) {
+    DialogScreen(int ID) {
         this.IDD_dialog = ID;
     }
 
-    public AlertDialog getDialog(final Activity activity) {
+    AlertDialog getDialog(final Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         final CharSequence[] rdVariants = activity.getResources().getStringArray(R.array.rd_variants);
 
         final AddEditEventActivity aeActivity;// = (AddEditEventActivity) activity;
         final EventListActivity elActivity;
+        final EventActivity eActivity;
+        final EditEventGroupActivity eegActivity;
 
         switch (getIDD_dialog()) {
             case IDD_RD_YEARS:
@@ -182,6 +190,144 @@ public class DialogScreen {
                         });
                 return builder.create();
 
+            case IDD_RD_YEARS_2:
+                eegActivity = (EditEventGroupActivity) activity;
+                builder.setTitle(R.string.track)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                eegActivity.setTvYears(rdVariants[eegActivity.getEventGroupTrackSettings().getRdInYears()]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(rdVariants, eegActivity.getEventGroupTrackSettings().getRdInYears(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                eegActivity.getEventGroupTrackSettings().setRdInYears(which);
+                            }
+                        });
+                return builder.create();
+
+
+            case IDD_RD_MONTHS_2:
+                eegActivity = (EditEventGroupActivity) activity;
+                builder.setTitle(R.string.track)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                eegActivity.setTvMonths(rdVariants[eegActivity.getEventGroupTrackSettings().getRdInMonths()]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(rdVariants, eegActivity.getEventGroupTrackSettings().getRdInMonths(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                eegActivity.getEventGroupTrackSettings().setRdInMonths(which);
+                            }
+                        });
+                return builder.create();
+
+
+            case IDD_RD_WEEKS_2:
+                eegActivity = (EditEventGroupActivity) activity;
+                builder.setTitle(R.string.track)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                eegActivity.setTvWeeks(rdVariants[eegActivity.getEventGroupTrackSettings().getRdInWeeks()]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(rdVariants, eegActivity.getEventGroupTrackSettings().getRdInWeeks(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                eegActivity.getEventGroupTrackSettings().setRdInWeeks(which);
+                            }
+                        });
+                return builder.create();
+
+
+            case IDD_RD_DAYS_2:
+                eegActivity = (EditEventGroupActivity) activity;
+                builder.setTitle(R.string.track)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                eegActivity.setTvDays(rdVariants[eegActivity.getEventGroupTrackSettings().getRdInDays()]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(rdVariants, eegActivity.getEventGroupTrackSettings().getRdInDays(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                eegActivity.getEventGroupTrackSettings().setRdInDays(which);
+                            }
+                        });
+                return builder.create();
+
+
+            case IDD_RD_HOURS_2:
+                eegActivity = (EditEventGroupActivity) activity;
+                builder.setTitle(R.string.track)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                eegActivity.setTvHours(rdVariants[eegActivity.getEventGroupTrackSettings().getRdInHours()]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(rdVariants, eegActivity.getEventGroupTrackSettings().getRdInHours(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                eegActivity.getEventGroupTrackSettings().setRdInHours(which);
+                            }
+                        });
+                return builder.create();
+
+            case IDD_RD_MINUTES_2:
+                eegActivity = (EditEventGroupActivity) activity;
+                builder.setTitle(R.string.track)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                eegActivity.setTvMinutes(rdVariants[eegActivity.getEventGroupTrackSettings().getRdInMinutes()]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(rdVariants, eegActivity.getEventGroupTrackSettings().getRdInMinutes(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                eegActivity.getEventGroupTrackSettings().setRdInMinutes(which);
+                            }
+                        });
+                return builder.create();
+
+
+            case IDD_RD_SECS_2:
+                eegActivity = (EditEventGroupActivity) activity;
+                builder.setTitle(R.string.track)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                eegActivity.setTvSecs(rdVariants[eegActivity.getEventGroupTrackSettings().getRdInSecs()]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(rdVariants, eegActivity.getEventGroupTrackSettings().getRdInSecs(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                eegActivity.getEventGroupTrackSettings().setRdInSecs(which);
+                            }
+                        });
+                return builder.create();
+
 
             case IDD_CHOICE_EVENT_GROUP:
                 elActivity = (EventListActivity) activity;
@@ -197,16 +343,21 @@ public class DialogScreen {
                                 // устанавливаем имя выбранной группы событий
                                 TextView tvGroupName = (TextView) elActivity.findViewById(R.id.tvEventsGroup);
                                 tvGroupName.setText(elActivity.getEventsGroupName()[which]);
-                                ImageButton imageButton = (ImageButton) elActivity.findViewById(R.id.btnEditEventsGroup);
+                                ImageButton btnEditEventsGroup = (ImageButton) elActivity.findViewById(R.id.btnEditEventsGroup);
+                                ImageButton btnDeleteEventsGroup = (ImageButton) elActivity.findViewById(R.id.btnDeleteEventsGroup);
                                 // получаем список событий по ID группы событий или же все события, если выбраны все события
                                 if (which == 0) {
                                     elActivity.setEvents(adapter.getAllEvents());
-                                    //imageButton.setEnabled(false);
-                                    imageButton.setVisibility(View.INVISIBLE);
+                                    btnEditEventsGroup.setVisibility(View.GONE);
+                                    btnDeleteEventsGroup.setVisibility(View.GONE);
                                 } else {
                                     elActivity.setEvents(adapter.getEventsById(elActivity.getEventsGroup().get(which).getId()));
-                                    //imageButton.setEnabled(true);
-                                    imageButton.setVisibility(View.VISIBLE);
+                                    btnEditEventsGroup.setVisibility(View.VISIBLE);
+                                    if (which != 1) {
+                                        btnDeleteEventsGroup.setVisibility(View.VISIBLE);
+                                    } else {
+                                        btnDeleteEventsGroup.setVisibility(View.GONE);
+                                    }
                                 }
 
 
@@ -215,6 +366,59 @@ public class DialogScreen {
                                 EventAdapter eventAdapter = new EventAdapter(elActivity, R.layout.event_item, elActivity.getEvents());
                                 elActivity.eventsList.setAdapter(eventAdapter);
                                 adapter.close();
+                            }
+                        });
+                return builder.create();
+
+            case DELETE_EVENT_CONFIRM:
+                eActivity = (EventActivity) activity;
+                builder.setCancelable(false)
+                        .setTitle(R.string.attention)
+                        .setMessage(R.string.do_you_want_to_remove_the_event)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+
+                                // Связь с БД и ее открытие
+                                DatabaseAdapter adapter = new DatabaseAdapter(eActivity);
+                                adapter.open();
+                                adapter.deleteEvent(eActivity.getEvent().getId());
+                                adapter.close();
+                                eActivity.setResult(Activity.RESULT_OK);
+                                eActivity.finish();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                return builder.create();
+
+            case DELETE_EVENTS_GROUP_CONFIRM:
+                elActivity = (EventListActivity) activity;
+                builder.setCancelable(false)
+                        .setTitle(R.string.attention)
+                        .setMessage(R.string.do_you_want_to_remove_the_events_group)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+
+                                // Связь с БД и ее открытие
+                                DatabaseAdapter adapter = new DatabaseAdapter(elActivity);
+                                adapter.open();
+                                adapter.deleteEventsGroup(elActivity.getEventsGroup().get((int) elActivity.getSelectedEventsGroupId()).getId());
+                                adapter.close();
+                                elActivity.recreate();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
                             }
                         });
                 return builder.create();

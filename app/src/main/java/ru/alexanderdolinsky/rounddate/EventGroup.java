@@ -18,12 +18,15 @@ class EventGroup {
     // индивидуальные настройки отслеживания Группы событий
     private TrackSettings trackSettings;
 
+    static final int SOURCE_TRACK_SETTINGS_APP = 0;
+    static final int SOURCE_TRACK_SETTINGS_GROUP = 1;
+
 
     // конструктор по умолчанию
     EventGroup() {
         this.id = -1;
         this.name = "Мои события";
-        this.sourceTrackSettings = 0;
+        this.sourceTrackSettings = SOURCE_TRACK_SETTINGS_APP;
         this.trackSettings = new TrackSettings(0,0,0,0,0,0,0);
     }
     // конструктор при создании новой Группы событий

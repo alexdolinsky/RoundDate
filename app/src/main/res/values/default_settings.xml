@@ -7,12 +7,12 @@
      1 - Только очень редкие
      0 - Не отслеживать-->
     <string name="rd_in_years">0</string>
-    <string name="rd_in_months">0</string>
-    <string name="rd_in_weeks">0</string>
+    <string name="rd_in_months">1</string>
+    <string name="rd_in_weeks">1</string>
     <string name="rd_in_days">0</string>
-    <string name="rd_in_hours">0</string>
-    <string name="rd_in_minutes">0</string>
-    <string name="rd_in_secs">0</string>
+    <string name="rd_in_hours">1</string>
+    <string name="rd_in_minutes">1</string>
+    <string name="rd_in_secs">1</string>
 
     <!--Настройки уведомлений
     значения:

@@ -117,6 +117,13 @@
     <string name="editing_event">Редактирование события</string>
     <string name="event">Событие</string>
     <string name="adding_event">Добавление события</string>
+    <string name="delete_event">Удалить событие</string>
+    <string name="attention">Внимание</string>
+    <string name="do_you_want_to_remove_the_event">Вы действительно хотите удалить событие?</string>
+    <string name="delete_event_group">Удалить группу событий</string>
+    <string name="do_you_want_to_remove_the_events_group">Вы действительно хотите удалить группу событий и все ее события?</string>
+    <string name="editing_events_group">Редактирование группы событий</string>
+    <string name="event_group_name">Название группы событий</string>
 
 
 </resources>

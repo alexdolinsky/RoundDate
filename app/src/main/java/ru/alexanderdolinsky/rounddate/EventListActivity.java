@@ -13,6 +13,8 @@ import java.util.List;
 
 public class EventListActivity extends AppCompatActivity {
 
+    private static final int DELETEEVENT_REQUESTCODE = 1;
+    private static final int EDITEVENTSGROUP_REQUESTCODE = 2;
     private CharSequence[] eventsGroupName;
     private long selectedEventsGroupId;
     private List<EventGroup> eventsGroup;
@@ -41,9 +43,12 @@ public class EventListActivity extends AppCompatActivity {
         tvGroupName.setText(R.string.all_events);
 
         // деактивация кнопки редактирование группы событий
-        ImageButton imageButton = (ImageButton) findViewById(R.id.btnEditEventsGroup);
-        //imageButton.setEnabled(false);
-        imageButton.setVisibility(View.INVISIBLE);
+        ImageButton btnEditEventsGroup = (ImageButton) findViewById(R.id.btnEditEventsGroup);
+        btnEditEventsGroup.setVisibility(View.GONE);
+
+        // деактивация кнопки удаления группы событий
+        ImageButton btnDeleteEventsGroup = (ImageButton) findViewById(R.id.btnDeleteEventsGroup);
+        btnDeleteEventsGroup.setVisibility(View.GONE);
 
         // получаем список всех событий
         setEvents(adapter.getAllEvents());
@@ -64,7 +69,7 @@ public class EventListActivity extends AppCompatActivity {
                 // передаем ID события в активити события
                 Intent intent = new Intent(EventListActivity.this, EventActivity.class);
                 intent.putExtra("ID", selectedEvent.getId());
-                startActivity(intent);
+                startActivityForResult(intent, DELETEEVENT_REQUESTCODE);
 
             }
         };
@@ -74,7 +79,29 @@ public class EventListActivity extends AppCompatActivity {
 
     }
 
-    public void onEditEventsGroup(View view) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case DELETEEVENT_REQUESTCODE:
+                if (resultCode == RESULT_OK) {
+                    this.recreate();
+                } else {
+                    super.onActivityResult(requestCode, resultCode, data);
+                }
+                break;
+            case EDITEVENTSGROUP_REQUESTCODE:
+                if (resultCode == RESULT_OK) {
+                    this.recreate();
+                } else {
+                    super.onActivityResult(requestCode, resultCode, data);
+                }
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+        }
+
+
     }
 
     public void onChoiceEventGroup(View view) {
@@ -122,6 +149,21 @@ public class EventListActivity extends AppCompatActivity {
 
     public void setEvents(List<Event> events) {
         this.events = events;
+    }
+
+
+    public void onDeleteEventsGroup(View view) {
+        DialogScreen ds;
+        android.app.AlertDialog dialog;
+        ds = new DialogScreen(DialogScreen.DELETE_EVENTS_GROUP_CONFIRM);
+        dialog = ds.getDialog(this);
+        dialog.show();
+    }
+
+    public void onEditEventsGroup(View view) {
+        Intent intent = new Intent(EventListActivity.this, EditEventGroupActivity.class);
+        intent.putExtra(EditEventGroupActivity.EVENTS_GROUP_ID, getEventsGroup().get((int) getSelectedEventsGroupId()).getId());
+        startActivityForResult(intent, EDITEVENTSGROUP_REQUESTCODE);
     }
 
 

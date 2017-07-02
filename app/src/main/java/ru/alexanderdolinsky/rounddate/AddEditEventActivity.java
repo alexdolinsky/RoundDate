@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,11 +18,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 
 public class AddEditEventActivity extends AppCompatActivity {
@@ -34,7 +34,7 @@ public class AddEditEventActivity extends AppCompatActivity {
     private TrackSettings eventGroupTrackSettings;
     private Event event;
 
-    private RadioGroup rdTrackSettings;
+    private RadioGroup rgTrackSettings;
     private TextView tvCurrentDate, tvCurrentTime;
     private TextView tvYears, tvMonths, tvWeeks, tvDays, tvHours, tvMinutes, tvSecs;
     private EditText etEventName, etEventComment;
@@ -167,7 +167,7 @@ public class AddEditEventActivity extends AppCompatActivity {
         etEventComment = (EditText) findViewById(R.id.etEventComment);
         tvCurrentDate = (TextView) findViewById(R.id.tvCurrentEventDate);
         tvCurrentTime = (TextView) findViewById(R.id.tvCurrentEventTime);
-        rdTrackSettings = (RadioGroup) findViewById(R.id.rgTracksettings);
+        rgTrackSettings = (RadioGroup) findViewById(R.id.rgTracksettings);
 
         tvYears = (TextView) findViewById(R.id.tvRoundDateInYears);
         tvMonths = (TextView) findViewById(R.id.tvRoundDateInMonths);
@@ -193,8 +193,10 @@ public class AddEditEventActivity extends AppCompatActivity {
             date.set(Calendar.SECOND, 0);
 
             // Устанавливается дата и время
-            tvCurrentDate.setText(sdfDate.format(date.getTime()));
-            tvCurrentTime.setText(sdfTime.format(date.getTime()));
+            //tvCurrentDate.setText(sdfDate.format(date.getTime()));
+            //tvCurrentTime.setText(sdfTime.format(date.getTime()));
+            tvCurrentDate.setText(DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault()).format(date.getTime()));
+            tvCurrentTime.setText(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(date.getTime()));
 
             // Установка настроек по умолчанию
             // TODO: 25.06.2017 Считывать их из настроек приложения
@@ -203,7 +205,7 @@ public class AddEditEventActivity extends AppCompatActivity {
             // Установка источника настроек отслеживания по умолчанию (по группе событий)
             setSourceTrackSettings(Event.SOURCE_TRACK_SETTINGS_GROUP);
             // Установка радиобаттона в соответствующее положение
-            rdTrackSettings.check(R.id.rbUseEventsGroupSettings);
+            rgTrackSettings.check(R.id.rbUseEventsGroupSettings);
 
         } else {  // если событие редактируется
 
@@ -215,8 +217,10 @@ public class AddEditEventActivity extends AppCompatActivity {
             date.setTimeInMillis(getEvent().getDateAndTime().getTimeInMillis());
 
             // Устанавливается дата и время из события
-            tvCurrentDate.setText(sdfDate.format(getEvent().getDateAndTime().getTime()));
-            tvCurrentTime.setText(sdfTime.format(getEvent().getDateAndTime().getTime()));
+            //tvCurrentDate.setText(sdfDate.format(getEvent().getDateAndTime().getTime()));
+            //tvCurrentTime.setText(sdfTime.format(getEvent().getDateAndTime().getTime()));
+            tvCurrentDate.setText(DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault()).format(date.getTime()));
+            tvCurrentTime.setText(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(date.getTime()));
 
             // Сохраняем начальные значения времени в миллисекундах
             setOldDateInMillis(getEvent().getDateAndTime().getTimeInMillis());
@@ -224,7 +228,7 @@ public class AddEditEventActivity extends AppCompatActivity {
             // Установка настроек из события
             eventTrackSettings = getEvent().getTrackSettings();
 
-            // Определяем начальный настройки слежения
+            // Определяем начальные настройки слежения
             TrackSettings trackSettings;
             switch (getEvent().getSourceTrackSettings()) {
                 case Event.SOURCE_TRACK_SETTINGS_APP:
@@ -258,15 +262,15 @@ public class AddEditEventActivity extends AppCompatActivity {
             LinearLayout llTrackSettings = (LinearLayout) findViewById(R.id.llTrackSettings);
             switch (getEvent().getSourceTrackSettings()) {
                 case Event.SOURCE_TRACK_SETTINGS_EVENT:
-                    rdTrackSettings.check(R.id.rbUseEventSettings);
+                    rgTrackSettings.check(R.id.rbUseEventSettings);
                     llTrackSettings.setVisibility(View.VISIBLE);
                     break;
                 case Event.SOURCE_TRACK_SETTINGS_GROUP:
-                    rdTrackSettings.check(R.id.rbUseEventsGroupSettings);
+                    rgTrackSettings.check(R.id.rbUseEventsGroupSettings);
                     llTrackSettings.setVisibility(View.GONE);
                     break;
                 case Event.SOURCE_TRACK_SETTINGS_APP:
-                    rdTrackSettings.check(R.id.rbUseAppSettings);
+                    rgTrackSettings.check(R.id.rbUseAppSettings);
                     llTrackSettings.setVisibility(View.GONE);
                     break;
             }
@@ -282,7 +286,7 @@ public class AddEditEventActivity extends AppCompatActivity {
         tvSecs.setText(rdVariants[eventTrackSettings.getRdInSecs()]);
 
         // Устанавливаем обработчик на группу радиобаттонов
-        rdTrackSettings.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        rgTrackSettings.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 LinearLayout llTrackSettings = (LinearLayout) findViewById(R.id.llTrackSettings);
@@ -352,7 +356,7 @@ public class AddEditEventActivity extends AppCompatActivity {
         }
 
         // Проверка на уникальность названия группы событий
-        if ((getSelectedEventGroup().getId() == -1) && (adapter.isEventGroupExists(newEventsGroupName))) {
+        if ((getSelectedEventGroup().getId() == -1) && (adapter.isEventGroupExists(newEventsGroupName, getSelectedEventGroup().getId()))) {
             Toast.makeText(this, R.string.events_group_is_exists, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -366,9 +370,9 @@ public class AddEditEventActivity extends AppCompatActivity {
             try {
 
                 // Запись группы событий в БД, если выбрана новая группа и название уникально
-                if ((getSelectedEventGroup().getId() == -1) && !(adapter.isEventGroupExists(newEventsGroupName))) {
+                if ((getSelectedEventGroup().getId() == -1) && !(adapter.isEventGroupExists(newEventsGroupName, getSelectedEventGroup().getId()))) {
                     // TODO: 25.06.2017 Настройки слежения взять из настроек приложения
-                    EventGroup eventGroup = new EventGroup(-1, newEventsGroupName, 0, new TrackSettings(0, 1, 1, 0, 1, 1, 1));
+                    EventGroup eventGroup = new EventGroup(-1, newEventsGroupName, 0, new TrackSettings(this));
                     getSelectedEventGroup().setId(adapter.addEventsGroup(eventGroup));
                 }
 
@@ -478,7 +482,9 @@ public class AddEditEventActivity extends AppCompatActivity {
             // Закрытие соединения с БД
             adapter.close();
 
+            setResult(RESULT_OK);
             finish();
+
         } else { // Если событие редактируется
 
             // начинаем транзакцию
@@ -486,9 +492,9 @@ public class AddEditEventActivity extends AppCompatActivity {
             try {
 
                 // Запись группы событий в БД, если выбрана новая группа и название уникально
-                if ((getSelectedEventGroup().getId() == -1) && !(adapter.isEventGroupExists(newEventsGroupName))) {
+                if ((getSelectedEventGroup().getId() == -1) && !(adapter.isEventGroupExists(newEventsGroupName, getSelectedEventGroup().getId()))) {
                     // TODO: 25.06.2017 Настройки слежения взять из настроек приложения
-                    EventGroup eventGroup = new EventGroup(-1, newEventsGroupName, 0, new TrackSettings(0, 1, 1, 0, 1, 1, 1));
+                    EventGroup eventGroup = new EventGroup(-1, newEventsGroupName, 0, new TrackSettings(this));
                     getSelectedEventGroup().setId(adapter.addEventsGroup(eventGroup));
                 }
 
@@ -633,8 +639,8 @@ public class AddEditEventActivity extends AppCompatActivity {
             // Закрытие соединения с БД
             adapter.close();
 
+            setResult(RESULT_OK);
             finish();
-
 
         }
     }
@@ -658,8 +664,9 @@ public class AddEditEventActivity extends AppCompatActivity {
             date.set(Calendar.YEAR, year);
             date.set(Calendar.MONTH, monthOfYear);
             date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            tvCurrentDate.setText(sdf.format(date.getTime()));
+            //SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            //tvCurrentDate.setText(sdf.format(date.getTime()));
+            tvCurrentDate.setText(DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault()).format(date.getTime()));
             //Log.d("MyLog", date.get(Calendar.DAY_OF_MONTH) + "-" + date.get(Calendar.MONTH) + "-" + date.get(Calendar.YEAR));
         }
     };
@@ -680,14 +687,18 @@ public class AddEditEventActivity extends AppCompatActivity {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             date.set(Calendar.HOUR_OF_DAY, hourOfDay);
             date.set(Calendar.MINUTE, minute);
-            SimpleDateFormat sdf = new SimpleDateFormat("kk:mm");
-            tvCurrentTime.setText(sdf.format(date.getTime()));
+            //SimpleDateFormat sdf = new SimpleDateFormat("kk:mm");
+            //tvCurrentTime.setText(sdf.format(date.getTime()));
+            //DateFormat df = new DateFormat("kk:mm");
+            tvCurrentTime.setText(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(date.getTime()));
+
             //Log.d("MyLog", sdf.format(date.getTime()));
 
         }
     };
 
     public void onCancel(View view) {
+        setResult(RESULT_CANCELED);
         finish();
     }
 
