@@ -65,6 +65,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
     static final String COLUMN_VIEWEVENTS_EVENTGROUPNAME = "event_group_name";
     static final String COLUMN_VIEWEVENTS_DATEANDTIME = "date_and_time";
     static final String COLUMN_VIEWEVENTS_SOURCETRACKSETTINGS = "source_track_settings";
+    static final String COLUMN_VIEWEVENTS_EVENTGROUPSOURCETRACKSETTINGS = "event_group_source_track_settings";
     static final String COLUMN_VIEWEVENTS_RDINYEARS = "rd_in_years";
     static final String COLUMN_VIEWEVENTS_RDINMONTHS = "rd_in_months";
     static final String COLUMN_VIEWEVENTS_RDINWEEKS = "rd_in_weeks";
@@ -172,6 +173,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 + TABLE_EVENT_GROUPS + "." + COLUMN_EVENTGROUPS_NAME + " AS " + COLUMN_VIEWEVENTS_EVENTGROUPNAME + ", "
                 + TABLE_EVENTS + "." + COLUMN_EVENTS_DATEANDTIME + " AS " + COLUMN_VIEWEVENTS_DATEANDTIME + ", "
                 + TABLE_EVENTS + "." + COLUMN_EVENTS_SOURCETRACKSETTINGS + " AS " + COLUMN_VIEWEVENTS_SOURCETRACKSETTINGS + ", "
+                + TABLE_EVENT_GROUPS + "." + COLUMN_EVENTGROUPS_SOURCETRACKSETTINGS + " AS " + COLUMN_VIEWEVENTS_EVENTGROUPSOURCETRACKSETTINGS + ", "
                 + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINYEARS + " AS " + COLUMN_VIEWEVENTS_RDINYEARS + ", "
                 + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINMONTHS + " AS " + COLUMN_VIEWEVENTS_RDINMONTHS + ", "
                 + TABLE_EVENTS + "." + COLUMN_EVENTS_RDINWEEKS + " AS " + COLUMN_VIEWEVENTS_RDINWEEKS + ", "

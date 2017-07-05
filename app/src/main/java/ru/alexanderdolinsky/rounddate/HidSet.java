@@ -22,12 +22,12 @@ public  class HidSet {
     static final long MULT_VERY_RARE_RD_IN_YEARS = 25;// должно быть кратно
 
     static final long MULT_STANDART_RD_IN_MONTHS = 10;
-    static final long MULT_RARE_RD_IN_MONTHS = 50;// должно быть кратно MULT_STANDART_RD_IN_MONTHS
-    static final long MULT_VERY_RARE_RD_IN_MONTHS = 100;// должно быть кратно MULT_RARE_RD_IN_MONTHS
+    static final long MULT_RARE_RD_IN_MONTHS = 100;// должно быть кратно MULT_STANDART_RD_IN_MONTHS
+    static final long MULT_VERY_RARE_RD_IN_MONTHS = 500;// должно быть кратно MULT_RARE_RD_IN_MONTHS
 
     static final long MULT_STANDART_RD_IN_WEEKS = 50;
-    static final long MULT_RARE_RD_IN_WEEKS = 100;// должно быть кратно MULT_STANDART_RD_IN_WEEKS
-    static final long MULT_VERY_RARE_RD_IN_WEEKS = 500;// должно быть кратно MULT_RARE_RD_IN_WEEKS
+    static final long MULT_RARE_RD_IN_WEEKS = 500;// должно быть кратно MULT_STANDART_RD_IN_WEEKS
+    static final long MULT_VERY_RARE_RD_IN_WEEKS = 1000;// должно быть кратно MULT_RARE_RD_IN_WEEKS
 
     static final long MULT_STANDART_RD_IN_DAYS = 500;
     static final long MULT_RARE_RD_IN_DAYS = 1000;// должно быть кратно MULT_STANDART_RD_IN_DAYS

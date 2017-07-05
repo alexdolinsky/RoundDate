@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Alexsvet on 24.06.2017.
@@ -43,13 +44,15 @@ class RoundDateAdapter extends ArrayAdapter<RoundDate> {
 
 
         RoundDate roundDate = roundDates.get(position);
-        String str = String.format("%,d %s", roundDate.getValueOf(), RoundDate.getUnit(getContext(), roundDate.getValueOf(), roundDate.getUnit()));
+        String str = String.format(Locale.getDefault(), "%,d %s", roundDate.getValueOf(), RoundDate.getUnit(getContext(), roundDate.getValueOf(), roundDate.getUnit()));
         if (roundDate.getImportant() == RoundDate.VERY_IMPORTANT) {
-            str = "*** " + str + " ***";
+            str = "\u2605\u2605\u2605 " + str + " \u2605\u2605\u2605";
+            viewHolder.tvValue.setTextColor(0xffff8800);
         } else if (roundDate.getImportant() == RoundDate.IMPORTANT) {
-            str = "* " + str + " *";
+            str = "\u2605 " + str + " \u2605";
         }
         viewHolder.tvValue.setText(str);
+
         viewHolder.tvEventName.setText(roundDate.getNameEvent());
         viewHolder.tvDateAndTime.setText(RoundDate.getStringOfDateAndTime(roundDate.getDateAndTime()));
         viewHolder.tvHaveToWait.setText(RoundDate.getTimeToWait(getContext(), roundDate.getDateAndTime()));

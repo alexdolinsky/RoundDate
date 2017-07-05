@@ -28,6 +28,13 @@ public class DialogScreen {
     final static int IDD_RD_HOURS_2 = 14;
     final static int IDD_RD_MINUTES_2 = 15;
     final static int IDD_RD_SECS_2 = 16;
+    final static int IDD_RD_YEARS_3 = 20;
+    final static int IDD_RD_MONTHS_3 = 21;
+    final static int IDD_RD_WEEKS_3 = 22;
+    final static int IDD_RD_DAYS_3 = 23;
+    final static int IDD_RD_HOURS_3 = 24;
+    final static int IDD_RD_MINUTES_3 = 25;
+    final static int IDD_RD_SECS_3 = 26;
 
     final static int IDD_CHOICE_EVENT_GROUP = 30;
     static final int DELETE_EVENT_CONFIRM = 40;
@@ -50,8 +57,11 @@ public class DialogScreen {
         final EventListActivity elActivity;
         final EventActivity eActivity;
         final EditEventGroupActivity eegActivity;
+        final SettingsActivity sActivity;
 
         switch (getIDD_dialog()) {
+
+            // диалоговые окна настроек отслеживания для события
             case IDD_RD_YEARS:
                 aeActivity = (AddEditEventActivity) activity;
                 builder.setTitle(R.string.track)
@@ -189,6 +199,8 @@ public class DialogScreen {
                             }
                         });
                 return builder.create();
+
+            // диалоговые окна настроек отслеживания для групп событий
 
             case IDD_RD_YEARS_2:
                 eegActivity = (EditEventGroupActivity) activity;
@@ -328,6 +340,145 @@ public class DialogScreen {
                         });
                 return builder.create();
 
+            // диалоговые окна настроек отслеживания для общих настроек
+            case IDD_RD_YEARS_3:
+                sActivity = (SettingsActivity) activity;
+                builder.setTitle(R.string.track)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sActivity.setTvYears(rdVariants[sActivity.getTrackSettings().getRdInYears()]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(rdVariants, sActivity.getTrackSettings().getRdInYears(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sActivity.getTrackSettings().setRdInYears(which);
+                            }
+                        });
+                return builder.create();
+
+
+            case IDD_RD_MONTHS_3:
+                sActivity = (SettingsActivity) activity;
+                builder.setTitle(R.string.track)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sActivity.setTvMonths(rdVariants[sActivity.getTrackSettings().getRdInMonths()]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(rdVariants, sActivity.getTrackSettings().getRdInMonths(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sActivity.getTrackSettings().setRdInMonths(which);
+                            }
+                        });
+                return builder.create();
+
+
+            case IDD_RD_WEEKS_3:
+                sActivity = (SettingsActivity) activity;
+                builder.setTitle(R.string.track)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sActivity.setTvWeeks(rdVariants[sActivity.getTrackSettings().getRdInWeeks()]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(rdVariants, sActivity.getTrackSettings().getRdInWeeks(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sActivity.getTrackSettings().setRdInWeeks(which);
+                            }
+                        });
+                return builder.create();
+
+
+            case IDD_RD_DAYS_3:
+                sActivity = (SettingsActivity) activity;
+                builder.setTitle(R.string.track)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sActivity.setTvDays(rdVariants[sActivity.getTrackSettings().getRdInDays()]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(rdVariants, sActivity.getTrackSettings().getRdInDays(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sActivity.getTrackSettings().setRdInDays(which);
+                            }
+                        });
+                return builder.create();
+
+
+            case IDD_RD_HOURS_3:
+                sActivity = (SettingsActivity) activity;
+                builder.setTitle(R.string.track)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sActivity.setTvHours(rdVariants[sActivity.getTrackSettings().getRdInHours()]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(rdVariants, sActivity.getTrackSettings().getRdInHours(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sActivity.getTrackSettings().setRdInHours(which);
+                            }
+                        });
+                return builder.create();
+
+            case IDD_RD_MINUTES_3:
+                sActivity = (SettingsActivity) activity;
+                builder.setTitle(R.string.track)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sActivity.setTvMinutes(rdVariants[sActivity.getTrackSettings().getRdInMinutes()]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(rdVariants, sActivity.getTrackSettings().getRdInMinutes(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sActivity.getTrackSettings().setRdInMinutes(which);
+                            }
+                        });
+                return builder.create();
+
+
+            case IDD_RD_SECS_3:
+                sActivity = (SettingsActivity) activity;
+                builder.setTitle(R.string.track)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sActivity.setTvSecs(rdVariants[sActivity.getTrackSettings().getRdInSecs()]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(rdVariants, sActivity.getTrackSettings().getRdInSecs(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sActivity.getTrackSettings().setRdInSecs(which);
+                            }
+                        });
+                return builder.create();
+
 
             case IDD_CHOICE_EVENT_GROUP:
                 elActivity = (EventListActivity) activity;
@@ -351,7 +502,7 @@ public class DialogScreen {
                                     btnEditEventsGroup.setVisibility(View.GONE);
                                     btnDeleteEventsGroup.setVisibility(View.GONE);
                                 } else {
-                                    elActivity.setEvents(adapter.getEventsById(elActivity.getEventsGroup().get(which).getId()));
+                                    elActivity.setEvents(adapter.getEventsByEventGroupId((elActivity.getEventsGroup().get(which).getId())));
                                     btnEditEventsGroup.setVisibility(View.VISIBLE);
                                     if (which != 1) {
                                         btnDeleteEventsGroup.setVisibility(View.VISIBLE);

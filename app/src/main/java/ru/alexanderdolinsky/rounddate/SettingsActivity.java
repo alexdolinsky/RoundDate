@@ -1,28 +1,18 @@
 package ru.alexanderdolinsky.rounddate;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity {
 
     //Объявляем названия файла настроек и сами настройки
-    public static final String  MY_SETTINGS = "my_settings",
-                                MY_SETTINGS_RD_IN_YEARS = "rd_in_years",
-                                MY_SETTINGS_RD_IN_MONTHS = "rd_in_months",
-                                MY_SETTINGS_RD_IN_WEEKS = "rd_in_weeks",
-                                MY_SETTINGS_RD_IN_DAYS = "rd_in_days",
-                                MY_SETTINGS_RD_IN_HOURS = "rd_in_hours",
-                                MY_SETTINGS_RD_IN_MINUTES = "rd_in_minutes",
-                                MY_SETTINGS_RD_IN_SECS = "rd_in_secs";
-                                /*MY_SETTINGS_VERY_IMORTANT_RD_MONTH = "very_important_rd_month",
+    /*public static final String
+                                MY_SETTINGS_VERY_IMORTANT_RD_MONTH = "very_important_rd_month",
                                 MY_SETTINGS_VERY_IMORTANT_RD_WEEK = "very_important_rd_week",
                                 MY_SETTINGS_VERY_IMORTANT_RD_DAY = "very_important_rd_day",
                                 MY_SETTINGS_VERY_IMORTANT_RD_HOUR = "very_important_rd_hour",
@@ -39,15 +29,9 @@ public class SettingsActivity extends AppCompatActivity {
                                 MY_SETTINGS_SMALL_IMPORTANT_RD_DAY = "small_important_rd_day",
                                 MY_SETTINGS_SMALL_IMPORTANT_RD_HOUR = "small_important_rd_hour";*/
     private SharedPreferences mSettings, mFilter;
-    private int[] mTrackSetting = {0, 0, 0, 0, 0, 0, 0};
+    private TrackSettings trackSettings, oldAppTrackSettings;
+    private TextView tvYears, tvMonths, tvWeeks, tvDays, tvHours, tvMinutes, tvSecs;
 
-    private final static int IDD_RD_YEARS = 0;
-    private final static int IDD_RD_MONTHS = 1;
-    private final static int IDD_RD_WEEKS = 2;
-    private final static int IDD_RD_DAYS = 3;
-    private final static int IDD_RD_HOURS = 4;
-    private final static int IDD_RD_MINUTES = 5;
-    private final static int IDD_RD_SECS = 6;
 
 
     @Override
@@ -55,264 +39,292 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        // Считываем настройки из внутреннего файла с настройками, если его нет, то по умолчанию
+        trackSettings = new TrackSettings(this);
+
+        // Сохраняем начальные настройки отслеживания для последующего сравнения
+        oldAppTrackSettings = new TrackSettings(
+                trackSettings.getRdInYears(),
+                trackSettings.getRdInMonths(),
+                trackSettings.getRdInWeeks(),
+                trackSettings.getRdInDays(),
+                trackSettings.getRdInHours(),
+                trackSettings.getRdInMinutes(),
+                trackSettings.getRdInSecs());
+
         final CharSequence[] rdVariants = getResources().getStringArray(R.array.rd_variants);
-        mSettings = getSharedPreferences(MY_SETTINGS, MODE_PRIVATE);
-        mTrackSetting[0] = mSettings.getInt(MY_SETTINGS_RD_IN_YEARS,
-                Integer.valueOf(getString(R.string.rd_in_years)));
-        mTrackSetting[1] = mSettings.getInt(MY_SETTINGS_RD_IN_MONTHS,
-                Integer.valueOf(getString(R.string.rd_in_months)));
-        mTrackSetting[2] = mSettings.getInt(MY_SETTINGS_RD_IN_WEEKS,
-                Integer.valueOf(getString(R.string.rd_in_weeks)));
-        mTrackSetting[3] = mSettings.getInt(MY_SETTINGS_RD_IN_DAYS,
-                Integer.valueOf(getString(R.string.rd_in_days)));
-        mTrackSetting[4] = mSettings.getInt(MY_SETTINGS_RD_IN_HOURS,
-                Integer.valueOf(getString(R.string.rd_in_hours)));
-        mTrackSetting[5] = mSettings.getInt(MY_SETTINGS_RD_IN_MINUTES,
-                Integer.valueOf(getString(R.string.rd_in_minutes)));
-        mTrackSetting[6] = mSettings.getInt(MY_SETTINGS_RD_IN_SECS,
-                Integer.valueOf(getString(R.string.rd_in_secs)));
-        TextView tvTrack = (TextView)findViewById(R.id.tvRoundDateInYears);
-        tvTrack.setText(rdVariants[mTrackSetting[0]]);
-        tvTrack = (TextView)findViewById(R.id.tvRoundDateInMonths);
-        tvTrack.setText(rdVariants[mTrackSetting[1]]);
-        tvTrack = (TextView)findViewById(R.id.tvRoundDateInWeeks);
-        tvTrack.setText(rdVariants[mTrackSetting[2]]);
-        tvTrack = (TextView)findViewById(R.id.tvRoundDateInDays);
-        tvTrack.setText(rdVariants[mTrackSetting[3]]);
-        tvTrack = (TextView)findViewById(R.id.tvRoundDateInHours);
-        tvTrack.setText(rdVariants[mTrackSetting[4]]);
-        tvTrack = (TextView)findViewById(R.id.tvRoundDateInMinutes);
-        tvTrack.setText(rdVariants[mTrackSetting[5]]);
-        tvTrack = (TextView)findViewById(R.id.tvRoundDateInSecs);
-        tvTrack.setText(rdVariants[mTrackSetting[6]]);
+
+        tvYears = (TextView) findViewById(R.id.tvRoundDateInYears);
+        tvMonths = (TextView) findViewById(R.id.tvRoundDateInMonths);
+        tvWeeks = (TextView) findViewById(R.id.tvRoundDateInWeeks);
+        tvDays = (TextView) findViewById(R.id.tvRoundDateInDays);
+        tvHours = (TextView) findViewById(R.id.tvRoundDateInHours);
+        tvMinutes = (TextView) findViewById(R.id.tvRoundDateInMinutes);
+        tvSecs = (TextView) findViewById(R.id.tvRoundDateInSecs);
+
+        tvYears.setText(rdVariants[trackSettings.getRdInYears()]);
+        tvMonths.setText(rdVariants[trackSettings.getRdInMonths()]);
+        tvWeeks.setText(rdVariants[trackSettings.getRdInWeeks()]);
+        tvDays.setText(rdVariants[trackSettings.getRdInDays()]);
+        tvHours.setText(rdVariants[trackSettings.getRdInHours()]);
+        tvMinutes.setText(rdVariants[trackSettings.getRdInMinutes()]);
+        tvSecs.setText(rdVariants[trackSettings.getRdInSecs()]);
+
+
+    }
+
+
+    public void onSaveSettings(View view) {
+        // TODO: 31.05.2017 Сохраняем настройки
+        SharedPreferences mSettings = getSharedPreferences(TrackSettings.MY_SETTINGS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSettings.edit();
+        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_YEARS, trackSettings.getRdInYears());
+        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_MONTHS, trackSettings.getRdInMonths());
+        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_WEEKS, trackSettings.getRdInWeeks());
+        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_DAYS, trackSettings.getRdInDays());
+        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_HOURS, trackSettings.getRdInHours());
+        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_MINUTES, trackSettings.getRdInMinutes());
+        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_SECS, trackSettings.getRdInSecs());
+        editor.apply();
+
+        // Связь с БД и ее открытие
+        DatabaseAdapter adapter = new DatabaseAdapter(this);
+        adapter.open();
+
+
+        // начинаем транзакцию
+        adapter.beginTransaction();
+        try {
+
+
+            // Получаем список событий данной группы
+            List<Event> events = adapter.getEventsWithAppTrackSettings();
+
+            List<RoundDate> roundDates;
+            // Перерасчет круглых дат в случае если изменились настройки отслеживания
+            //long start = System.nanoTime();
+            if (trackSettings.getRdInYears() != getOldAppTrackSettings().getRdInYears()) {
+
+                for (Event event : events) {
+
+                    // Удаление из БД текущих круглых дат - года
+                    adapter.deleteRoundDates(event.getId(), RoundDate.UNIT_YEARS);
+                    if (trackSettings.getRdInYears() != TrackSettings.NOT_TRACK) {
+                        // Расчет Круглых дат - года
+                        roundDates = event.getRoundDates(Event.YEAR, trackSettings.getRdInYears());
+                        // Запись круглых дат в БД
+                        adapter.addRoundDates(roundDates);
+                    }
+                }
+            }
+
+            if (trackSettings.getRdInMonths() != getOldAppTrackSettings().getRdInMonths()) {
+                for (Event event : events) {
+                    // Удаление из БД текущих круглых дат - месяцы
+                    adapter.deleteRoundDates(event.getId(), RoundDate.UNIT_MONTHS);
+                    if (trackSettings.getRdInMonths() != TrackSettings.NOT_TRACK) {
+                        // Расчет Круглых дат - месяцы
+                        roundDates = event.getRoundDates(Event.MONTH, trackSettings.getRdInMonths());
+                        // Запись круглых дат в БД
+                        adapter.addRoundDates(roundDates);
+                    }
+                }
+            }
+
+            if (trackSettings.getRdInWeeks() != getOldAppTrackSettings().getRdInWeeks()) {
+                for (Event event : events) {
+                    // Удаление из БД текущих круглых дат - недели
+                    adapter.deleteRoundDates(event.getId(), RoundDate.UNIT_WEEKS);
+                    if (trackSettings.getRdInWeeks() != TrackSettings.NOT_TRACK) {
+                        // Расчет Круглых дат - недели
+                        roundDates = event.getRoundDates(Event.WEEK, trackSettings.getRdInWeeks());
+                        // Запись круглых дат в БД
+                        adapter.addRoundDates(roundDates);
+                    }
+                }
+            }
+
+            if (trackSettings.getRdInDays() != getOldAppTrackSettings().getRdInDays()) {
+                for (Event event : events) {
+                    // Удаление из БД текущих круглых дат - дни
+                    adapter.deleteRoundDates(event.getId(), RoundDate.UNIT_DAYS);
+                    if (trackSettings.getRdInDays() != TrackSettings.NOT_TRACK) {
+                        // Расчет Круглых дат - дни
+                        roundDates = event.getRoundDates(Event.DAY, trackSettings.getRdInDays());
+                        // Запись круглых дат в БД
+                        adapter.addRoundDates(roundDates);
+                    }
+                }
+            }
+
+            if (trackSettings.getRdInHours() != getOldAppTrackSettings().getRdInHours()) {
+                for (Event event : events) {
+                    // Удаление из БД текущих круглых дат - часы
+                    adapter.deleteRoundDates(event.getId(), RoundDate.UNIT_HOURS);
+                    if (trackSettings.getRdInHours() != TrackSettings.NOT_TRACK) {
+                        // Расчет Круглых дат - часы
+                        roundDates = event.getRoundDates(Event.HOUR, trackSettings.getRdInHours());
+                        // Запись круглых дат в БД
+                        adapter.addRoundDates(roundDates);
+                    }
+                }
+            }
+
+            if (trackSettings.getRdInMinutes() != getOldAppTrackSettings().getRdInMinutes()) {
+                for (Event event : events) {
+                    // Удаление из БД текущих круглых дат - минуты
+                    adapter.deleteRoundDates(event.getId(), RoundDate.UNIT_MINUTES);
+                    if (trackSettings.getRdInMinutes() != TrackSettings.NOT_TRACK) {
+                        // Расчет Круглых дат - минуты
+                        roundDates = event.getRoundDates(Event.MINUTE, trackSettings.getRdInMinutes());
+                        // Запись круглых дат в БД
+                        adapter.addRoundDates(roundDates);
+                    }
+                }
+            }
+
+            if (trackSettings.getRdInSecs() != getOldAppTrackSettings().getRdInSecs()) {
+                for (Event event : events) {
+                    // Удаление из БД текущих круглых дат - секунды
+                    adapter.deleteRoundDates(event.getId(), RoundDate.UNIT_SECS);
+                    if (trackSettings.getRdInSecs() != TrackSettings.NOT_TRACK) {
+                        // Расчет Круглых дат - секунды
+                        roundDates = event.getRoundDates(Event.SEC, trackSettings.getRdInSecs());
+                        // Запись круглых дат в БД
+                        adapter.addRoundDates(roundDates);
+                    }
+                }
+            }
+
+            //long finish = System.nanoTime();
+            //long duration = finish - start;
+            //Log.d("MyLog", "Время выполнения = " + duration);
+
+            adapter.setTransactionSuccessful();
+        } finally {
+            adapter.endTransaction();
+        }
+
+        // Закрытие соединения с БД
+        adapter.close();
+
+        setResult(RESULT_OK);
+        finish();
 
 
     }
 
     public void onCancel(View view) {
+        setResult(RESULT_CANCELED);
         finish();
-    }
-
-    public void onSaveSettings(View view) {
-        // TODO: 31.05.2017 Сохраняем настройки
-        SharedPreferences.Editor editor = mSettings.edit();
-        editor.putInt(MY_SETTINGS_RD_IN_YEARS, mTrackSetting[0]);
-        editor.putInt(MY_SETTINGS_RD_IN_MONTHS, mTrackSetting[1]);
-        editor.putInt(MY_SETTINGS_RD_IN_WEEKS, mTrackSetting[2]);
-        editor.putInt(MY_SETTINGS_RD_IN_DAYS, mTrackSetting[3]);
-        editor.putInt(MY_SETTINGS_RD_IN_HOURS, mTrackSetting[4]);
-        editor.putInt(MY_SETTINGS_RD_IN_MINUTES, mTrackSetting[5]);
-        editor.putInt(MY_SETTINGS_RD_IN_SECS, mTrackSetting[6]);
-        editor.apply();
-
-        // TODO: 31.05.2017 Определяем список событий, для которых сменились настройки
-
-        // TODO: 31.05.2017 Удаляем кргулые даты из БД для полученного списка,
-        // формируем новые и добавляем их в БД в единой транзакции
-
-
-        finish();
-
-
     }
 
     public void onLoadDefaultSettings(View view) {
-        // TODO: 31.05.2017 удалить файл с настройками
-        /*SharedPreferences.Editor editor = mSettings.edit();
+        SharedPreferences mSettings = getSharedPreferences(TrackSettings.MY_SETTINGS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSettings.edit();
         editor.clear();
         editor.apply();
-        mTrackSetting[0] = Integer.valueOf(getString(R.string.rd_in_years));
-        mTrackSetting[1] = Integer.valueOf(getString(R.string.rd_in_months));
-        mTrackSetting[2] = Integer.valueOf(getString(R.string.rd_in_weeks));
-        mTrackSetting[3] = Integer.valueOf(getString(R.string.rd_in_days));
-        mTrackSetting[4] = Integer.valueOf(getString(R.string.rd_in_hours));
-        mTrackSetting[5] = Integer.valueOf(getString(R.string.rd_in_minutes));
-        mTrackSetting[6] = Integer.valueOf(getString(R.string.rd_in_secs));*/
+        trackSettings = new TrackSettings(this);
+
+        final CharSequence[] rdVariants = getResources().getStringArray(R.array.rd_variants);
+
+        tvYears.setText(rdVariants[trackSettings.getRdInYears()]);
+        tvMonths.setText(rdVariants[trackSettings.getRdInMonths()]);
+        tvWeeks.setText(rdVariants[trackSettings.getRdInWeeks()]);
+        tvDays.setText(rdVariants[trackSettings.getRdInDays()]);
+        tvHours.setText(rdVariants[trackSettings.getRdInHours()]);
+        tvMinutes.setText(rdVariants[trackSettings.getRdInMinutes()]);
+        tvSecs.setText(rdVariants[trackSettings.getRdInSecs()]);
+
     }
 
 
     public void onClick(View view) {
-        switch (view.getId()){
+        DialogScreen ds;
+        android.app.AlertDialog dialog;
+
+        switch (view.getId()) {
             case R.id.llRoundDateYear:
-                showDialog(IDD_RD_YEARS);
+                ds = new DialogScreen(DialogScreen.IDD_RD_YEARS_3);
+                dialog = ds.getDialog(this);
+                dialog.show();
                 break;
             case R.id.llRoundDateMonth:
-                showDialog(IDD_RD_MONTHS);
+                ds = new DialogScreen(DialogScreen.IDD_RD_MONTHS_3);
+                dialog = ds.getDialog(this);
+                dialog.show();
                 break;
             case R.id.llRoundDateWeek:
-                showDialog(IDD_RD_WEEKS);
+                ds = new DialogScreen(DialogScreen.IDD_RD_WEEKS_3);
+                dialog = ds.getDialog(this);
+                dialog.show();
                 break;
             case R.id.llRoundDateDay:
-                showDialog(IDD_RD_DAYS);
+                ds = new DialogScreen(DialogScreen.IDD_RD_DAYS_3);
+                dialog = ds.getDialog(this);
+                dialog.show();
                 break;
             case R.id.llRoundDateHour:
-                showDialog(IDD_RD_HOURS);
+                ds = new DialogScreen(DialogScreen.IDD_RD_HOURS_3);
+                dialog = ds.getDialog(this);
+                dialog.show();
                 break;
             case R.id.llRoundDateMinute:
-                showDialog(IDD_RD_MINUTES);
+                ds = new DialogScreen(DialogScreen.IDD_RD_MINUTES_3);
+                dialog = ds.getDialog(this);
+                dialog.show();
                 break;
             case R.id.llRoundDateSec:
-                showDialog(IDD_RD_SECS);
+                ds = new DialogScreen(DialogScreen.IDD_RD_SECS_3);
+                dialog = ds.getDialog(this);
+                dialog.show();
                 break;
 
 
         }
-        Log.d("MyLog", Integer.toString(mTrackSetting[0]) + " " +
-                Integer.toString(mTrackSetting[1]) + " " +
-                Integer.toString(mTrackSetting[2]) + " " +
-                Integer.toString(mTrackSetting[3]) + " " +
-                Integer.toString(mTrackSetting[4]) + " " +
-                Integer.toString(mTrackSetting[5]) + " " +
-                Integer.toString(mTrackSetting[6]));
-
     }
 
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        final CharSequence[] rdVariants;
-        switch (id) {
-            case IDD_RD_YEARS:
-                AlertDialog.Builder builderYears = new AlertDialog.Builder(this);
-                rdVariants = getResources().getStringArray(R.array.rd_variants);
-                builderYears.setTitle(R.string.track)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        })
-                        .setSingleChoiceItems(rdVariants, mTrackSetting[0], new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mTrackSetting[0] = which;
-                                TextView tv = (TextView)findViewById(R.id.tvRoundDateInYears);
-                                tv.setText(rdVariants[which]);
-                            }
-                        });
-                return builderYears.create();
-            case IDD_RD_MONTHS:
-                AlertDialog.Builder builderMonths = new AlertDialog.Builder(this);
-                rdVariants = getResources().getStringArray(R.array.rd_variants);
-                builderMonths.setTitle(R.string.track)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        })
-                        .setSingleChoiceItems(rdVariants, mTrackSetting[1], new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mTrackSetting[1] = which;
-                                TextView tv = (TextView)findViewById(R.id.tvRoundDateInMonths);
-                                tv.setText(rdVariants[which]);
-                            }
-                        });
-                return builderMonths.create();
-            case IDD_RD_WEEKS:
-                AlertDialog.Builder builderWeeks = new AlertDialog.Builder(this);
-                rdVariants = getResources().getStringArray(R.array.rd_variants);
-                builderWeeks.setTitle(R.string.track)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        })
-                        .setSingleChoiceItems(rdVariants, mTrackSetting[2], new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mTrackSetting[2] = which;
-                                TextView tv = (TextView)findViewById(R.id.tvRoundDateInWeeks);
-                                tv.setText(rdVariants[which]);
-                            }
-                        });
-                return builderWeeks.create();
-            case IDD_RD_DAYS:
-                AlertDialog.Builder builderDays = new AlertDialog.Builder(this);
-                rdVariants = getResources().getStringArray(R.array.rd_variants);
-                builderDays.setTitle(R.string.track)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        })
-                        .setSingleChoiceItems(rdVariants, mTrackSetting[3], new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mTrackSetting[3] = which;
-                                TextView tv = (TextView)findViewById(R.id.tvRoundDateInDays);
-                                tv.setText(rdVariants[which]);
-                            }
-                        });
-                return builderDays.create();
-            case IDD_RD_HOURS:
-                AlertDialog.Builder builderHours = new AlertDialog.Builder(this);
-                rdVariants = getResources().getStringArray(R.array.rd_variants);
-                builderHours.setTitle(R.string.track)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        })
-                        .setSingleChoiceItems(rdVariants, mTrackSetting[4], new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mTrackSetting[4] = which;
-                                TextView tv = (TextView)findViewById(R.id.tvRoundDateInHours);
-                                tv.setText(rdVariants[which]);
-                            }
-                        });
-                return builderHours.create();
-            case IDD_RD_MINUTES:
-                AlertDialog.Builder builderMinutes = new AlertDialog.Builder(this);
-                rdVariants = getResources().getStringArray(R.array.rd_variants);
-                builderMinutes.setTitle(R.string.track)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        })
-                        .setSingleChoiceItems(rdVariants, mTrackSetting[5], new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mTrackSetting[5] = which;
-                                TextView tv = (TextView)findViewById(R.id.tvRoundDateInMinutes);
-                                tv.setText(rdVariants[which]);
-                            }
-                        });
-                return builderMinutes.create();
-            case IDD_RD_SECS:
-                AlertDialog.Builder builderSecs = new AlertDialog.Builder(this);
-                rdVariants = getResources().getStringArray(R.array.rd_variants);
-                builderSecs.setTitle(R.string.track)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        })
-                        .setSingleChoiceItems(rdVariants, mTrackSetting[6], new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mTrackSetting[6] = which;
-                                TextView tv = (TextView)findViewById(R.id.tvRoundDateInSecs);
-                                tv.setText(rdVariants[which]);
-                            }
-                        });
-                return builderSecs.create();
-            default:
-                return null;
-        }
+    public TrackSettings getTrackSettings() {
+        return trackSettings;
+    }
+
+    public void setTrackSettings(TrackSettings trackSettings) {
+        this.trackSettings = trackSettings;
+    }
+
+    public TrackSettings getOldAppTrackSettings() {
+        return oldAppTrackSettings;
+    }
+
+    public void setOldAppTrackSettings(TrackSettings oldAppTrackSettings) {
+        this.oldAppTrackSettings = oldAppTrackSettings;
+    }
+
+    public void setTvYears(CharSequence rdVariant) {
+        this.tvYears.setText(rdVariant);
+    }
+
+    public void setTvMonths(CharSequence rdVariant) {
+        this.tvMonths.setText(rdVariant);
+    }
+
+    public void setTvWeeks(CharSequence rdVariant) {
+        this.tvWeeks.setText(rdVariant);
+    }
+
+    public void setTvDays(CharSequence rdVariant) {
+        this.tvDays.setText(rdVariant);
+    }
+
+    public void setTvHours(CharSequence rdVariant) {
+        this.tvHours.setText(rdVariant);
+    }
+
+    public void setTvMinutes(CharSequence rdVariant) {
+        this.tvMinutes.setText(rdVariant);
+    }
+
+    public void setTvSecs(CharSequence rdVariant) {
+        this.tvSecs.setText(rdVariant);
     }
 }

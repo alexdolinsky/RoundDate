@@ -199,7 +199,7 @@ public class DatabaseAdapter {
             return events;
     }
 
-    public List<Event> getEventsById(long idEventsGroup) {
+    public List<Event> getEventsByEventGroupId(long idEventsGroup) {
 
         ArrayList<Event> events = new ArrayList<>();
 
@@ -264,7 +264,7 @@ public class DatabaseAdapter {
         return event;
     }
 
-    List<Event> getEventsById(long idEG, int sourceTrackSettingsGroup) {
+    List<Event> getEventsByEventGroupIdAndGroupTrackSettings(long idEG, int sourceTrackSettingsGroup) {
 
         ArrayList<Event> events = new ArrayList<>();
 
@@ -300,10 +300,46 @@ public class DatabaseAdapter {
         return events;
     }
 
+    List<Event> getEventsWithAppTrackSettings() {
+        ArrayList<Event> events = new ArrayList<>();
+
+        String selection = DatabaseHelper.COLUMN_VIEWEVENTS_SOURCETRACKSETTINGS + "=" + Event.SOURCE_TRACK_SETTINGS_APP + " OR (" +
+                DatabaseHelper.COLUMN_VIEWEVENTS_EVENTGROUPSOURCETRACKSETTINGS + "=" + Event.SOURCE_TRACK_SETTINGS_APP + " AND " +
+                DatabaseHelper.COLUMN_VIEWEVENTS_SOURCETRACKSETTINGS + "=" + Event.SOURCE_TRACK_SETTINGS_GROUP + ")";
+
+        Cursor cursor = database.query(DatabaseHelper.VIEW_EVENTS, null, selection, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_ID));
+                String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_NAME));
+                String comment = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_COMMENT));
+                long idEventGroup = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_ID_EVENTGROUP));
+                String nameEventGroup = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_EVENTGROUPNAME));
+                Calendar dateAndTime = new GregorianCalendar();
+                dateAndTime.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_DATEANDTIME)));
+                int sourceTrackSettings = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_SOURCETRACKSETTINGS));
+                int rdInYears = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINYEARS));
+                int rdInMonths = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINMONTHS));
+                int rdInWeeks = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINWEEKS));
+                int rdInDays = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINDAYS));
+                int rdInHours = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINHOURS));
+                int rdInMinutes = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINMINUTES));
+                int rdInSecs = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWEVENTS_RDINSECS));
+                events.add(new Event(id, name, comment, idEventGroup, nameEventGroup, dateAndTime, sourceTrackSettings,
+                        new TrackSettings(rdInYears, rdInMonths, rdInWeeks, rdInDays, rdInHours, rdInMinutes, rdInSecs)));
+            }
+            while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return events;
+    }
+
 
     TrackSettings getGroupTrackSettingsById(long idEventGroup) {
         TrackSettings trackSettings;
-        String selection = "" + DatabaseHelper.COLUMN_EVENTGROUPS_ID + "=" + idEventGroup;
+        String selection = DatabaseHelper.COLUMN_EVENTGROUPS_ID + "=" + idEventGroup;
 
         Cursor cursor = database.query(DatabaseHelper.TABLE_EVENT_GROUPS, null, selection, null, null, null, null);
 
@@ -319,7 +355,7 @@ public class DatabaseAdapter {
         return trackSettings;
     }
 
-    public void addRoundDates(List<RoundDate> roundDates) {
+    void addRoundDates(List<RoundDate> roundDates) {
 
         if (!roundDates.isEmpty()) {
             for (RoundDate roundDate : roundDates) {

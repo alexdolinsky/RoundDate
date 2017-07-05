@@ -397,7 +397,12 @@ public class AddEditEventActivity extends AppCompatActivity {
                         trackSettings = new TrackSettings(this);
                         break;
                     case Event.SOURCE_TRACK_SETTINGS_GROUP:
-                        trackSettings = adapter.getGroupTrackSettingsById(event.getIdEventGroup());
+                        EventGroup eventGroup = adapter.getEventGroupById(event.getIdEventGroup());
+                        if (eventGroup.getSourceTrackSettings() == Event.SOURCE_TRACK_SETTINGS_APP) {
+                            trackSettings = new TrackSettings(this);
+                        } else {
+                            trackSettings = eventGroup.getTrackSettings();
+                        }
                         break;
                     case Event.SOURCE_TRACK_SETTINGS_EVENT:
                         trackSettings = event.getTrackSettings();
@@ -414,18 +419,6 @@ public class AddEditEventActivity extends AppCompatActivity {
                     roundDates = event.getRoundDates(Event.YEAR, trackSettings.getRdInYears());
                     // Запись круглых дат в БД
                     adapter.addRoundDates(roundDates);
-
-
-                    /*for (RoundDate roundDate : roundDates) {
-                        Log.d("MyLog", "ID = " + roundDate.getId() +
-                                " valueOf = " + roundDate.getValueOf() +
-                                " dateAndTime = " + roundDate.getDateAndTime().getTimeInMillis() / 31557600000L +
-                                " idEvent = " + roundDate.getIdEvent() +
-                                " NameEvent = " + roundDate.getNameEvent() +
-                                " rare = " + roundDate.getRare() +
-                                " important = " + roundDate.getImportant()
-                        );
-                    }*/
                 }
 
                 if (trackSettings.getRdInMonths() != TrackSettings.NOT_TRACK) {
@@ -517,7 +510,12 @@ public class AddEditEventActivity extends AppCompatActivity {
                         trackSettings = new TrackSettings(this);
                         break;
                     case Event.SOURCE_TRACK_SETTINGS_GROUP:
-                        trackSettings = adapter.getGroupTrackSettingsById(event.getIdEventGroup());
+                        EventGroup eventGroup = adapter.getEventGroupById(event.getIdEventGroup());
+                        if (eventGroup.getSourceTrackSettings() == Event.SOURCE_TRACK_SETTINGS_APP) {
+                            trackSettings = new TrackSettings(this);
+                        } else {
+                            trackSettings = eventGroup.getTrackSettings();
+                        }
                         break;
                     case Event.SOURCE_TRACK_SETTINGS_EVENT:
                         trackSettings = event.getTrackSettings();
@@ -548,17 +546,6 @@ public class AddEditEventActivity extends AppCompatActivity {
                         adapter.addRoundDates(roundDates);
                     }
 
-
-                    /*for (RoundDate roundDate : roundDates) {
-                        Log.d("MyLog", "ID = " + roundDate.getId() +
-                                " valueOf = " + roundDate.getValueOf() +
-                                " dateAndTime = " + roundDate.getDateAndTime().getTimeInMillis() / 31557600000L +
-                                " idEvent = " + roundDate.getIdEvent() +
-                                " NameEvent = " + roundDate.getNameEvent() +
-                                " rare = " + roundDate.getRare() +
-                                " important = " + roundDate.getImportant()
-                        );
-                    }*/
                 }
 
                 if (isDateChange || trackSettings.getRdInMonths() != getOldEventTrackSettings().getRdInMonths()) {

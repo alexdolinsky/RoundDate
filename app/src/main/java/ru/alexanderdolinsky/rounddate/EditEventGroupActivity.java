@@ -180,7 +180,7 @@ public class EditEventGroupActivity extends AppCompatActivity {
 
 
             // Получаем список событий данной группы
-            List<Event> events = adapter.getEventsById(getEventGroup().getId(), Event.SOURCE_TRACK_SETTINGS_GROUP);
+            List<Event> events = adapter.getEventsByEventGroupIdAndGroupTrackSettings(getEventGroup().getId(), Event.SOURCE_TRACK_SETTINGS_GROUP);
 
             List<RoundDate> roundDates;
             // Перерасчет круглых дат в случае если изменились настройки отслеживания

@@ -14,12 +14,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private List<RoundDate> roundDates;
 
     ListView roundDatesList;
 
     public static final String ISNEWEVENT = "IS_NEW_EVENT";
     public static final int ADDEVENTREQUESTCODE = 1;
+    private static final int SETTINGSREQUESTCODE = 2;
 
 
     @Override
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_settings:
                 intent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, SETTINGSREQUESTCODE);
                 return true;
             case R.id.action_filter:
                 intent = new Intent(MainActivity.this, FilterActivity.class);
@@ -106,16 +108,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == ADDEVENTREQUESTCODE) {
-            if (resultCode == RESULT_OK) {
-                this.recreate();
-            } else {
+        switch (requestCode) {
+            case ADDEVENTREQUESTCODE:
+                if (resultCode == RESULT_OK) {
+                    this.recreate();
+                }
+                break;
+            case SETTINGSREQUESTCODE:
+                if (resultCode == RESULT_OK) {
+                    this.recreate();
+                }
+                break;
+            default:
                 super.onActivityResult(requestCode, resultCode, data);
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
 
+
+        }
     }
 
     public List<RoundDate> getRoundDates() {
