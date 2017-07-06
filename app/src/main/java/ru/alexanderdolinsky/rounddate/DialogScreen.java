@@ -39,6 +39,7 @@ public class DialogScreen {
     final static int IDD_CHOICE_EVENT_GROUP = 30;
     static final int DELETE_EVENT_CONFIRM = 40;
     static final int DELETE_EVENTS_GROUP_CONFIRM = 41;
+    static final int IDD_CHOICE_IMPORTANT = 42;
 
 
     private final int IDD_dialog;
@@ -52,12 +53,14 @@ public class DialogScreen {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         final CharSequence[] rdVariants = activity.getResources().getStringArray(R.array.rd_variants);
+        final CharSequence[] importantVariants = activity.getResources().getStringArray(R.array.important_variants);
 
         final AddEditEventActivity aeActivity;// = (AddEditEventActivity) activity;
         final EventListActivity elActivity;
         final EventActivity eActivity;
         final EditEventGroupActivity eegActivity;
         final SettingsActivity sActivity;
+        final MainActivity mActivity;
 
         switch (getIDD_dialog()) {
 
@@ -574,13 +577,36 @@ public class DialogScreen {
                         });
                 return builder.create();
 
+            case IDD_CHOICE_IMPORTANT:
+                mActivity = (MainActivity) activity;
+                builder.setTitle(R.string.choice_importan)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DatabaseAdapter adapter = new DatabaseAdapter(mActivity);
+                                adapter.open();
+                                adapter.updateRoundDateImportant(mActivity.getSelectedRoundDate().getId(), mActivity.getSelectedRoundDate().getImportant());
+                                adapter.close();
+                                mActivity.roundDateAdapter.notifyDataSetChanged();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(importantVariants, mActivity.getSelectedRoundDate().getImportant(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mActivity.getSelectedRoundDate().setImportant(which);
+                            }
+                        });
+                return builder.create();
+
 
             default:
                 return null;
         }
     }
 
-    public int getIDD_dialog() {
+    private int getIDD_dialog() {
         return IDD_dialog;
     }
 

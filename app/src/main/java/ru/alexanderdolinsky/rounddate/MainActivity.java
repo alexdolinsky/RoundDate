@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -16,8 +15,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     private List<RoundDate> roundDates;
+    private RoundDate selectedRoundDate;
+    private int positionSelectedRoundDate;
 
     ListView roundDatesList;
+    RoundDateAdapter roundDateAdapter;
 
     public static final String ISNEWEVENT = "IS_NEW_EVENT";
     public static final int ADDEVENTREQUESTCODE = 1;
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         // выводим круглые даты в список
         roundDatesList = (ListView) findViewById(R.id.lvRoundDates);
-        RoundDateAdapter roundDateAdapter = new RoundDateAdapter(this, R.layout.round_date_item, getRoundDates());
+        roundDateAdapter = new RoundDateAdapter(this, R.layout.round_date_item, getRoundDates());
         roundDatesList.setAdapter(roundDateAdapter);
 
         // устанавливаем слушателя на список и вывод диалогового окна по ID круглой даты
@@ -48,9 +50,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // получаем выбранное событие
-                RoundDate selectedRoundDate = (RoundDate) parent.getItemAtPosition(position);
+                setSelectedRoundDate((RoundDate) parent.getItemAtPosition(position));
+                setPositionSelectedRoundDate(position);
                 // диалоговое окно с выбором важности круглой даты по ID
-                Toast.makeText(MainActivity.this, "Выбрана круглая дата номер " + position, Toast.LENGTH_SHORT).show();
+
+                DialogScreen ds;
+                android.app.AlertDialog dialog;
+                ds = new DialogScreen(DialogScreen.IDD_CHOICE_IMPORTANT);
+                dialog = ds.getDialog(MainActivity.this);
+                dialog.show();
             }
         };
 
@@ -132,5 +140,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void setRoundDates(List<RoundDate> roundDates) {
         this.roundDates = roundDates;
+    }
+
+    public RoundDate getSelectedRoundDate() {
+        return selectedRoundDate;
+    }
+
+    public void setSelectedRoundDate(RoundDate selectedRoundDate) {
+        this.selectedRoundDate = selectedRoundDate;
+    }
+
+    public int getPositionSelectedRoundDate() {
+        return positionSelectedRoundDate;
+    }
+
+    public void setPositionSelectedRoundDate(int positionSelectedRoundDate) {
+        this.positionSelectedRoundDate = positionSelectedRoundDate;
     }
 }

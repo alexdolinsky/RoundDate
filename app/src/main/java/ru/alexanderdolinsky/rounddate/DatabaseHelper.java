@@ -48,7 +48,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     static final String TABLE_ROUNDDATES = "round_dates"; //название таблицы Круглые даты
     // столбцы таблицы "round dates"
-    private static final String COLUMN_ROUNDDATES_ID = "_id";
+    static final String COLUMN_ROUNDDATES_ID = "_id";
     static final String COLUMN_ROUNDDATES_VALUE = "value";
     static final String COLUMN_ROUNDDATES_UNIT = "unit"; //1 - года, 2 - месяцы, 3 - недели, 4 - дни, 5 - часы, 6 - минуты, 7 - секунды
     static final String COLUMN_ROUNDDATES_DATEANDTIME = "date_and_time";

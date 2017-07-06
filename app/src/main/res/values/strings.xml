@@ -124,6 +124,7 @@
     <string name="do_you_want_to_remove_the_events_group">Вы действительно хотите удалить группу событий и все ее события?</string>
     <string name="editing_events_group">Редактирование группы событий</string>
     <string name="event_group_name">Название группы событий</string>
+    <string name="choice_importan">Выбор важности круглой даты</string>
 
 
 </resources>

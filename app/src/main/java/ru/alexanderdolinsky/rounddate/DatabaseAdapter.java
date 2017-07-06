@@ -483,4 +483,10 @@ public class DatabaseAdapter {
     }
 
 
+    int updateRoundDateImportant(long id, int important) {
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.COLUMN_ROUNDDATES_IMPORTANT, important);
+        String where = DatabaseHelper.COLUMN_ROUNDDATES_ID + "=" + id;
+        return database.update(DatabaseHelper.TABLE_ROUNDDATES, cv, where, null);
+    }
 }

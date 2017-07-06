@@ -6,4 +6,10 @@
         <item>Только очень редкие</item>
         <item>Не отслеживать</item>
     </string-array>
+    <string-array name="important_variants">
+        <item>Обычная дата</item>
+        <item>Важная дата</item>
+        <item>Очень важная дата</item>
+        <item>Маловажная дата</item>
+    </string-array>
 </resources>
