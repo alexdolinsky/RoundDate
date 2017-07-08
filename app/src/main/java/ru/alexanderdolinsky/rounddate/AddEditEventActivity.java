@@ -630,13 +630,11 @@ public class AddEditEventActivity extends AppCompatActivity {
     public void onChoiceEventDate(View view) {
         //  диалоговое окно выбора даты
 
-        DatePickerDialog dtp = new DatePickerDialog(AddEditEventActivity.this, d,
+        DatePickerDialog dtp = new DatePickerDialog(AddEditEventActivity.this, R.style.TimePickerTheme, d,
                 date.get(Calendar.YEAR),
                 date.get(Calendar.MONTH),
                 date.get(Calendar.DAY_OF_MONTH));
         dtp.show();
-
-        Toast.makeText(this, "Всплывает окно выбора даты", Toast.LENGTH_SHORT).show();
     }
 
     // установка обработчика выбора даты
@@ -655,7 +653,7 @@ public class AddEditEventActivity extends AppCompatActivity {
 
     public void onChoiceEventTime(View view) {
         // диалоговое окно выбора времени
-        TimePickerDialog ttp = new TimePickerDialog(AddEditEventActivity.this, t,
+        TimePickerDialog ttp = new TimePickerDialog(AddEditEventActivity.this, R.style.TimePickerTheme, t,
                 date.get(Calendar.HOUR_OF_DAY),
                 date.get(Calendar.MINUTE),
                 true);
