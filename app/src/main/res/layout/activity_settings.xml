@@ -496,7 +496,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onSaveSettings"
-            android:text="@string/save" />
+            android:text="@string/save"
+            android:textSize="@dimen/large_size" />
 
         <Button
             android:id="@+id/btn_cancel"
@@ -505,7 +506,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onCancel"
-            android:text="@string/cancel" />
+            android:text="@string/cancel"
+            android:textSize="@dimen/large_size" />
 
     </LinearLayout>
 

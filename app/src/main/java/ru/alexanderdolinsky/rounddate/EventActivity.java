@@ -3,17 +3,17 @@ package ru.alexanderdolinsky.rounddate;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class EventActivity extends AppCompatActivity {
 
-    private static final int EDITEVENTREQUESTCODE = 1;
+    private static final int EDITEVENT_REQUESTCODE = 1;
     private Event event;
 
 
@@ -54,7 +54,8 @@ public class EventActivity extends AppCompatActivity {
                 tvEventComment.setText(event.getComment());
             }
             tvEventsGroupName.setText(event.getNameEventGroup());
-            tvDateAndTime.setText(event.getDate() + " " + event.getTime());
+            tvDateAndTime.setText(DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault()).format(getEvent().getDateAndTime().getTime()) + " " // дата
+                    + DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(getEvent().getDateAndTime().getTime())); // время
             Calendar currentDateAndTime = new GregorianCalendar();
             long duration = currentDateAndTime.getTimeInMillis() - event.getDateAndTime().getTimeInMillis();
 
@@ -97,10 +98,10 @@ public class EventActivity extends AppCompatActivity {
             }
 
 
-            Log.d("MyLog", "ID: " + event.getId() + " Имя события: " + event.getName() +
+            /*Log.d("MyLog", "ID: " + event.getId() + " Имя события: " + event.getName() +
                     " Комментарий: " + event.getComment() +
                     " Группа событий: " + event.getNameEventGroup() +
-                    " Дата: " + event.getDateAndTime());
+                    " Дата: " + event.getDateAndTime());*/
 
 
         }
@@ -112,13 +113,13 @@ public class EventActivity extends AppCompatActivity {
         Intent intent = new Intent(EventActivity.this, AddEditEventActivity.class);
         intent.putExtra(AddEditEventActivity.ISNEWEVENT, false);
         intent.putExtra(AddEditEventActivity.EVENT_ID, getEvent().getId());
-        startActivityForResult(intent, EDITEVENTREQUESTCODE);
+        startActivityForResult(intent, EDITEVENT_REQUESTCODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == EDITEVENTREQUESTCODE) {
+        if (requestCode == EDITEVENT_REQUESTCODE) {
             if (resultCode == RESULT_OK) {
                 this.recreate();
             } else {
@@ -140,7 +141,7 @@ public class EventActivity extends AppCompatActivity {
 
     public void onDeleteEvent(View view) {
         DialogScreen ds;
-        android.app.AlertDialog dialog;
+        android.support.v7.app.AlertDialog dialog;
         ds = new DialogScreen(DialogScreen.DELETE_EVENT_CONFIRM);
         dialog = ds.getDialog(this);
         dialog.show();

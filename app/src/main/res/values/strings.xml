@@ -125,6 +125,7 @@
     <string name="editing_events_group">Редактирование группы событий</string>
     <string name="event_group_name">Название группы событий</string>
     <string name="choice_importan">Выбор важности круглой даты</string>
+    <string name="this_events_group_not_be_deleted">Эта группа событий не может быть удалена</string>
 
 
 </resources>

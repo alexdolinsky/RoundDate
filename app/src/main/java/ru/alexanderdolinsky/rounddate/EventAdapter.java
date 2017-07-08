@@ -2,28 +2,29 @@ package ru.alexanderdolinsky.rounddate;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Alexsvet on 17.06.2017.
  * Класс адаптер списка событий
  */
 
-public class EventAdapter extends ArrayAdapter<Event> {
+class EventAdapter extends ArrayAdapter<Event> {
 
     private LayoutInflater inflater;
     private int layout;
     private List<Event> events;
 
 
-    public EventAdapter(Context context, int resource, List<Event> events) {
+    EventAdapter(Context context, int resource, List<Event> events) {
         super(context, resource, events);
         this.events = events;
         this.layout = resource;
@@ -48,7 +49,8 @@ public class EventAdapter extends ArrayAdapter<Event> {
         viewHolder.tvEventName.setText(event.getName());
         viewHolder.tvEventGroupName.setText(event.getNameEventGroup());
         viewHolder.tvDate.setText(event.getDate());
-        viewHolder.tvTime.setText(event.getTime());
+        viewHolder.tvDate.setText(DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault()).format(event.getDateAndTime().getTime()));
+        viewHolder.tvTime.setText(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(event.getDateAndTime().getTime()));
 
 
         return convertView;

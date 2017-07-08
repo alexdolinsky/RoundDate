@@ -315,7 +315,7 @@ public class EditEventGroupActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         DialogScreen ds;
-        android.app.AlertDialog dialog;
+        android.support.v7.app.AlertDialog dialog;
 
         switch (view.getId()) {
             case R.id.llRoundDateYear:

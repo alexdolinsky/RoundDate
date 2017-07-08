@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 // диалоговое окно с выбором важности круглой даты по ID
 
                 DialogScreen ds;
-                android.app.AlertDialog dialog;
+                android.support.v7.app.AlertDialog dialog;
                 ds = new DialogScreen(DialogScreen.IDD_CHOICE_IMPORTANT);
                 dialog = ds.getDialog(MainActivity.this);
                 dialog.show();

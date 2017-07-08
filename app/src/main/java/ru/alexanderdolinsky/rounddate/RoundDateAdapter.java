@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,11 +51,17 @@ class RoundDateAdapter extends ArrayAdapter<RoundDate> {
             viewHolder.tvValue.setTextColor(0xffff8800);
         } else if (roundDate.getImportant() == RoundDate.IMPORTANT) {
             str = "\u2605 " + str + " \u2605";
+            viewHolder.tvValue.setTextColor(0xffff8800);
+        } else if (roundDate.getImportant() == RoundDate.STANDART) {
+            viewHolder.tvValue.setTextColor(0xff404040);
+        } else {
+            viewHolder.tvValue.setTextColor(0xaa404040);
         }
         viewHolder.tvValue.setText(str);
 
         viewHolder.tvEventName.setText(roundDate.getNameEvent());
-        viewHolder.tvDateAndTime.setText(RoundDate.getStringOfDateAndTime(roundDate.getDateAndTime()));
+        viewHolder.tvDateAndTime.setText(DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault()).format(roundDate.getDateAndTime().getTime()) + " " // дата
+                + DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(roundDate.getDateAndTime().getTime())); // время
         viewHolder.tvHaveToWait.setText(RoundDate.getTimeToWait(getContext(), roundDate.getDateAndTime()));
 
 

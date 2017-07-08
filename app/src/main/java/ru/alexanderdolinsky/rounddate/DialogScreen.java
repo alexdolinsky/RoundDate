@@ -1,8 +1,8 @@
 package ru.alexanderdolinsky.rounddate;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -40,6 +40,8 @@ public class DialogScreen {
     static final int DELETE_EVENT_CONFIRM = 40;
     static final int DELETE_EVENTS_GROUP_CONFIRM = 41;
     static final int IDD_CHOICE_IMPORTANT = 42;
+    static final int DELETE_EVENT_CONFIRM_2 = 43;
+    static final int DELETE_EVENTS_GROUP_CONFIRM_2 = 44;
 
 
     private final int IDD_dialog;
@@ -551,6 +553,35 @@ public class DialogScreen {
                         });
                 return builder.create();
 
+            case DELETE_EVENT_CONFIRM_2:
+                elActivity = (EventListActivity) activity;
+                builder.setCancelable(false)
+                        .setTitle(R.string.attention)
+                        .setMessage(R.string.do_you_want_to_remove_the_event)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+
+                                // Связь с БД и ее открытие
+                                DatabaseAdapter adapter = new DatabaseAdapter(elActivity);
+                                adapter.open();
+                                // удаление события
+                                adapter.deleteEvent(elActivity.getSelectedEvent().getId());
+                                // закрытие соединения с БД
+                                adapter.close();
+                                // пересоздание списка событий
+                                elActivity.recreate();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                return builder.create();
+
             case DELETE_EVENTS_GROUP_CONFIRM:
                 elActivity = (EventListActivity) activity;
                 builder.setCancelable(false)
@@ -565,6 +596,32 @@ public class DialogScreen {
                                 DatabaseAdapter adapter = new DatabaseAdapter(elActivity);
                                 adapter.open();
                                 adapter.deleteEventsGroup(elActivity.getEventsGroup().get((int) elActivity.getSelectedEventsGroupId()).getId());
+                                adapter.close();
+                                elActivity.recreate();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                return builder.create();
+
+            case DELETE_EVENTS_GROUP_CONFIRM_2:
+                elActivity = (EventListActivity) activity;
+                builder.setCancelable(false)
+                        .setTitle(R.string.attention)
+                        .setMessage(R.string.do_you_want_to_remove_the_events_group)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+
+                                // Связь с БД и ее открытие
+                                DatabaseAdapter adapter = new DatabaseAdapter(elActivity);
+                                adapter.open();
+                                adapter.deleteEventsGroup(elActivity.getSelectedEvent().getIdEventGroup());
                                 adapter.close();
                                 elActivity.recreate();
                             }

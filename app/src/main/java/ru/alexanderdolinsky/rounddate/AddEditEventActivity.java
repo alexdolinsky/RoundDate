@@ -19,7 +19,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -178,8 +177,6 @@ public class AddEditEventActivity extends AppCompatActivity {
         tvSecs = (TextView) findViewById(R.id.tvRoundDateInSecs);
 
         //Задание формата вывода даты и времени
-        SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat sdfTime = new SimpleDateFormat("kk:mm");
         final CharSequence[] rdVariants = getResources().getStringArray(R.array.rd_variants);
 
 
@@ -193,14 +190,11 @@ public class AddEditEventActivity extends AppCompatActivity {
             date.set(Calendar.SECOND, 0);
 
             // Устанавливается дата и время
-            //tvCurrentDate.setText(sdfDate.format(date.getTime()));
-            //tvCurrentTime.setText(sdfTime.format(date.getTime()));
             tvCurrentDate.setText(DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault()).format(date.getTime()));
             tvCurrentTime.setText(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(date.getTime()));
 
             // Установка настроек по умолчанию
-            // TODO: 25.06.2017 Считывать их из настроек приложения
-            eventTrackSettings = new TrackSettings(0, 1, 1, 0, 1, 1, 1);
+            eventTrackSettings = new TrackSettings(this);
 
             // Установка источника настроек отслеживания по умолчанию (по группе событий)
             setSourceTrackSettings(Event.SOURCE_TRACK_SETTINGS_GROUP);
@@ -666,7 +660,6 @@ public class AddEditEventActivity extends AppCompatActivity {
                 date.get(Calendar.MINUTE),
                 true);
         ttp.show();
-        Toast.makeText(this, "Всплывает окно выбора времени", Toast.LENGTH_SHORT).show();
     }
 
     // установка обработчика выбора времени
@@ -674,12 +667,7 @@ public class AddEditEventActivity extends AppCompatActivity {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             date.set(Calendar.HOUR_OF_DAY, hourOfDay);
             date.set(Calendar.MINUTE, minute);
-            //SimpleDateFormat sdf = new SimpleDateFormat("kk:mm");
-            //tvCurrentTime.setText(sdf.format(date.getTime()));
-            //DateFormat df = new DateFormat("kk:mm");
             tvCurrentTime.setText(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(date.getTime()));
-
-            //Log.d("MyLog", sdf.format(date.getTime()));
 
         }
     };
@@ -692,7 +680,7 @@ public class AddEditEventActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         DialogScreen ds;
-        android.app.AlertDialog dialog;
+        android.support.v7.app.AlertDialog dialog;
 
         switch (view.getId()) {
             case R.id.llRoundDateYear:
