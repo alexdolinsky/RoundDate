@@ -1,5 +1,6 @@
 package ru.alexanderdolinsky.rounddate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
@@ -301,6 +302,10 @@ public class EditEventGroupActivity extends AppCompatActivity {
 
         // Закрытие соединения с БД
         adapter.close();
+
+        Intent intent = new Intent();
+        intent.setAction(AddEditEventActivity.NOTIFICATION_ACTION);
+        sendBroadcast(intent);
 
         setResult(RESULT_OK);
         finish();

@@ -49,7 +49,7 @@ class EventAdapter extends ArrayAdapter<Event> {
         viewHolder.tvEventName.setText(event.getName());
         viewHolder.tvEventGroupName.setText(event.getNameEventGroup());
         viewHolder.tvDate.setText(event.getDate());
-        viewHolder.tvDate.setText(DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault()).format(event.getDateAndTime().getTime()));
+        viewHolder.tvDate.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()).format(event.getDateAndTime().getTime()));
         viewHolder.tvTime.setText(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(event.getDateAndTime().getTime()));
 
 

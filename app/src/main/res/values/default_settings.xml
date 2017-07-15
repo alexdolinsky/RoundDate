@@ -21,20 +21,16 @@
     <string name="very_important_rd_month">1</string>
     <string name="very_important_rd_week">1</string>
     <string name="very_important_rd_day">1</string>
-    <string name="very_important_rd_hour">1</string>
 
     <string name="important_rd_month">0</string>
     <string name="important_rd_week">1</string>
     <string name="important_rd_day">1</string>
-    <string name="important_rd_hour">1</string>
 
     <string name="standart_rd_month">0</string>
     <string name="standart_rd_week">0</string>
     <string name="standart_rd_day">1</string>
-    <string name="standart_rd_hour">1</string>
 
     <string name="small_important_rd_month">0</string>
     <string name="small_important_rd_week">0</string>
     <string name="small_important_rd_day">0</string>
-    <string name="small_important_rd_hour">0</string>
 </resources>

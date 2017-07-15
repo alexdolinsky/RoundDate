@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         DatabaseAdapter adapter = new DatabaseAdapter(this);
         adapter.open();
 
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         roundDatesList = (ListView) findViewById(R.id.lvRoundDates);
         roundDateAdapter = new RoundDateAdapter(this, R.layout.round_date_item, getRoundDates());
         roundDatesList.setAdapter(roundDateAdapter);
+
 
         // устанавливаем слушателя на список и вывод диалогового окна по ID круглой даты
 
@@ -77,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // получим идентификатор выбранного пункта меню
         int id = item.getItemId();
-        //TODO: 27.05.2017 тестовый туду
 
         // операции для выбранного пункта меню
         Intent intent;

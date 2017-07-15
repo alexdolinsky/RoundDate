@@ -2,6 +2,7 @@ package ru.alexanderdolinsky.rounddate;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageButton;
@@ -63,6 +64,7 @@ public class DialogScreen {
         final EditEventGroupActivity eegActivity;
         final SettingsActivity sActivity;
         final MainActivity mActivity;
+
 
         switch (getIDD_dialog()) {
 
@@ -541,6 +543,10 @@ public class DialogScreen {
                                 adapter.open();
                                 adapter.deleteEvent(eActivity.getEvent().getId());
                                 adapter.close();
+
+                                Intent intent = new Intent();
+                                intent.setAction(AddEditEventActivity.NOTIFICATION_ACTION);
+                                eActivity.sendBroadcast(intent);
                                 eActivity.setResult(Activity.RESULT_OK);
                                 eActivity.finish();
                             }
@@ -570,6 +576,11 @@ public class DialogScreen {
                                 adapter.deleteEvent(elActivity.getSelectedEvent().getId());
                                 // закрытие соединения с БД
                                 adapter.close();
+
+                                Intent intent = new Intent();
+                                intent.setAction(AddEditEventActivity.NOTIFICATION_ACTION);
+                                elActivity.sendBroadcast(intent);
+
                                 // пересоздание списка событий
                                 elActivity.recreate();
                             }
@@ -597,6 +608,11 @@ public class DialogScreen {
                                 adapter.open();
                                 adapter.deleteEventsGroup(elActivity.getEventsGroup().get((int) elActivity.getSelectedEventsGroupId()).getId());
                                 adapter.close();
+
+                                Intent intent = new Intent();
+                                intent.setAction(AddEditEventActivity.NOTIFICATION_ACTION);
+                                elActivity.sendBroadcast(intent);
+
                                 elActivity.recreate();
                             }
                         })
@@ -623,6 +639,9 @@ public class DialogScreen {
                                 adapter.open();
                                 adapter.deleteEventsGroup(elActivity.getSelectedEvent().getIdEventGroup());
                                 adapter.close();
+                                Intent intent = new Intent();
+                                intent.setAction(AddEditEventActivity.NOTIFICATION_ACTION);
+                                elActivity.sendBroadcast(intent);
                                 elActivity.recreate();
                             }
                         })
@@ -645,6 +664,9 @@ public class DialogScreen {
                                 adapter.open();
                                 adapter.updateRoundDateImportant(mActivity.getSelectedRoundDate().getId(), mActivity.getSelectedRoundDate().getImportant());
                                 adapter.close();
+                                Intent intent = new Intent();
+                                intent.setAction(AddEditEventActivity.NOTIFICATION_ACTION);
+                                mActivity.sendBroadcast(intent);
                                 mActivity.roundDateAdapter.notifyDataSetChanged();
                                 dialog.dismiss();
                             }

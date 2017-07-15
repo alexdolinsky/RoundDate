@@ -374,14 +374,14 @@ public class DatabaseAdapter {
     }
 
 
-    public List<RoundDate> getRoundDates() {
+    List<RoundDate> getRoundDates() {
         ArrayList<RoundDate> roundDates = new ArrayList<>();
 
         Calendar currentDateAndTime = new GregorianCalendar();
-        //String selection = DatabaseHelper.COLUMN_VIEWROUNDDATES_DATEANDTIME + ">" + currentDateAndTime.getTimeInMillis();
+        String selection = DatabaseHelper.COLUMN_VIEWROUNDDATES_DATEANDTIME + ">" + currentDateAndTime.getTimeInMillis();
         String order = DatabaseHelper.COLUMN_VIEWROUNDDATES_DATEANDTIME;
 
-        Cursor cursor = database.query(DatabaseHelper.VIEW_ROUNDDATES, null, null, null, null, null, order);
+        Cursor cursor = database.query(DatabaseHelper.VIEW_ROUNDDATES, null, selection, null, null, null, order);
 
         if (cursor.moveToFirst()) {
             do {
@@ -402,14 +402,42 @@ public class DatabaseAdapter {
         return roundDates;
     }
 
-    public void deleteRoundDates(long id, int unit) {
+    List<RoundDate> getRoundDates(long startTime, long finishTime) {
+        ArrayList<RoundDate> roundDates = new ArrayList<>();
+
+        Calendar currentDateAndTime = new GregorianCalendar();
+        String selection = "(" + DatabaseHelper.COLUMN_VIEWROUNDDATES_DATEANDTIME + ">" + startTime + ") AND (" +
+                DatabaseHelper.COLUMN_VIEWROUNDDATES_DATEANDTIME + "<" + finishTime + ")";
+
+        Cursor cursor = database.query(DatabaseHelper.VIEW_ROUNDDATES, null, selection, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_ID));
+                long value = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_VALUE));
+                int unit = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_UNIT));
+                Calendar dateAndTime = new GregorianCalendar();
+                dateAndTime.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_DATEANDTIME)));
+                long idEvent = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_ID_EVENT));
+                String eventName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_EVENTNAME));
+                int rare = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_RARE));
+                int important = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_IMPORTANT));
+                roundDates.add(new RoundDate(id, value, unit, dateAndTime, idEvent, eventName, rare, important));
+            }
+            while (cursor.moveToNext());
+        }
+        cursor.close();
+        return roundDates;
+    }
+
+    void deleteRoundDates(long id, int unit) {
         String table = DatabaseHelper.TABLE_ROUNDDATES;
         String where = DatabaseHelper.COLUMN_ROUNDDATES_ID_EVENT + "=" + id + " AND " +
                 DatabaseHelper.COLUMN_ROUNDDATES_UNIT + "=" + unit;
         database.delete(table, where, null);
     }
 
-    public int updateEvent(Event event) {
+    int updateEvent(Event event) {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.COLUMN_EVENTS_NAME, event.getName());
         cv.put(DatabaseHelper.COLUMN_EVENTS_COMMENT, event.getComment());
@@ -489,4 +517,5 @@ public class DatabaseAdapter {
         String where = DatabaseHelper.COLUMN_ROUNDDATES_ID + "=" + id;
         return database.update(DatabaseHelper.TABLE_ROUNDDATES, cv, where, null);
     }
+
 }

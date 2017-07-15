@@ -1,5 +1,6 @@
 package ru.alexanderdolinsky.rounddate;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -75,7 +76,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
     public void onSaveSettings(View view) {
-        // TODO: 31.05.2017 Сохраняем настройки
+        // Сохраняем настройки
         SharedPreferences mSettings = getSharedPreferences(TrackSettings.MY_SETTINGS, MODE_PRIVATE);
         SharedPreferences.Editor editor = mSettings.edit();
         editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_YEARS, trackSettings.getRdInYears());
@@ -207,6 +208,10 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Закрытие соединения с БД
         adapter.close();
+
+        Intent intent = new Intent();
+        intent.setAction(AddEditEventActivity.NOTIFICATION_ACTION);
+        sendBroadcast(intent);
 
         setResult(RESULT_OK);
         finish();

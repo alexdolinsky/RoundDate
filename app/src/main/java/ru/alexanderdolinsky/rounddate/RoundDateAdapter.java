@@ -60,7 +60,7 @@ class RoundDateAdapter extends ArrayAdapter<RoundDate> {
         viewHolder.tvValue.setText(str);
 
         viewHolder.tvEventName.setText(roundDate.getNameEvent());
-        viewHolder.tvDateAndTime.setText(DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault()).format(roundDate.getDateAndTime().getTime()) + " " // дата
+        viewHolder.tvDateAndTime.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()).format(roundDate.getDateAndTime().getTime()) + " " // дата
                 + DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(roundDate.getDateAndTime().getTime())); // время
         viewHolder.tvHaveToWait.setText(RoundDate.getTimeToWait(getContext(), roundDate.getDateAndTime()));
 
