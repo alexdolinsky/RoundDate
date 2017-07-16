@@ -663,6 +663,8 @@ public class DialogScreen {
                                 DatabaseAdapter adapter = new DatabaseAdapter(mActivity);
                                 adapter.open();
                                 adapter.updateRoundDateImportant(mActivity.getSelectedRoundDate().getId(), mActivity.getSelectedRoundDate().getImportant());
+                                // обновляем записи уведомления для данной круглой даты
+                                adapter.updateNotifyDate(mActivity.getSelectedRoundDate());
                                 adapter.close();
                                 Intent intent = new Intent();
                                 intent.setAction(AddEditEventActivity.NOTIFICATION_ACTION);

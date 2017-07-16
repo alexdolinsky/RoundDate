@@ -7,8 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import static java.security.AccessController.getContext;
-
 /**
  * Created by Alexsvet on 04.06.2017.
  * Класс Круглая дата
@@ -18,28 +16,28 @@ class RoundDate {
     // id Круглой даты
     private long id;
     // значение Круглой даты
-    private long valueOf;
+    protected long valueOf;
     // размерность Круглой даты
-    private int unit;
+    protected int unit;
     // дата/время Круглой даты
-    private Calendar dateAndTime;
+    protected Calendar dateAndTime;
     // id События
-    private long idEvent;
+    protected long idEvent;
     // название События
-    private String nameEvent;
+    protected String nameEvent;
     /* редкость Круглой даты
     0 - обычная Курглая дата
     1 - редкая Круглая дата
     2 - очень редкая Круглая дата
     */
-    private int rare;
+    protected int rare;
     /* важность Круглой даты
     0 - обычная Круглая дата
     1 - важная Круглой даты
     2 - очень важная Круглая дата
     3 - неважная Круглая дат
      */
-    private int important;
+    protected int important;
 
     // константы размерностей Круглой даты
     public final static int UNIT_YEARS = 1;

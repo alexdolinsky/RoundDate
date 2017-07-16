@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,6 +22,10 @@ public class DatabaseAdapter {
     private DatabaseHelper dbHelper;
     private SQLiteDatabase database;
     private Context context;
+
+    static final long PERIOD_MONTH = 30 * 24 * 3600 * 1000L;
+    static final long PERIOD_WEEK = 7 * 24 * 3600 * 1000L;
+    static final long PERIOD_DAY = 24 * 3600 * 1000L;
 
     public DatabaseAdapter(Context context) {
         dbHelper = new DatabaseHelper(context.getApplicationContext());
@@ -355,7 +360,7 @@ public class DatabaseAdapter {
         return trackSettings;
     }
 
-    void addRoundDates(List<RoundDate> roundDates) {
+    List<RoundDate> addRoundDates(List<RoundDate> roundDates) {
 
         if (!roundDates.isEmpty()) {
             for (RoundDate roundDate : roundDates) {
@@ -367,10 +372,105 @@ public class DatabaseAdapter {
                 cv.put(DatabaseHelper.COLUMN_ROUNDDATES_RARE, roundDate.getRare());
                 cv.put(DatabaseHelper.COLUMN_ROUNDDATES_IMPORTANT, roundDate.getImportant());
                 // TODO: 24.06.2017 проверка на ошибки при вставке 
-                database.insert(DatabaseHelper.TABLE_ROUNDDATES, null, cv);
+                roundDate.setId(database.insert(DatabaseHelper.TABLE_ROUNDDATES, null, cv));
+                ;
+            }
+            return roundDates;
+        } else return null;
+    }
+
+    void addNotifyDates(List<RoundDate> roundDates) {
+
+        if (!roundDates.isEmpty()) {
+
+            NotifySettings notifySettings = new NotifySettings(getContext());
+
+            for (RoundDate roundDate : roundDates) {
+                switch (roundDate.getImportant()) {
+                    case RoundDate.VERY_IMPORTANT:
+                        if ((notifySettings.getVeryImportantRdMonth() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH > System.currentTimeMillis())) {
+                            ContentValues cv = new ContentValues();
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH);
+                            database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                        }
+                        if ((notifySettings.getVeryImportantRdWeek() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK > System.currentTimeMillis())) {
+                            ContentValues cv = new ContentValues();
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK);
+                            database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                        }
+                        if ((notifySettings.getVeryImportantRdDay() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY > System.currentTimeMillis())) {
+                            ContentValues cv = new ContentValues();
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY);
+                            database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                        }
+                        break;
+                    case RoundDate.IMPORTANT:
+                        if ((notifySettings.getImportantRdMonth() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH > System.currentTimeMillis())) {
+                            ContentValues cv = new ContentValues();
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH);
+                            database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                        }
+                        if ((notifySettings.getImportantRdWeek() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK > System.currentTimeMillis())) {
+                            ContentValues cv = new ContentValues();
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK);
+                            database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                        }
+                        if ((notifySettings.getImportantRdDay() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY > System.currentTimeMillis())) {
+                            ContentValues cv = new ContentValues();
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY);
+                            database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                        }
+                        break;
+                    case RoundDate.STANDART:
+                        if ((notifySettings.getStandartRdMonth() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH > System.currentTimeMillis())) {
+                            ContentValues cv = new ContentValues();
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH);
+                            database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                        }
+                        if ((notifySettings.getStandartRdWeek() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK > System.currentTimeMillis())) {
+                            ContentValues cv = new ContentValues();
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK);
+                            database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                        }
+                        if ((notifySettings.getStandartRdDay() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY > System.currentTimeMillis())) {
+                            ContentValues cv = new ContentValues();
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY);
+                            database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                        }
+                        break;
+                    case RoundDate.NOT_IMPORTANT:
+                        if ((notifySettings.getSmallImportantRdMonth() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH > System.currentTimeMillis())) {
+                            ContentValues cv = new ContentValues();
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH);
+                            database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                        }
+                        if ((notifySettings.getSmallImportantRdWeek() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK > System.currentTimeMillis())) {
+                            ContentValues cv = new ContentValues();
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK);
+                            database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                        }
+                        if ((notifySettings.getSmallImportantRdDay() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY > System.currentTimeMillis())) {
+                            ContentValues cv = new ContentValues();
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                            cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY);
+                            database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                        }
+                        break;
+                }
+
             }
         }
-
     }
 
 
@@ -402,16 +502,14 @@ public class DatabaseAdapter {
         return roundDates;
     }
 
-    List<RoundDate> getRoundDates(long startTime, long finishTime) {
+    List<RoundDate> getAllRoundDates() {
         ArrayList<RoundDate> roundDates = new ArrayList<>();
 
-        Calendar currentDateAndTime = new GregorianCalendar();
-        String selection = "(" + DatabaseHelper.COLUMN_VIEWROUNDDATES_DATEANDTIME + ">" + startTime + ") AND (" +
-                DatabaseHelper.COLUMN_VIEWROUNDDATES_DATEANDTIME + "<" + finishTime + ")";
 
-        Cursor cursor = database.query(DatabaseHelper.VIEW_ROUNDDATES, null, selection, null, null, null, null);
+        Cursor cursor = database.query(DatabaseHelper.TABLE_ROUNDDATES, null, null, null, null, null, null);
+        Log.d("MyLog", "Количество круглых дат = " + cursor.getCount());
 
-        if (cursor.moveToFirst()) {
+        /*if (cursor.moveToFirst()) {
             do {
                 long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_ID));
                 long value = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWROUNDDATES_VALUE));
@@ -425,12 +523,140 @@ public class DatabaseAdapter {
                 roundDates.add(new RoundDate(id, value, unit, dateAndTime, idEvent, eventName, rare, important));
             }
             while (cursor.moveToNext());
-        }
+        }*/
         cursor.close();
         return roundDates;
     }
 
+    void deleteNotifyDate(long id) {
+        String table = DatabaseHelper.TABLE_NOTIFYDATES;
+        String where = DatabaseHelper.COLUMN_NOTIFYDATES_ID + "=" + id;
+        database.delete(table, where, null);
+    }
+
+    NotifyDate getNextNotifyDate() {
+        NotifyDate notifyDate = new NotifyDate();
+
+        Cursor cursor = database.query(DatabaseHelper.VIEW_NOTIFYDATES, null, null, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            notifyDate.setId(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWNOTIFYDATES_ID)));
+            notifyDate.setValueOf(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWNOTIFYDATES_VALUE)));
+            notifyDate.setUnit(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWNOTIFYDATES_UNIT)));
+            Calendar dateAndTime = new GregorianCalendar();
+            dateAndTime.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWNOTIFYDATES_DATEANDTIME)));
+            notifyDate.setDateAndTime(dateAndTime);
+            notifyDate.setNotifyDateAndTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWNOTIFYDATES_NOTIFYDATEANDTIME)));
+            notifyDate.setIdRoundDate(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWNOTIFYDATES_ID_ROUNDDATE)));
+            notifyDate.setNameEvent(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWNOTIFYDATES_EVENTNAME)));
+            notifyDate.setRare(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWNOTIFYDATES_RARE)));
+            notifyDate.setImportant(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_VIEWNOTIFYDATES_IMPORTANT)));
+        }
+
+        cursor.close();
+        if (notifyDate.getId() != NotifyDate.NOT_NOTIFY) {
+            return notifyDate;
+        } else {
+            return null;
+        }
+
+
+    }
+
+    void updateNotifyDate(RoundDate roundDate) {
+
+        NotifySettings notifySettings = new NotifySettings(getContext());
+        // удаялем старые уведомления
+        String table = DatabaseHelper.TABLE_NOTIFYDATES;
+        String where = DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE + "=" + roundDate.getId();
+        database.delete(table, where, null);
+        // добавляем новые уведомления
+        switch (roundDate.getImportant()) {
+            case RoundDate.VERY_IMPORTANT:
+                if ((notifySettings.getVeryImportantRdMonth() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH > System.currentTimeMillis())) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH);
+                    database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                }
+                if ((notifySettings.getVeryImportantRdWeek() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK > System.currentTimeMillis())) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK);
+                    database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                }
+                if ((notifySettings.getVeryImportantRdDay() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY > System.currentTimeMillis())) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY);
+                    database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                }
+                break;
+            case RoundDate.IMPORTANT:
+                if ((notifySettings.getImportantRdMonth() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH > System.currentTimeMillis())) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH);
+                    database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                }
+                if ((notifySettings.getImportantRdWeek() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK > System.currentTimeMillis())) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK);
+                    database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                }
+                if ((notifySettings.getImportantRdDay() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY > System.currentTimeMillis())) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY);
+                    database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                }
+                break;
+            case RoundDate.STANDART:
+                if ((notifySettings.getStandartRdMonth() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH > System.currentTimeMillis())) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH);
+                    database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                }
+                if ((notifySettings.getStandartRdWeek() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK > System.currentTimeMillis())) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK);
+                    database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                }
+                if ((notifySettings.getStandartRdDay() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY > System.currentTimeMillis())) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY);
+                    database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                }
+                break;
+            case RoundDate.NOT_IMPORTANT:
+                if ((notifySettings.getSmallImportantRdMonth() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH > System.currentTimeMillis())) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_MONTH);
+                    database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                }
+                if ((notifySettings.getSmallImportantRdWeek() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK > System.currentTimeMillis())) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_WEEK);
+                    database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                }
+                if ((notifySettings.getSmallImportantRdDay() == 1) && (roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY > System.currentTimeMillis())) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE, roundDate.getId());
+                    cv.put(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME, roundDate.getDateAndTime().getTimeInMillis() - PERIOD_DAY);
+                    database.insert(DatabaseHelper.TABLE_NOTIFYDATES, null, cv);
+                }
+                break;
+        }
+    }
+
     void deleteRoundDates(long id, int unit) {
+        database.execSQL("PRAGMA foreign_keys=on;");
         String table = DatabaseHelper.TABLE_ROUNDDATES;
         String where = DatabaseHelper.COLUMN_ROUNDDATES_ID_EVENT + "=" + id + " AND " +
                 DatabaseHelper.COLUMN_ROUNDDATES_UNIT + "=" + unit;
@@ -518,4 +744,19 @@ public class DatabaseAdapter {
         return database.update(DatabaseHelper.TABLE_ROUNDDATES, cv, where, null);
     }
 
+    void getAllNotify() {
+        Cursor cursor = database.query(DatabaseHelper.TABLE_NOTIFYDATES, null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_NOTIFYDATES_ID));
+                long idRoundDate = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_NOTIFYDATES_ID_ROUNDDATE));
+                long notifyDateAndTime = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME));
+
+                Log.d("MyLog", "id = " + id + " idRoundDate = " + idRoundDate + " notifyDateAndTime = " + notifyDateAndTime);
+
+            }
+            while (cursor.moveToNext());
+        }
+        cursor.close();
+    }
 }

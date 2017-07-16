@@ -2,6 +2,7 @@ package ru.alexanderdolinsky.rounddate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 // диалоговое окно с выбором важности круглой даты по ID
 
                 DialogScreen ds;
-                android.support.v7.app.AlertDialog dialog;
+                AlertDialog dialog;
                 ds = new DialogScreen(DialogScreen.IDD_CHOICE_IMPORTANT);
                 dialog = ds.getDialog(MainActivity.this);
                 dialog.show();

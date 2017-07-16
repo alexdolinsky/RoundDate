@@ -5,9 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 
-
-
-
 /**
  * Created by Alexsvet on 04.06.2017.
  * Класс DatabaseHelper
@@ -47,7 +44,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
     static final String COLUMN_EVENTS_RDINSECS = "rd_in_secs";
 
     static final String TABLE_ROUNDDATES = "round_dates"; //название таблицы Круглые даты
-    // столбцы таблицы "round dates"
+    // столбцы таблицы "round_dates"
     static final String COLUMN_ROUNDDATES_ID = "_id";
     static final String COLUMN_ROUNDDATES_VALUE = "value";
     static final String COLUMN_ROUNDDATES_UNIT = "unit"; //1 - года, 2 - месяцы, 3 - недели, 4 - дни, 5 - часы, 6 - минуты, 7 - секунды
@@ -55,6 +52,12 @@ class DatabaseHelper extends SQLiteOpenHelper {
     static final String COLUMN_ROUNDDATES_ID_EVENT = "id_event";
     static final String COLUMN_ROUNDDATES_RARE = "rare";
     static final String COLUMN_ROUNDDATES_IMPORTANT = "important";
+
+    static final String TABLE_NOTIFYDATES = "notify_dates"; //название таблицы Уведомлений
+    // столбцы таблицы "notify_dates"
+    static final String COLUMN_NOTIFYDATES_ID = "_id";
+    static final String COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME = "notify_date_and_time";
+    static final String COLUMN_NOTIFYDATES_ID_ROUNDDATE = "id_rounddate";
 
     static final String VIEW_EVENTS = "view_events"; // название представления Событий
     // столбцы-алиасы представления событий
@@ -76,7 +79,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
 
     static final String VIEW_ROUNDDATES = "view_round_dates"; // название представления Круглые даты
-    // столбцы-алиасы представления событий
+    // столбцы-алиасы представления круглых дат
     static final String COLUMN_VIEWROUNDDATES_ID = "_id";
     static final String COLUMN_VIEWROUNDDATES_VALUE = "value";
     static final String COLUMN_VIEWROUNDDATES_UNIT = "unit"; //1 - года, 2 - месяцы, 3 - недели, 4 - дни, 5 - часы, 6 - минуты, 7 - секунды
@@ -85,6 +88,18 @@ class DatabaseHelper extends SQLiteOpenHelper {
     static final String COLUMN_VIEWROUNDDATES_EVENTNAME = "event_name";
     static final String COLUMN_VIEWROUNDDATES_RARE = "rare";
     static final String COLUMN_VIEWROUNDDATES_IMPORTANT = "important";
+
+    static final String VIEW_NOTIFYDATES = "view_notify_dates"; // название представления Уведомлений
+    // столбцы-алиасы представления уведомлений
+    static final String COLUMN_VIEWNOTIFYDATES_ID = "_id";
+    static final String COLUMN_VIEWNOTIFYDATES_VALUE = "value";
+    static final String COLUMN_VIEWNOTIFYDATES_UNIT = "unit"; //1 - года, 2 - месяцы, 3 - недели, 4 - дни, 5 - часы, 6 - минуты, 7 - секунды
+    static final String COLUMN_VIEWNOTIFYDATES_DATEANDTIME = "date_and_time";
+    static final String COLUMN_VIEWNOTIFYDATES_NOTIFYDATEANDTIME = "notify_date_and_time";
+    static final String COLUMN_VIEWNOTIFYDATES_ID_ROUNDDATE = "id_rounddate";
+    static final String COLUMN_VIEWNOTIFYDATES_EVENTNAME = "event_name";
+    static final String COLUMN_VIEWNOTIFYDATES_RARE = "rare";
+    static final String COLUMN_VIEWNOTIFYDATES_IMPORTANT = "important";
 
     private static String myEvents;
     private TrackSettings trackSettings;
@@ -121,7 +136,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_EVENTS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_EVENTS_NAME + " TEXT UNIQUE, "
                 + COLUMN_EVENTS_COMMENT + " TEXT NOT NULL, "
-                + COLUMN_EVENTS_ID_EVENTGROUP + " INTEGER CONSTRAINT bbb REFERENCES " + TABLE_EVENT_GROUPS + "("
+                + COLUMN_EVENTS_ID_EVENTGROUP + " INTEGER REFERENCES " + TABLE_EVENT_GROUPS + "("
                         + COLUMN_EVENTGROUPS_ID + ") ON DELETE CASCADE, "
                 + COLUMN_EVENTS_DATEANDTIME + " INTEGER NOT NULL, "
                 + COLUMN_EVENTS_SOURCETRACKSETTINGS + " INTEGER NOT NULL, "
@@ -139,10 +154,17 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_ROUNDDATES_VALUE + " INTEGER NOT NULL, "
                 + COLUMN_ROUNDDATES_UNIT + " INTEGER NOT NULL, "
                 + COLUMN_ROUNDDATES_DATEANDTIME + " INTEGER NOT NULL, "
-                + COLUMN_ROUNDDATES_ID_EVENT + " INTEGER CONSTRAINT aaa REFERENCES " + TABLE_EVENTS + "("
+                + COLUMN_ROUNDDATES_ID_EVENT + " INTEGER REFERENCES " + TABLE_EVENTS + "("
                     + COLUMN_EVENTS_ID + ") ON DELETE CASCADE, "
                 + COLUMN_ROUNDDATES_RARE + " INTEGER NOT NULL, "
                 + COLUMN_ROUNDDATES_IMPORTANT + " INTEGER NOT NULL);");
+
+
+        db.execSQL("CREATE TABLE " + TABLE_NOTIFYDATES + " ("
+                + COLUMN_NOTIFYDATES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME + " INTEGER NOT NULL, "
+                + COLUMN_NOTIFYDATES_ID_ROUNDDATE + " INTEGER REFERENCES " + TABLE_ROUNDDATES + "("
+                + COLUMN_ROUNDDATES_ID + ") ON DELETE CASCADE);");
 
 
         db.execSQL("INSERT INTO " + TABLE_EVENT_GROUPS + " ("
@@ -200,6 +222,24 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 + TABLE_EVENTS + "." + COLUMN_EVENTS_ID + ";"
         );
 
+        db.execSQL("CREATE VIEW " + VIEW_NOTIFYDATES + " AS SELECT DISTINCT "
+                + TABLE_NOTIFYDATES + "." + COLUMN_NOTIFYDATES_ID + " AS " + COLUMN_VIEWNOTIFYDATES_ID + ", "
+                + TABLE_ROUNDDATES + "." + COLUMN_ROUNDDATES_VALUE + " AS " + COLUMN_VIEWNOTIFYDATES_VALUE + ", "
+                + TABLE_ROUNDDATES + "." + COLUMN_ROUNDDATES_UNIT + " AS " + COLUMN_VIEWNOTIFYDATES_UNIT + ", "
+                + TABLE_ROUNDDATES + "." + COLUMN_ROUNDDATES_DATEANDTIME + " AS " + COLUMN_VIEWNOTIFYDATES_DATEANDTIME + ", "
+                + TABLE_NOTIFYDATES + "." + COLUMN_NOTIFYDATES_NOTIFYDATEANDTIME + " AS " + COLUMN_VIEWNOTIFYDATES_NOTIFYDATEANDTIME + ", "
+                + TABLE_NOTIFYDATES + "." + COLUMN_NOTIFYDATES_ID_ROUNDDATE + " AS " + COLUMN_VIEWNOTIFYDATES_ID_ROUNDDATE + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_NAME + " AS " + COLUMN_VIEWNOTIFYDATES_EVENTNAME + ", "
+                + TABLE_ROUNDDATES + "." + COLUMN_ROUNDDATES_RARE + " AS " + COLUMN_VIEWROUNDDATES_RARE + ", "
+                + TABLE_ROUNDDATES + "." + COLUMN_ROUNDDATES_IMPORTANT + " AS " + COLUMN_VIEWROUNDDATES_IMPORTANT +
+                " FROM " + TABLE_NOTIFYDATES + " INNER JOIN " + TABLE_ROUNDDATES + " ON " + TABLE_NOTIFYDATES + "." + COLUMN_NOTIFYDATES_ID_ROUNDDATE + "="
+                + TABLE_ROUNDDATES + "." + COLUMN_ROUNDDATES_ID +
+                " INNER JOIN " + TABLE_EVENTS + " ON " + TABLE_ROUNDDATES + "." + COLUMN_ROUNDDATES_ID_EVENT + "="
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_ID +
+                " WHERE " + COLUMN_VIEWNOTIFYDATES_NOTIFYDATEANDTIME + ">" + (System.currentTimeMillis() - NotificationService.MINUTE_30) +
+                " ORDER BY " + COLUMN_VIEWNOTIFYDATES_NOTIFYDATEANDTIME + " ASC LIMIT 1;"
+        );
+
 
     }
 
@@ -208,7 +248,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT_GROUPS + ";");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS + ";");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ROUNDDATES + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTIFYDATES + ";");
         db.execSQL("DROP VIEW IF EXISTS " + VIEW_EVENTS + ";");
+        db.execSQL("DROP VIEW IF EXISTS " + VIEW_ROUNDDATES + ";");
+        db.execSQL("DROP VIEW IF EXISTS " + VIEW_NOTIFYDATES + ";");
         onCreate(db);
     }
 }

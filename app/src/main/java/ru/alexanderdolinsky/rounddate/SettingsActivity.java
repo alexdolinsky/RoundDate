@@ -114,7 +114,8 @@ public class SettingsActivity extends AppCompatActivity {
                         // Расчет Круглых дат - года
                         roundDates = event.getRoundDates(Event.YEAR, trackSettings.getRdInYears());
                         // Запись круглых дат в БД
-                        adapter.addRoundDates(roundDates);
+                        roundDates = adapter.addRoundDates(roundDates);
+                        adapter.addNotifyDates(roundDates);
                     }
                 }
             }
@@ -127,7 +128,8 @@ public class SettingsActivity extends AppCompatActivity {
                         // Расчет Круглых дат - месяцы
                         roundDates = event.getRoundDates(Event.MONTH, trackSettings.getRdInMonths());
                         // Запись круглых дат в БД
-                        adapter.addRoundDates(roundDates);
+                        roundDates = adapter.addRoundDates(roundDates);
+                        adapter.addNotifyDates(roundDates);
                     }
                 }
             }
@@ -140,7 +142,8 @@ public class SettingsActivity extends AppCompatActivity {
                         // Расчет Круглых дат - недели
                         roundDates = event.getRoundDates(Event.WEEK, trackSettings.getRdInWeeks());
                         // Запись круглых дат в БД
-                        adapter.addRoundDates(roundDates);
+                        roundDates = adapter.addRoundDates(roundDates);
+                        adapter.addNotifyDates(roundDates);
                     }
                 }
             }
@@ -153,7 +156,8 @@ public class SettingsActivity extends AppCompatActivity {
                         // Расчет Круглых дат - дни
                         roundDates = event.getRoundDates(Event.DAY, trackSettings.getRdInDays());
                         // Запись круглых дат в БД
-                        adapter.addRoundDates(roundDates);
+                        roundDates = adapter.addRoundDates(roundDates);
+                        adapter.addNotifyDates(roundDates);
                     }
                 }
             }
@@ -166,7 +170,8 @@ public class SettingsActivity extends AppCompatActivity {
                         // Расчет Круглых дат - часы
                         roundDates = event.getRoundDates(Event.HOUR, trackSettings.getRdInHours());
                         // Запись круглых дат в БД
-                        adapter.addRoundDates(roundDates);
+                        roundDates = adapter.addRoundDates(roundDates);
+                        adapter.addNotifyDates(roundDates);
                     }
                 }
             }
@@ -179,7 +184,8 @@ public class SettingsActivity extends AppCompatActivity {
                         // Расчет Круглых дат - минуты
                         roundDates = event.getRoundDates(Event.MINUTE, trackSettings.getRdInMinutes());
                         // Запись круглых дат в БД
-                        adapter.addRoundDates(roundDates);
+                        roundDates = adapter.addRoundDates(roundDates);
+                        adapter.addNotifyDates(roundDates);
                     }
                 }
             }
@@ -192,7 +198,8 @@ public class SettingsActivity extends AppCompatActivity {
                         // Расчет Круглых дат - секунды
                         roundDates = event.getRoundDates(Event.SEC, trackSettings.getRdInSecs());
                         // Запись круглых дат в БД
-                        adapter.addRoundDates(roundDates);
+                        roundDates = adapter.addRoundDates(roundDates);
+                        adapter.addNotifyDates(roundDates);
                     }
                 }
             }
