@@ -14,8 +14,8 @@ public class FilterActivity extends AppCompatActivity {
         DatabaseAdapter adapter = new DatabaseAdapter(this);
         adapter.open();
 
-        adapter.getAllNotify();
-        //adapter.getAllRoundDates();
+        //adapter.getAllNotify();
+        adapter.getAllRoundDates();
         adapter.close();
 
     }

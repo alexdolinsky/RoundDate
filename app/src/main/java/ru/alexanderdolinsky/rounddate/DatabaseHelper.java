@@ -85,6 +85,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
     static final String COLUMN_VIEWROUNDDATES_UNIT = "unit"; //1 - года, 2 - месяцы, 3 - недели, 4 - дни, 5 - часы, 6 - минуты, 7 - секунды
     static final String COLUMN_VIEWROUNDDATES_DATEANDTIME = "date_and_time";
     static final String COLUMN_VIEWROUNDDATES_ID_EVENT = "id_event";
+    static final String COLUMN_VIEWROUNDDATES_ID_EVENTSGROUP = "id_eventsgroup";
     static final String COLUMN_VIEWROUNDDATES_EVENTNAME = "event_name";
     static final String COLUMN_VIEWROUNDDATES_RARE = "rare";
     static final String COLUMN_VIEWROUNDDATES_IMPORTANT = "important";
@@ -215,6 +216,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 + TABLE_ROUNDDATES + "." + COLUMN_ROUNDDATES_DATEANDTIME + " AS " + COLUMN_VIEWROUNDDATES_DATEANDTIME + ", "
                 + TABLE_ROUNDDATES + "." + COLUMN_ROUNDDATES_ID_EVENT + " AS " + COLUMN_VIEWROUNDDATES_ID_EVENT + ", "
                 + TABLE_EVENTS + "." + COLUMN_EVENTS_NAME + " AS " + COLUMN_VIEWROUNDDATES_EVENTNAME + ", "
+                + TABLE_EVENTS + "." + COLUMN_EVENTS_ID_EVENTGROUP + " AS " + COLUMN_VIEWROUNDDATES_ID_EVENTSGROUP + ", "
                 + TABLE_ROUNDDATES + "." + COLUMN_ROUNDDATES_RARE + " AS " + COLUMN_VIEWROUNDDATES_RARE + ", "
                 + TABLE_ROUNDDATES + "." + COLUMN_ROUNDDATES_IMPORTANT + " AS " + COLUMN_VIEWROUNDDATES_IMPORTANT +
                 " FROM " + TABLE_ROUNDDATES + " INNER JOIN " + TABLE_EVENTS +

@@ -72,7 +72,7 @@
     <string name="events_group_is_exists">Группа событий с таким именем уже существует</string>
     <string name="event_name_is_exists">Событие с таким именем уже существует</string>
     <string name="all_events">Все события</string>
-    <string name="edit_events_group">Редактирование группы событий</string>
+    <string name="edit_events_group">Редактировать группу событий</string>
     <string name="edit_event">Редактировать событие</string>
     <string name="since_the_event_time_has_passed">с момента события прошло времени</string>
     <string name="in_years">в годах:</string>
@@ -115,17 +115,26 @@
     <string name="minutes_4">минуты</string>
     <string name="secs_4">секунды</string>
     <string name="editing_event">Редактирование события</string>
+    <string name="editing_events_group">Редактирование группы событий</string>
     <string name="event">Событие</string>
     <string name="adding_event">Добавление события</string>
     <string name="delete_event">Удалить событие</string>
+    <string name="delete_event_group">Удалить группу событий</string>
     <string name="attention">Внимание</string>
     <string name="do_you_want_to_remove_the_event">Вы действительно хотите удалить событие?</string>
-    <string name="delete_event_group">Удалить группу событий</string>
     <string name="do_you_want_to_remove_the_events_group">Вы действительно хотите удалить группу событий и все ее события?</string>
-    <string name="editing_events_group">Редактирование группы событий</string>
     <string name="event_group_name">Название группы событий</string>
     <string name="choice_importan">Выбор важности круглой даты</string>
     <string name="this_events_group_not_be_deleted">Эта группа событий не может быть удалена</string>
+    <string name="will">будет</string>
+    <string name="since_the_event">с момента события</string>
+    <string name="rounddate_list_of_event">Список круглых дат события</string>
+    <string name="rounddate_list_of_eventsgroup">Список круглых дат группы событий</string>
+    <string name="one_day">1 день</string>
+    <string name="one_week">7 дней</string>
+    <string name="one_month">30 дней</string>
+    <string name="not_notify">Не уведомлять</string>
+    <string name="notice_for">Уведомлять за</string>
 
 
 </resources>

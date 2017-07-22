@@ -43,6 +43,11 @@ public class DialogScreen {
     static final int IDD_CHOICE_IMPORTANT = 42;
     static final int DELETE_EVENT_CONFIRM_2 = 43;
     static final int DELETE_EVENTS_GROUP_CONFIRM_2 = 44;
+    static final int IDD_CHOICE_IMPORTANT_2 = 45;
+    static final int IDD_VERY_IMPORTANT_ROUNDDATE = 46;
+    static final int IDD_IMPORTANT_ROUNDDATE = 47;
+    static final int IDD_STANDART_ROUNDDATE = 48;
+    static final int IDD_SMALL_IMPORTANT_ROUNDDATE = 49;
 
 
     private final int IDD_dialog;
@@ -57,6 +62,8 @@ public class DialogScreen {
 
         final CharSequence[] rdVariants = activity.getResources().getStringArray(R.array.rd_variants);
         final CharSequence[] importantVariants = activity.getResources().getStringArray(R.array.important_variants);
+        CharSequence[] notificationsVariants = {activity.getString(R.string.one_day), activity.getString(R.string.one_week), activity.getString(R.string.one_month)};
+        final boolean[] checkedItemsArray = {false, false, false};
 
         final AddEditEventActivity aeActivity;// = (AddEditEventActivity) activity;
         final EventListActivity elActivity;
@@ -64,6 +71,7 @@ public class DialogScreen {
         final EditEventGroupActivity eegActivity;
         final SettingsActivity sActivity;
         final MainActivity mActivity;
+        final RoundDateListActivity rdlActivity;
 
 
         switch (getIDD_dialog()) {
@@ -679,6 +687,279 @@ public class DialogScreen {
                                 mActivity.getSelectedRoundDate().setImportant(which);
                             }
                         });
+                return builder.create();
+
+            case IDD_CHOICE_IMPORTANT_2:
+                rdlActivity = (RoundDateListActivity) activity;
+                builder.setTitle(R.string.choice_importan)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DatabaseAdapter adapter = new DatabaseAdapter(rdlActivity);
+                                adapter.open();
+                                adapter.updateRoundDateImportant(rdlActivity.getSelectedRoundDate().getId(), rdlActivity.getSelectedRoundDate().getImportant());
+                                // обновляем записи уведомления для данной круглой даты
+                                adapter.updateNotifyDate(rdlActivity.getSelectedRoundDate());
+                                adapter.close();
+                                Intent intent = new Intent();
+                                intent.setAction(AddEditEventActivity.NOTIFICATION_ACTION);
+                                rdlActivity.sendBroadcast(intent);
+                                rdlActivity.roundDateAdapter.notifyDataSetChanged();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setSingleChoiceItems(importantVariants, rdlActivity.getSelectedRoundDate().getImportant(), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                rdlActivity.getSelectedRoundDate().setImportant(which);
+                            }
+                        });
+                return builder.create();
+
+
+            case IDD_VERY_IMPORTANT_ROUNDDATE:
+                sActivity = (SettingsActivity) activity;
+                if (sActivity.getNotifySettings().getVeryImportantRdDay() == 1) {
+                    checkedItemsArray[0] = true;
+                } else {
+                    checkedItemsArray[0] = false;
+                }
+                if (sActivity.getNotifySettings().getVeryImportantRdWeek() == 1) {
+                    checkedItemsArray[1] = true;
+                } else {
+                    checkedItemsArray[1] = false;
+                }
+                if (sActivity.getNotifySettings().getVeryImportantRdMonth() == 1) {
+                    checkedItemsArray[2] = true;
+                } else {
+                    checkedItemsArray[2] = false;
+                }
+
+                builder.setTitle(R.string.notice_for)
+                        .setCancelable(true)
+                        .setMultiChoiceItems(notificationsVariants, checkedItemsArray, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                checkedItemsArray[which] = isChecked;
+                            }
+                        })
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (checkedItemsArray[0]) {
+                                    sActivity.getNotifySettings().setVeryImportantRdDay(1);
+                                } else {
+                                    sActivity.getNotifySettings().setVeryImportantRdDay(0);
+                                }
+                                if (checkedItemsArray[1]) {
+                                    sActivity.getNotifySettings().setVeryImportantRdWeek(1);
+                                } else {
+                                    sActivity.getNotifySettings().setVeryImportantRdWeek(0);
+                                }
+                                if (checkedItemsArray[2]) {
+                                    sActivity.getNotifySettings().setVeryImportantRdMonth(1);
+                                } else {
+                                    sActivity.getNotifySettings().setVeryImportantRdMonth(0);
+                                }
+                                sActivity.setTvVeryImportantRd(sActivity.getNotificationsVariants(sActivity.getNotifySettings().getVeryImportantRdDay(),
+                                        sActivity.getNotifySettings().getVeryImportantRdWeek(),
+                                        sActivity.getNotifySettings().getVeryImportantRdMonth()));
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("Отмена",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                return builder.create();
+
+            case IDD_IMPORTANT_ROUNDDATE:
+                sActivity = (SettingsActivity) activity;
+                if (sActivity.getNotifySettings().getImportantRdDay() == 1) {
+                    checkedItemsArray[0] = true;
+                } else {
+                    checkedItemsArray[0] = false;
+                }
+                if (sActivity.getNotifySettings().getImportantRdWeek() == 1) {
+                    checkedItemsArray[1] = true;
+                } else {
+                    checkedItemsArray[1] = false;
+                }
+                if (sActivity.getNotifySettings().getImportantRdMonth() == 1) {
+                    checkedItemsArray[2] = true;
+                } else {
+                    checkedItemsArray[2] = false;
+                }
+
+                builder.setTitle(R.string.notice_for)
+                        .setCancelable(true)
+                        .setMultiChoiceItems(notificationsVariants, checkedItemsArray, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                checkedItemsArray[which] = isChecked;
+                            }
+                        })
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (checkedItemsArray[0]) {
+                                    sActivity.getNotifySettings().setImportantRdDay(1);
+                                } else {
+                                    sActivity.getNotifySettings().setImportantRdDay(0);
+                                }
+                                if (checkedItemsArray[1]) {
+                                    sActivity.getNotifySettings().setImportantRdWeek(1);
+                                } else {
+                                    sActivity.getNotifySettings().setImportantRdWeek(0);
+                                }
+                                if (checkedItemsArray[2]) {
+                                    sActivity.getNotifySettings().setImportantRdMonth(1);
+                                } else {
+                                    sActivity.getNotifySettings().setImportantRdMonth(0);
+                                }
+                                sActivity.setTvImportantRd(sActivity.getNotificationsVariants(sActivity.getNotifySettings().getImportantRdDay(),
+                                        sActivity.getNotifySettings().getImportantRdWeek(),
+                                        sActivity.getNotifySettings().getImportantRdMonth()));
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("Отмена",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                return builder.create();
+
+            case IDD_STANDART_ROUNDDATE:
+                sActivity = (SettingsActivity) activity;
+                if (sActivity.getNotifySettings().getStandartRdDay() == 1) {
+                    checkedItemsArray[0] = true;
+                } else {
+                    checkedItemsArray[0] = false;
+                }
+                if (sActivity.getNotifySettings().getStandartRdWeek() == 1) {
+                    checkedItemsArray[1] = true;
+                } else {
+                    checkedItemsArray[1] = false;
+                }
+                if (sActivity.getNotifySettings().getStandartRdMonth() == 1) {
+                    checkedItemsArray[2] = true;
+                } else {
+                    checkedItemsArray[2] = false;
+                }
+
+                builder.setTitle(R.string.notice_for)
+                        .setCancelable(true)
+                        .setMultiChoiceItems(notificationsVariants, checkedItemsArray, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                checkedItemsArray[which] = isChecked;
+                            }
+                        })
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (checkedItemsArray[0]) {
+                                    sActivity.getNotifySettings().setStandartRdDay(1);
+                                } else {
+                                    sActivity.getNotifySettings().setStandartRdDay(0);
+                                }
+                                if (checkedItemsArray[1]) {
+                                    sActivity.getNotifySettings().setStandartRdWeek(1);
+                                } else {
+                                    sActivity.getNotifySettings().setStandartRdWeek(0);
+                                }
+                                if (checkedItemsArray[2]) {
+                                    sActivity.getNotifySettings().setStandartRdMonth(1);
+                                } else {
+                                    sActivity.getNotifySettings().setStandartRdMonth(0);
+                                }
+                                sActivity.setTvStandartRd(sActivity.getNotificationsVariants(sActivity.getNotifySettings().getStandartRdDay(),
+                                        sActivity.getNotifySettings().getStandartRdWeek(),
+                                        sActivity.getNotifySettings().getStandartRdMonth()));
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("Отмена",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                return builder.create();
+
+            case IDD_SMALL_IMPORTANT_ROUNDDATE:
+                sActivity = (SettingsActivity) activity;
+                if (sActivity.getNotifySettings().getSmallImportantRdDay() == 1) {
+                    checkedItemsArray[0] = true;
+                } else {
+                    checkedItemsArray[0] = false;
+                }
+                if (sActivity.getNotifySettings().getSmallImportantRdWeek() == 1) {
+                    checkedItemsArray[1] = true;
+                } else {
+                    checkedItemsArray[1] = false;
+                }
+                if (sActivity.getNotifySettings().getSmallImportantRdMonth() == 1) {
+                    checkedItemsArray[2] = true;
+                } else {
+                    checkedItemsArray[2] = false;
+                }
+
+                builder.setTitle(R.string.notice_for)
+                        .setCancelable(true)
+                        .setMultiChoiceItems(notificationsVariants, checkedItemsArray, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                checkedItemsArray[which] = isChecked;
+                            }
+                        })
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (checkedItemsArray[0]) {
+                                    sActivity.getNotifySettings().setSmallImportantRdDay(1);
+                                } else {
+                                    sActivity.getNotifySettings().setSmallImportantRdDay(0);
+                                }
+                                if (checkedItemsArray[1]) {
+                                    sActivity.getNotifySettings().setSmallImportantRdWeek(1);
+                                } else {
+                                    sActivity.getNotifySettings().setSmallImportantRdWeek(0);
+                                }
+                                if (checkedItemsArray[2]) {
+                                    sActivity.getNotifySettings().setSmallImportantRdMonth(1);
+                                } else {
+                                    sActivity.getNotifySettings().setSmallImportantRdMonth(0);
+                                }
+                                sActivity.setTvSmallImportantRd(sActivity.getNotificationsVariants(sActivity.getNotifySettings().getSmallImportantRdDay(),
+                                        sActivity.getNotifySettings().getSmallImportantRdWeek(),
+                                        sActivity.getNotifySettings().getSmallImportantRdMonth()));
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("Отмена",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
                 return builder.create();
 
 

@@ -79,6 +79,8 @@ public class NotificationService extends Service {
     private void setNotification(NotifyDate notifyDate) {
         Context context = getApplicationContext();
         Intent notificationIntent = new Intent(context, MainActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(context,
                 0, notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
@@ -92,10 +94,10 @@ public class NotificationService extends Service {
                 .setLargeIcon(BitmapFactory.decodeResource(res, R.mipmap.ic_launcher_round))
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)
-                //.setContentTitle(res.getString(R.string.notifytitle)) // Заголовок уведомления
-                .setContentTitle("29/01/2018 будет 1 000 000 000 секунд")
-                //.setContentText(res.getString(R.string.notifytext))
-                .setContentText("с момента события: День рождения Лизы"); // Текст уведомления
+                .setContentTitle(DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()).format(notifyDate.getDateAndTime().getTime()) +
+                        " " + getString(R.string.will) + " " +
+                        String.format(Locale.getDefault(), "%,d %s", notifyDate.getValueOf(), RoundDate.getUnit(context, notifyDate.getValueOf(), notifyDate.getUnit())))
+                .setContentText(getString(R.string.since_the_event) + ": " + notifyDate.getNameEvent()); // Текст уведомления
 
         // Notification notification = builder.getNotification(); // до API 16
         Notification notification = builder.build();

@@ -24,7 +24,7 @@ class NotifySettings {
             smallImportantRdWeek,
             smallImportantRdDay;
 
-    private static final String MY_SETTINGS_VERY_IMPORTANT_RD_MONTH = "very_important_rd_month",
+    static final String MY_SETTINGS_VERY_IMPORTANT_RD_MONTH = "very_important_rd_month",
             MY_SETTINGS_VERY_IMPORTANT_RD_WEEK = "very_important_rd_week",
             MY_SETTINGS_VERY_IMPORTANT_RD_DAY = "very_important_rd_day",
             MY_SETTINGS_IMPORTANT_RD_MONTH = "important_rd_month",

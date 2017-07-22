@@ -31,8 +31,9 @@ public class SettingsActivity extends AppCompatActivity {
                                 MY_SETTINGS_SMALL_IMPORTANT_RD_HOUR = "small_important_rd_hour";*/
     private SharedPreferences mSettings, mFilter;
     private TrackSettings trackSettings, oldAppTrackSettings;
-    private TextView tvYears, tvMonths, tvWeeks, tvDays, tvHours, tvMinutes, tvSecs;
-
+    private NotifySettings notifySettings, oldNotifySettings;
+    private TextView tvYears, tvMonths, tvWeeks, tvDays, tvHours, tvMinutes, tvSecs,
+            tvVeryImportantRd, tvImportantRd, tvStandartRd, tvSmallImportantRd;
 
 
     @Override
@@ -40,19 +41,18 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        // Считываем настройки из внутреннего файла с настройками, если его нет, то по умолчанию
+        // Считываем настройки отслеживания из внутреннего файла с настройками, если его нет, то по умолчанию
         trackSettings = new TrackSettings(this);
+        // Считываем настройки уведомлений из внутреннего файла с настройками, если его нет, то по умолчанию
+        notifySettings = new NotifySettings(this);
 
         // Сохраняем начальные настройки отслеживания для последующего сравнения
-        oldAppTrackSettings = new TrackSettings(
-                trackSettings.getRdInYears(),
-                trackSettings.getRdInMonths(),
-                trackSettings.getRdInWeeks(),
-                trackSettings.getRdInDays(),
-                trackSettings.getRdInHours(),
-                trackSettings.getRdInMinutes(),
-                trackSettings.getRdInSecs());
+        oldAppTrackSettings = new TrackSettings(this);
 
+        // Сохраняем начальные настройки уведомлений для последующего сравнения
+        oldNotifySettings = new NotifySettings(this);
+
+        // Выводим значения настроек отслеживания
         final CharSequence[] rdVariants = getResources().getStringArray(R.array.rd_variants);
 
         tvYears = (TextView) findViewById(R.id.tvRoundDateInYears);
@@ -71,12 +71,33 @@ public class SettingsActivity extends AppCompatActivity {
         tvMinutes.setText(rdVariants[trackSettings.getRdInMinutes()]);
         tvSecs.setText(rdVariants[trackSettings.getRdInSecs()]);
 
+        // TODO: 22.07.2017  Выводим значения настроек уведомлений
+        tvVeryImportantRd = (TextView) findViewById(R.id.tvVeryImportantRoundDate);
+        tvImportantRd = (TextView) findViewById(R.id.tvImportantRoundDate);
+        tvStandartRd = (TextView) findViewById(R.id.tvStandartRoundDate);
+        tvSmallImportantRd = (TextView) findViewById(R.id.tvSmallImportantRoundDate);
+
+        tvVeryImportantRd.setText(getNotificationsVariants(notifySettings.getVeryImportantRdDay(),
+                notifySettings.getVeryImportantRdWeek(),
+                notifySettings.getVeryImportantRdMonth()));
+
+        tvImportantRd.setText(getNotificationsVariants(notifySettings.getImportantRdDay(),
+                notifySettings.getImportantRdWeek(),
+                notifySettings.getImportantRdMonth()));
+
+        tvStandartRd.setText(getNotificationsVariants(notifySettings.getStandartRdDay(),
+                notifySettings.getStandartRdWeek(),
+                notifySettings.getStandartRdMonth()));
+
+        tvSmallImportantRd.setText(getNotificationsVariants(notifySettings.getSmallImportantRdDay(),
+                notifySettings.getSmallImportantRdWeek(),
+                notifySettings.getSmallImportantRdMonth()));
 
     }
 
 
     public void onSaveSettings(View view) {
-        // Сохраняем настройки
+        // Сохраняем настройки отслеживания и уведомлений
         SharedPreferences mSettings = getSharedPreferences(TrackSettings.MY_SETTINGS, MODE_PRIVATE);
         SharedPreferences.Editor editor = mSettings.edit();
         editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_YEARS, trackSettings.getRdInYears());
@@ -86,7 +107,22 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_HOURS, trackSettings.getRdInHours());
         editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_MINUTES, trackSettings.getRdInMinutes());
         editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_SECS, trackSettings.getRdInSecs());
+
+        editor.putInt(NotifySettings.MY_SETTINGS_VERY_IMPORTANT_RD_MONTH, notifySettings.getVeryImportantRdMonth());
+        editor.putInt(NotifySettings.MY_SETTINGS_VERY_IMPORTANT_RD_WEEK, notifySettings.getVeryImportantRdWeek());
+        editor.putInt(NotifySettings.MY_SETTINGS_VERY_IMPORTANT_RD_DAY, notifySettings.getVeryImportantRdDay());
+        editor.putInt(NotifySettings.MY_SETTINGS_IMPORTANT_RD_MONTH, notifySettings.getImportantRdMonth());
+        editor.putInt(NotifySettings.MY_SETTINGS_IMPORTANT_RD_WEEK, notifySettings.getImportantRdWeek());
+        editor.putInt(NotifySettings.MY_SETTINGS_IMPORTANT_RD_DAY, notifySettings.getImportantRdDay());
+        editor.putInt(NotifySettings.MY_SETTINGS_STANDART_RD_MONTH, notifySettings.getStandartRdMonth());
+        editor.putInt(NotifySettings.MY_SETTINGS_STANDART_RD_WEEK, notifySettings.getStandartRdWeek());
+        editor.putInt(NotifySettings.MY_SETTINGS_STANDART_RD_DAY, notifySettings.getStandartRdDay());
+        editor.putInt(NotifySettings.MY_SETTINGS_SMALL_IMPORTANT_RD_MONTH, notifySettings.getSmallImportantRdMonth());
+        editor.putInt(NotifySettings.MY_SETTINGS_SMALL_IMPORTANT_RD_WEEK, notifySettings.getSmallImportantRdWeek());
+        editor.putInt(NotifySettings.MY_SETTINGS_SMALL_IMPORTANT_RD_DAY, notifySettings.getSmallImportantRdDay());
+
         editor.apply();
+
 
         // Связь с БД и ее открытие
         DatabaseAdapter adapter = new DatabaseAdapter(this);
@@ -108,8 +144,18 @@ public class SettingsActivity extends AppCompatActivity {
 
                 for (Event event : events) {
 
+                    // Лог
+                    adapter.getAllRoundDates();
+                    adapter.getAllNotify();
+
                     // Удаление из БД текущих круглых дат - года
                     adapter.deleteRoundDates(event.getId(), RoundDate.UNIT_YEARS);
+                    //adapter.deleteRoundDate(event.getId());
+
+                    // Лог
+                    adapter.getAllRoundDates();
+                    adapter.getAllNotify();
+
                     if (trackSettings.getRdInYears() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - года
                         roundDates = event.getRoundDates(Event.YEAR, trackSettings.getRdInYears());
@@ -237,6 +283,7 @@ public class SettingsActivity extends AppCompatActivity {
         editor.clear();
         editor.apply();
         trackSettings = new TrackSettings(this);
+        notifySettings = new NotifySettings(this);
 
         final CharSequence[] rdVariants = getResources().getStringArray(R.array.rd_variants);
 
@@ -247,6 +294,22 @@ public class SettingsActivity extends AppCompatActivity {
         tvHours.setText(rdVariants[trackSettings.getRdInHours()]);
         tvMinutes.setText(rdVariants[trackSettings.getRdInMinutes()]);
         tvSecs.setText(rdVariants[trackSettings.getRdInSecs()]);
+
+        tvVeryImportantRd.setText(getNotificationsVariants(notifySettings.getVeryImportantRdDay(),
+                notifySettings.getVeryImportantRdWeek(),
+                notifySettings.getVeryImportantRdMonth()));
+
+        tvImportantRd.setText(getNotificationsVariants(notifySettings.getImportantRdDay(),
+                notifySettings.getImportantRdWeek(),
+                notifySettings.getImportantRdMonth()));
+
+        tvStandartRd.setText(getNotificationsVariants(notifySettings.getStandartRdDay(),
+                notifySettings.getStandartRdWeek(),
+                notifySettings.getStandartRdMonth()));
+
+        tvSmallImportantRd.setText(getNotificationsVariants(notifySettings.getSmallImportantRdDay(),
+                notifySettings.getSmallImportantRdWeek(),
+                notifySettings.getSmallImportantRdMonth()));
 
     }
 
@@ -291,13 +354,35 @@ public class SettingsActivity extends AppCompatActivity {
                 dialog = ds.getDialog(this);
                 dialog.show();
                 break;
-
-
+            case R.id.llVeryImportantRoundDate:
+                ds = new DialogScreen(DialogScreen.IDD_VERY_IMPORTANT_ROUNDDATE);
+                dialog = ds.getDialog(this);
+                dialog.show();
+                break;
+            case R.id.llImportantRoundDate:
+                ds = new DialogScreen(DialogScreen.IDD_IMPORTANT_ROUNDDATE);
+                dialog = ds.getDialog(this);
+                dialog.show();
+                break;
+            case R.id.llStandartRoundDate:
+                ds = new DialogScreen(DialogScreen.IDD_STANDART_ROUNDDATE);
+                dialog = ds.getDialog(this);
+                dialog.show();
+                break;
+            case R.id.llSmallImportantRoundDate:
+                ds = new DialogScreen(DialogScreen.IDD_SMALL_IMPORTANT_ROUNDDATE);
+                dialog = ds.getDialog(this);
+                dialog.show();
+                break;
         }
     }
 
     public TrackSettings getTrackSettings() {
         return trackSettings;
+    }
+
+    public NotifySettings getNotifySettings() {
+        return notifySettings;
     }
 
     public void setTrackSettings(TrackSettings trackSettings) {
@@ -338,5 +423,49 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void setTvSecs(CharSequence rdVariant) {
         this.tvSecs.setText(rdVariant);
+    }
+
+    public void setTvVeryImportantRd(CharSequence notificationsVariants) {
+        this.tvVeryImportantRd.setText(notificationsVariants);
+    }
+
+    public void setTvImportantRd(CharSequence notificationsVariants) {
+        this.tvImportantRd.setText(notificationsVariants);
+    }
+
+    public void setTvStandartRd(CharSequence notificationsVariants) {
+        this.tvStandartRd.setText(notificationsVariants);
+    }
+
+    public void setTvSmallImportantRd(CharSequence notificationsVariants) {
+        this.tvSmallImportantRd.setText(notificationsVariants);
+    }
+
+
+    public String getNotificationsVariants(int rdDay, int rdWeek, int rdMonth) {
+        String s = "";
+        if (rdDay == 1) {
+            s = getString(R.string.one_day);
+        }
+        if (rdWeek == 1) {
+            if (s.isEmpty()) {
+                s = getString(R.string.one_week);
+            } else {
+                s = s + ", " + getString(R.string.one_week);
+            }
+        }
+        if (rdMonth == 1) {
+            if (s.isEmpty()) {
+                s = getString(R.string.one_month);
+            } else {
+                s = s + ", " + getString(R.string.one_month);
+            }
+        }
+        if (s.isEmpty()) {
+            s = getString(R.string.not_notify);
+        } else {
+            s = getString(R.string.notice_for) + " " + s;
+        }
+        return s;
     }
 }

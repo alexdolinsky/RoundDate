@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -22,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     ListView roundDatesList;
     RoundDateAdapter roundDateAdapter;
 
-    public static final String ISNEWEVENT = "IS_NEW_EVENT";
     public static final int ADDEVENTREQUESTCODE = 1;
     private static final int SETTINGSREQUESTCODE = 2;
 
@@ -35,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
 
         DatabaseAdapter adapter = new DatabaseAdapter(this);
         adapter.open();
+
+        // Лог
+        adapter.getAllRoundDates();
+        adapter.getAllNotify();
 
 
         // получаем список всех круглых дат
@@ -54,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // получаем выбранное событие
                 setSelectedRoundDate((RoundDate) parent.getItemAtPosition(position));
+                Toast.makeText(MainActivity.this, "ID = " + getSelectedRoundDate().getId(), Toast.LENGTH_SHORT).show();
                 setPositionSelectedRoundDate(position);
                 // диалоговое окно с выбором важности круглой даты по ID
 
@@ -66,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         };
 
         roundDatesList.setOnItemClickListener(itemListener);
+
+        registerForContextMenu(roundDatesList);
     }
 
 
@@ -106,7 +114,28 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.lvRoundDates) {
+            menu.add(Menu.NONE, 0, 0, "Удалить круглую дату");
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        setSelectedRoundDate(getRoundDates().get(info.position));
+        Toast.makeText(this, "ID = " + getSelectedRoundDate().getId(), Toast.LENGTH_SHORT).show();
+
+        DatabaseAdapter adapter = new DatabaseAdapter(this);
+        adapter.open();
+        adapter.deleteRoundDates(5, RoundDate.UNIT_YEARS);
+        adapter.close();
+
+        this.recreate();
+        return true;
     }
 
     public void onAddEvent(View view) {

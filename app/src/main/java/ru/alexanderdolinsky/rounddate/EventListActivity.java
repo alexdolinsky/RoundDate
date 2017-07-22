@@ -20,6 +20,12 @@ public class EventListActivity extends AppCompatActivity {
     private static final int DELETEEVENT_REQUESTCODE = 1;
     private static final int EDITEVENTSGROUP_REQUESTCODE = 2;
     private static final int EDITEVENT_REQUESTCODE = 3;
+    private static final int ROUNDDATE_LIST_OF_EVENT = 0;
+    private static final int EDIT_EVENT = 1;
+    private static final int DELETE_EVENT = 2;
+    private static final int ROUNDDATE_LIST_OF_EVENTSGROUP = 3;
+    private static final int EDIT_EVENTSGROUP = 4;
+    private static final int DELETE_EVENTSGROUP = 5;
     private CharSequence[] eventsGroupName;
     private long selectedEventsGroupId;
     private List<EventGroup> eventsGroup;
@@ -72,6 +78,8 @@ public class EventListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // получаем выбранное событие
                 Event selectedEvent = (Event) parent.getItemAtPosition(position);
+
+                Toast.makeText(EventListActivity.this, "ID группы =" + selectedEvent.getId(), Toast.LENGTH_SHORT).show();
                 // передаем ID события в активити события
                 Intent intent = new Intent(EventListActivity.this, EventActivity.class);
                 intent.putExtra("ID", selectedEvent.getId());
@@ -83,19 +91,6 @@ public class EventListActivity extends AppCompatActivity {
 
         eventsList.setOnItemClickListener(itemListener);
 
-
-        /*AdapterView.OnItemLongClickListener itemLongClickListener = new AdapterView.OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                registerForContextMenu(view);
-                return true;
-            }
-        };
-
-        eventsList.setOnItemLongClickListener(itemLongClickListener);*/
-
         registerForContextMenu(eventsList);
     }
 
@@ -103,12 +98,13 @@ public class EventListActivity extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.lvEvents) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            //menu.setHeaderTitle(Countries[info.position]);
-            String[] menuItems = getResources().getStringArray(R.array.contextMenuOfEventList);
-            for (int i = 0; i < menuItems.length; i++) {
-                menu.add(Menu.NONE, i, i, menuItems[i]);
-            }
+            menu.add(Menu.NONE, ROUNDDATE_LIST_OF_EVENT, 0, getString(R.string.rounddate_list_of_event));
+            menu.add(Menu.NONE, EDIT_EVENT, 0, getString(R.string.edit_event));
+            menu.add(Menu.NONE, DELETE_EVENT, 0, getString(R.string.delete_event));
+            menu.add(Menu.NONE, ROUNDDATE_LIST_OF_EVENTSGROUP, 0, getString(R.string.rounddate_list_of_eventsgroup));
+            menu.add(Menu.NONE, EDIT_EVENTSGROUP, 0, getString(R.string.edit_events_group));
+            menu.add(Menu.NONE, DELETE_EVENTSGROUP, 0, getString(R.string.delete_event_group));
+
         }
     }
 
@@ -127,29 +123,37 @@ public class EventListActivity extends AppCompatActivity {
 
         // выбор и выполнение действия
         switch (menuItemIndex) {
-            case 0: // Список круглых дат события
-                Toast.makeText(this, "Список круглых дат события", Toast.LENGTH_SHORT).show();
+            case ROUNDDATE_LIST_OF_EVENT: // Список круглых дат события
+                intent = new Intent(EventListActivity.this, RoundDateListActivity.class);
+                intent.putExtra(RoundDateListActivity.ISEVENT, true);
+                intent.putExtra(RoundDateListActivity.ID, getSelectedEvent().getId());
+                startActivity(intent);
+                //Toast.makeText(this, "Список круглых дат события", Toast.LENGTH_SHORT).show();
                 break;
-            case 1: // Редактировать событие
+            case EDIT_EVENT: // Редактировать событие
                 intent = new Intent(EventListActivity.this, AddEditEventActivity.class);
                 intent.putExtra(AddEditEventActivity.ISNEWEVENT, false);
                 intent.putExtra(AddEditEventActivity.EVENT_ID, getSelectedEvent().getId());
                 startActivityForResult(intent, EDITEVENT_REQUESTCODE);
                 break;
-            case 2: // Удалить событие
+            case DELETE_EVENT: // Удалить событие
                 ds = new DialogScreen(DialogScreen.DELETE_EVENT_CONFIRM_2);
                 dialog = ds.getDialog(this);
                 dialog.show();
                 break;
-            case 3: // Список круглых дат группы событий
-                Toast.makeText(this, "Список круглых дат группы событий", Toast.LENGTH_SHORT).show();
+            case ROUNDDATE_LIST_OF_EVENTSGROUP: // Список круглых дат группы событий
+                intent = new Intent(EventListActivity.this, RoundDateListActivity.class);
+                intent.putExtra(RoundDateListActivity.ISEVENT, false);
+                intent.putExtra(RoundDateListActivity.ID, getSelectedEvent().getIdEventGroup());
+                startActivity(intent);
+                //Toast.makeText(this, "Список круглых дат группы событий", Toast.LENGTH_SHORT).show();
                 break;
-            case 4: // Редактировать группу событий
+            case EDIT_EVENTSGROUP: // Редактировать группу событий
                 intent = new Intent(EventListActivity.this, EditEventGroupActivity.class);
                 intent.putExtra(EditEventGroupActivity.EVENTS_GROUP_ID, getSelectedEvent().getIdEventGroup());
                 startActivityForResult(intent, EDITEVENTSGROUP_REQUESTCODE);
                 break;
-            case 5: // Удалить группу событий
+            case DELETE_EVENTSGROUP: // Удалить группу событий
                 if (getSelectedEvent().getIdEventGroup() == 1) { // если группа событий - Мои события
                     Toast.makeText(this, R.string.this_events_group_not_be_deleted, Toast.LENGTH_SHORT).show();
                 } else {
@@ -257,6 +261,12 @@ public class EventListActivity extends AppCompatActivity {
         startActivityForResult(intent, EDITEVENTSGROUP_REQUESTCODE);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 
     public Event getSelectedEvent() {
         return selectedEvent;

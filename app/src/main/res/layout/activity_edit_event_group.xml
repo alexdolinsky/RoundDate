@@ -131,7 +131,7 @@
                 android:visibility="gone">
 
 
-                <TextView
+                <!--<TextView
                     android:id="@+id/tvTrackSettings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/divider_size"
-                    android:background="@color/colorDivider" />
+                    android:background="@color/colorDivider" />-->
 
                 <LinearLayout
                     android:id="@+id/llRoundDateYear"

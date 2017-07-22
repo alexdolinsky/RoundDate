@@ -92,6 +92,12 @@
         </receiver>
 
         <service android:name=".NotificationService" />
+
+        <activity android:name=".RoundDateListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".EventListActivity" />
+        </activity>
     </application>
 
 </manifest>
