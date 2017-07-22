@@ -100,6 +100,7 @@ public class AddEditEventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_event);
 
         Bundle extras = getIntent().getExtras();
@@ -146,6 +147,8 @@ public class AddEditEventActivity extends AppCompatActivity {
         eventGroupsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) parent.getChildAt(0)).setTextColor(0xaa303030);
+                ((TextView) parent.getChildAt(0)).setTextSize(18);
                 setSelectedEventGroup(eventGroups.get(position));
                 EditText et = (EditText) findViewById(R.id.etNewEventsGroup);
                 switch ((int) getSelectedEventGroup().getId()) {
@@ -310,7 +313,6 @@ public class AddEditEventActivity extends AppCompatActivity {
         });
         adapter.close();
     }
-
 
     public void onSaveEvent(View view) {
 
