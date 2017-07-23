@@ -133,6 +133,7 @@
     <string name="not_notify">Не уведомлять</string>
     <string name="notice_for">Уведомлять за</string>
     <string name="error">Ошибка</string>
+    <string name="soon_round_date">Приближается круглая дата</string>
 
 
 </resources>

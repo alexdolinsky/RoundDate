@@ -140,30 +140,30 @@ public class EventActivity extends AppCompatActivity {
             long weeks = days / 7;
             final String sWeeks = String.format(Locale.getDefault(), "%,d %s", weeks, RoundDate.getUnit(EventActivity.this, weeks, RoundDate.UNIT_WEEKS));
 
-            long months = secs / 2628000;
             tempCurrentDateAndTime = new GregorianCalendar();
-            tempCurrentDateAndTime.setTimeInMillis(currentDateAndTime.getTimeInMillis());
-            tempCurrentDateAndTime.set(Calendar.YEAR, 0);
-            tempCurrentDateAndTime.set(Calendar.MONTH, 0);
             tempEventDateAndTime = new GregorianCalendar();
-            tempEventDateAndTime.setTimeInMillis(event.getDateAndTime().getTimeInMillis());
-            tempEventDateAndTime.set(Calendar.YEAR, 0);
-            tempEventDateAndTime.set(Calendar.MONTH, 0);
-            if (tempCurrentDateAndTime.getTimeInMillis() < tempEventDateAndTime.getTimeInMillis()) {
-                months = months - 1;
-            }
-            final String sMonths = String.format(Locale.getDefault(), "%,d %s", months, RoundDate.getUnit(EventActivity.this, months, RoundDate.UNIT_MONTHS));
-
-            long years = secs / 31536000;
             tempCurrentDateAndTime.setTimeInMillis(currentDateAndTime.getTimeInMillis());
-            tempCurrentDateAndTime.set(Calendar.YEAR, 0);
             tempEventDateAndTime.setTimeInMillis(event.getDateAndTime().getTimeInMillis());
-            tempEventDateAndTime.set(Calendar.YEAR, 0);
-            if (tempCurrentDateAndTime.getTimeInMillis() < tempEventDateAndTime.getTimeInMillis()) {
+            long years = tempCurrentDateAndTime.get(Calendar.YEAR) - tempEventDateAndTime.get(Calendar.YEAR);
+            tempEventDateAndTime.set(Calendar.YEAR, tempCurrentDateAndTime.get(Calendar.YEAR));
+
+            if (tempEventDateAndTime.getTimeInMillis() > tempCurrentDateAndTime.getTimeInMillis()) {
                 years = years - 1;
+                tempEventDateAndTime.set(Calendar.YEAR, tempEventDateAndTime.get(Calendar.YEAR) - 1);// для расчетов месяцев
             }
 
             final String sYears = String.format(Locale.getDefault(), "%,d %s", years, RoundDate.getUnit(EventActivity.this, years, RoundDate.UNIT_YEARS));
+
+            long months = years * 12;
+
+            int i = -1;
+            while (tempEventDateAndTime.getTimeInMillis() < tempCurrentDateAndTime.getTimeInMillis()) {
+                tempEventDateAndTime.add(Calendar.MONTH, 1);
+                i++;
+            }
+            months = months + i;
+
+            final String sMonths = String.format(Locale.getDefault(), "%,d %s", months, RoundDate.getUnit(EventActivity.this, months, RoundDate.UNIT_MONTHS));
 
             runOnUiThread(new Runnable() {
 

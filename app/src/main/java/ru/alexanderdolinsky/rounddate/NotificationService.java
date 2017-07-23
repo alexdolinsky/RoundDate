@@ -79,11 +79,12 @@ public class NotificationService extends Service {
         Notification.Builder builder = new Notification.Builder(context);
 
         builder.setContentIntent(contentIntent)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setSmallIcon(R.drawable.ic_action_name)
                 // большая картинка
                 .setLargeIcon(BitmapFactory.decodeResource(res, R.mipmap.ic_launcher_round))
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)
+                .setTicker(getString(R.string.soon_round_date))
                 .setContentTitle(DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()).format(notifyDate.getDateAndTime().getTime()) +
                         " " + getString(R.string.will) + " " +
                         String.format(Locale.getDefault(), "%,d %s", notifyDate.getValueOf(), RoundDate.getUnit(context, notifyDate.getValueOf(), notifyDate.getUnit())))
