@@ -2,6 +2,7 @@ package ru.alexanderdolinsky.rounddate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -10,17 +11,31 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class EventActivity extends AppCompatActivity {
 
     private static final int EDITEVENT_REQUESTCODE = 1;
     private Event event;
+    private Timer mTimer;
+    private MyTimerTask mMyTimerTask;
 
+    private TextView tvInYears, tvInMonths, tvInWeeks, tvInDays, tvInHours, tvInMinutes, tvInSecs;
+
+
+    @Override
+    protected void onDestroy() {
+        mTimer.cancel();
+        super.onDestroy();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+
+        //Calendar tempCurrentDateAndTime, tempEventDateAndTime;
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -38,13 +53,13 @@ public class EventActivity extends AppCompatActivity {
             TextView tvEventComment = (TextView) findViewById(R.id.tvEventComment);
             TextView tvEventsGroupName = (TextView) findViewById(R.id.tvEventsGroupName);
             TextView tvDateAndTime = (TextView) findViewById(R.id.tvDateAndTime);
-            TextView tvInYears = (TextView) findViewById(R.id.tvInYears);
-            TextView tvInMonths = (TextView) findViewById(R.id.tvInMonths);
-            TextView tvInWeeks = (TextView) findViewById(R.id.tvInWeeks);
-            TextView tvInDays = (TextView) findViewById(R.id.tvInDays);
-            TextView tvInHours = (TextView) findViewById(R.id.tvInHours);
-            TextView tvInMinutes = (TextView) findViewById(R.id.tvInMinutes);
-            TextView tvInSecs = (TextView) findViewById(R.id.tvInSecs);
+            tvInYears = (TextView) findViewById(R.id.tvInYears);
+            tvInMonths = (TextView) findViewById(R.id.tvInMonths);
+            tvInWeeks = (TextView) findViewById(R.id.tvInWeeks);
+            tvInDays = (TextView) findViewById(R.id.tvInDays);
+            tvInHours = (TextView) findViewById(R.id.tvInHours);
+            tvInMinutes = (TextView) findViewById(R.id.tvInMinutes);
+            tvInSecs = (TextView) findViewById(R.id.tvInSecs);
 
             // заносим данные события в текстовые поля
             tvEventName.setText(event.getName());
@@ -56,57 +71,12 @@ public class EventActivity extends AppCompatActivity {
             tvEventsGroupName.setText(event.getNameEventGroup());
             tvDateAndTime.setText(DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault()).format(getEvent().getDateAndTime().getTime()) + " " // дата
                     + DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(getEvent().getDateAndTime().getTime())); // время
-            Calendar currentDateAndTime = new GregorianCalendar();
-            long duration = currentDateAndTime.getTimeInMillis() - event.getDateAndTime().getTimeInMillis();
 
-            if (duration < 0) {
-                tvInYears.setText(R.string.event_has_not_yet_occurred);
-                tvInMonths.setText(R.string.event_has_not_yet_occurred);
-                tvInWeeks.setText(R.string.event_has_not_yet_occurred);
-                tvInDays.setText(R.string.event_has_not_yet_occurred);
-                tvInHours.setText(R.string.event_has_not_yet_occurred);
-                tvInMinutes.setText(R.string.event_has_not_yet_occurred);
-                tvInSecs.setText(R.string.event_has_not_yet_occurred);
-            } else {
-                long secs = duration / 1000;
-                String sSecs = String.format(Locale.getDefault(), "%,d %s", secs, RoundDate.getUnit(this, secs, RoundDate.UNIT_SECS));
-                tvInSecs.setText(sSecs);
-
-                long minutes = secs / 60;
-                String sMinutes = String.format(Locale.getDefault(), "%,d %s", minutes, RoundDate.getUnit(this, minutes, RoundDate.UNIT_MINUTES));
-                tvInMinutes.setText(sMinutes);
-
-                long hours = minutes / 60;
-                String sHours = String.format(Locale.getDefault(), "%,d %s", hours, RoundDate.getUnit(this, hours, RoundDate.UNIT_HOURS));
-                tvInHours.setText(sHours);
-
-                long days = hours / 24;
-                String sDays = String.format(Locale.getDefault(), "%,d %s", days, RoundDate.getUnit(this, days, RoundDate.UNIT_DAYS));
-                tvInDays.setText(sDays);
-
-                long weeks = days / 7;
-                String sWeeks = String.format(Locale.getDefault(), "%,d %s", weeks, RoundDate.getUnit(this, weeks, RoundDate.UNIT_WEEKS));
-                tvInWeeks.setText(sWeeks);
-
-                long months = secs / 2629800;
-                String sMonths = String.format(Locale.getDefault(), "%,d %s", months, RoundDate.getUnit(this, months, RoundDate.UNIT_MONTHS));
-                tvInMonths.setText(sMonths);
-
-                long years = secs / 31557600;
-                String sYears = String.format(Locale.getDefault(), "%,d %s", years, RoundDate.getUnit(this, years, RoundDate.UNIT_YEARS));
-                tvInYears.setText(sYears);
-            }
-
-
-            /*Log.d("MyLog", "ID: " + event.getId() + " Имя события: " + event.getName() +
-                    " Комментарий: " + event.getComment() +
-                    " Группа событий: " + event.getNameEventGroup() +
-                    " Дата: " + event.getDateAndTime());*/
-
+            mTimer = new Timer();
+            mMyTimerTask = new MyTimerTask();
+            mTimer.schedule(mMyTimerTask, 0, 1000);
 
         }
-
-
     }
 
     public void onEditEvent(View view) {
@@ -128,7 +98,6 @@ public class EventActivity extends AppCompatActivity {
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-
     }
 
     public Event getEvent() {
@@ -141,11 +110,85 @@ public class EventActivity extends AppCompatActivity {
 
     public void onDeleteEvent(View view) {
         DialogScreen ds;
-        android.support.v7.app.AlertDialog dialog;
+        AlertDialog dialog;
         ds = new DialogScreen(DialogScreen.DELETE_EVENT_CONFIRM);
         dialog = ds.getDialog(this);
         dialog.show();
     }
 
 
+    private class MyTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            Calendar currentDateAndTime, tempCurrentDateAndTime, tempEventDateAndTime;
+
+            currentDateAndTime = new GregorianCalendar();
+            final long duration = currentDateAndTime.getTimeInMillis() - event.getDateAndTime().getTimeInMillis();
+
+            long secs = duration / 1000;
+            final String sSecs = String.format(Locale.getDefault(), "%,d %s", secs, RoundDate.getUnit(EventActivity.this, secs, RoundDate.UNIT_SECS));
+
+            long minutes = secs / 60;
+            final String sMinutes = String.format(Locale.getDefault(), "%,d %s", minutes, RoundDate.getUnit(EventActivity.this, minutes, RoundDate.UNIT_MINUTES));
+
+            long hours = minutes / 60;
+            final String sHours = String.format(Locale.getDefault(), "%,d %s", hours, RoundDate.getUnit(EventActivity.this, hours, RoundDate.UNIT_HOURS));
+
+            long days = hours / 24;
+            final String sDays = String.format(Locale.getDefault(), "%,d %s", days, RoundDate.getUnit(EventActivity.this, days, RoundDate.UNIT_DAYS));
+
+            long weeks = days / 7;
+            final String sWeeks = String.format(Locale.getDefault(), "%,d %s", weeks, RoundDate.getUnit(EventActivity.this, weeks, RoundDate.UNIT_WEEKS));
+
+            long months = secs / 2628000;
+            tempCurrentDateAndTime = new GregorianCalendar();
+            tempCurrentDateAndTime.setTimeInMillis(currentDateAndTime.getTimeInMillis());
+            tempCurrentDateAndTime.set(Calendar.YEAR, 0);
+            tempCurrentDateAndTime.set(Calendar.MONTH, 0);
+            tempEventDateAndTime = new GregorianCalendar();
+            tempEventDateAndTime.setTimeInMillis(event.getDateAndTime().getTimeInMillis());
+            tempEventDateAndTime.set(Calendar.YEAR, 0);
+            tempEventDateAndTime.set(Calendar.MONTH, 0);
+            if (tempCurrentDateAndTime.getTimeInMillis() < tempEventDateAndTime.getTimeInMillis()) {
+                months = months - 1;
+            }
+            final String sMonths = String.format(Locale.getDefault(), "%,d %s", months, RoundDate.getUnit(EventActivity.this, months, RoundDate.UNIT_MONTHS));
+
+            long years = secs / 31536000;
+            tempCurrentDateAndTime.setTimeInMillis(currentDateAndTime.getTimeInMillis());
+            tempCurrentDateAndTime.set(Calendar.YEAR, 0);
+            tempEventDateAndTime.setTimeInMillis(event.getDateAndTime().getTimeInMillis());
+            tempEventDateAndTime.set(Calendar.YEAR, 0);
+            if (tempCurrentDateAndTime.getTimeInMillis() < tempEventDateAndTime.getTimeInMillis()) {
+                years = years - 1;
+            }
+
+            final String sYears = String.format(Locale.getDefault(), "%,d %s", years, RoundDate.getUnit(EventActivity.this, years, RoundDate.UNIT_YEARS));
+
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (duration < 0) {
+                        tvInYears.setText(R.string.event_has_not_yet_occurred);
+                        tvInMonths.setText(R.string.event_has_not_yet_occurred);
+                        tvInWeeks.setText(R.string.event_has_not_yet_occurred);
+                        tvInDays.setText(R.string.event_has_not_yet_occurred);
+                        tvInHours.setText(R.string.event_has_not_yet_occurred);
+                        tvInMinutes.setText(R.string.event_has_not_yet_occurred);
+                        tvInSecs.setText(R.string.event_has_not_yet_occurred);
+                    } else {
+                        tvInYears.setText(sYears);
+                        tvInMonths.setText(sMonths);
+                        tvInWeeks.setText(sWeeks);
+                        tvInDays.setText(sDays);
+                        tvInHours.setText(sHours);
+                        tvInMinutes.setText(sMinutes);
+                        tvInSecs.setText(sSecs);
+                    }
+
+                }
+            });
+        }
+    }
 }

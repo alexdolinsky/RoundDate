@@ -24,18 +24,18 @@ class NotifySettings {
             smallImportantRdWeek,
             smallImportantRdDay;
 
-    static final String MY_SETTINGS_VERY_IMPORTANT_RD_MONTH = "very_important_rd_month",
-            MY_SETTINGS_VERY_IMPORTANT_RD_WEEK = "very_important_rd_week",
-            MY_SETTINGS_VERY_IMPORTANT_RD_DAY = "very_important_rd_day",
-            MY_SETTINGS_IMPORTANT_RD_MONTH = "important_rd_month",
-            MY_SETTINGS_IMPORTANT_RD_WEEK = "important_rd_week",
-            MY_SETTINGS_IMPORTANT_RD_DAY = "important_rd_day",
-            MY_SETTINGS_STANDART_RD_MONTH = "standart_rd_month",
-            MY_SETTINGS_STANDART_RD_WEEK = "standart_rd_week",
-            MY_SETTINGS_STANDART_RD_DAY = "standart_rd_day",
-            MY_SETTINGS_SMALL_IMPORTANT_RD_MONTH = "small_important_rd_month",
-            MY_SETTINGS_SMALL_IMPORTANT_RD_WEEK = "small_important_rd_week",
-            MY_SETTINGS_SMALL_IMPORTANT_RD_DAY = "small_important_rd_day";
+    private static final String MY_SETTINGS_VERY_IMPORTANT_RD_MONTH = "very_important_rd_month";
+    private static final String MY_SETTINGS_VERY_IMPORTANT_RD_WEEK = "very_important_rd_week";
+    private static final String MY_SETTINGS_VERY_IMPORTANT_RD_DAY = "very_important_rd_day";
+    private static final String MY_SETTINGS_IMPORTANT_RD_MONTH = "important_rd_month";
+    private static final String MY_SETTINGS_IMPORTANT_RD_WEEK = "important_rd_week";
+    private static final String MY_SETTINGS_IMPORTANT_RD_DAY = "important_rd_day";
+    private static final String MY_SETTINGS_STANDART_RD_MONTH = "standart_rd_month";
+    private static final String MY_SETTINGS_STANDART_RD_WEEK = "standart_rd_week";
+    private static final String MY_SETTINGS_STANDART_RD_DAY = "standart_rd_day";
+    private static final String MY_SETTINGS_SMALL_IMPORTANT_RD_MONTH = "small_important_rd_month";
+    private static final String MY_SETTINGS_SMALL_IMPORTANT_RD_WEEK = "small_important_rd_week";
+    private static final String MY_SETTINGS_SMALL_IMPORTANT_RD_DAY = "small_important_rd_day";
 
 
     NotifySettings(Context context) {
@@ -75,99 +75,114 @@ class NotifySettings {
     }
 
 
-    public int getVeryImportantRdMonth() {
+    boolean comparedWith(NotifySettings notifySettings) {
+        return (this.getVeryImportantRdDay() == notifySettings.getVeryImportantRdDay() &&
+                this.getVeryImportantRdWeek() == notifySettings.getVeryImportantRdWeek() &&
+                this.getVeryImportantRdMonth() == notifySettings.getVeryImportantRdMonth() &&
+                this.getImportantRdDay() == notifySettings.getImportantRdDay() &&
+                this.getImportantRdWeek() == notifySettings.getImportantRdWeek() &&
+                this.getImportantRdMonth() == notifySettings.getImportantRdMonth() &&
+                this.getStandartRdDay() == notifySettings.getStandartRdDay() &&
+                this.getStandartRdWeek() == notifySettings.getStandartRdWeek() &&
+                this.getStandartRdMonth() == notifySettings.getStandartRdMonth() &&
+                this.getSmallImportantRdDay() == notifySettings.getSmallImportantRdDay() &&
+                this.getSmallImportantRdWeek() == notifySettings.getSmallImportantRdWeek() &&
+                this.getSmallImportantRdMonth() == notifySettings.getSmallImportantRdMonth());
+    }
+
+    int getVeryImportantRdMonth() {
         return veryImportantRdMonth;
     }
 
-    public void setVeryImportantRdMonth(int veryImportantRdMonth) {
+    void setVeryImportantRdMonth(int veryImportantRdMonth) {
         this.veryImportantRdMonth = veryImportantRdMonth;
     }
 
-    public int getVeryImportantRdWeek() {
+    int getVeryImportantRdWeek() {
         return veryImportantRdWeek;
     }
 
-    public void setVeryImportantRdWeek(int veryImportantRdWeek) {
+    void setVeryImportantRdWeek(int veryImportantRdWeek) {
         this.veryImportantRdWeek = veryImportantRdWeek;
     }
 
-    public int getVeryImportantRdDay() {
+    int getVeryImportantRdDay() {
         return veryImportantRdDay;
     }
 
-    public void setVeryImportantRdDay(int veryImportantRdDay) {
+    void setVeryImportantRdDay(int veryImportantRdDay) {
         this.veryImportantRdDay = veryImportantRdDay;
     }
 
-    public int getImportantRdMonth() {
+    int getImportantRdMonth() {
         return importantRdMonth;
     }
 
-    public void setImportantRdMonth(int importantRdMonth) {
+    void setImportantRdMonth(int importantRdMonth) {
         this.importantRdMonth = importantRdMonth;
     }
 
-    public int getImportantRdWeek() {
+    int getImportantRdWeek() {
         return importantRdWeek;
     }
 
-    public void setImportantRdWeek(int importantRdWeek) {
+    void setImportantRdWeek(int importantRdWeek) {
         this.importantRdWeek = importantRdWeek;
     }
 
-    public int getImportantRdDay() {
+    int getImportantRdDay() {
         return importantRdDay;
     }
 
-    public void setImportantRdDay(int importantRdDay) {
+    void setImportantRdDay(int importantRdDay) {
         this.importantRdDay = importantRdDay;
     }
 
-    public int getStandartRdMonth() {
+    int getStandartRdMonth() {
         return standartRdMonth;
     }
 
-    public void setStandartRdMonth(int standartRdMonth) {
+    void setStandartRdMonth(int standartRdMonth) {
         this.standartRdMonth = standartRdMonth;
     }
 
-    public int getStandartRdWeek() {
+    int getStandartRdWeek() {
         return standartRdWeek;
     }
 
-    public void setStandartRdWeek(int standartRdWeek) {
+    void setStandartRdWeek(int standartRdWeek) {
         this.standartRdWeek = standartRdWeek;
     }
 
-    public int getStandartRdDay() {
+    int getStandartRdDay() {
         return standartRdDay;
     }
 
-    public void setStandartRdDay(int standartRdDay) {
+    void setStandartRdDay(int standartRdDay) {
         this.standartRdDay = standartRdDay;
     }
 
-    public int getSmallImportantRdMonth() {
+    int getSmallImportantRdMonth() {
         return smallImportantRdMonth;
     }
 
-    public void setSmallImportantRdMonth(int smallImportantRdMonth) {
+    void setSmallImportantRdMonth(int smallImportantRdMonth) {
         this.smallImportantRdMonth = smallImportantRdMonth;
     }
 
-    public int getSmallImportantRdWeek() {
+    int getSmallImportantRdWeek() {
         return smallImportantRdWeek;
     }
 
-    public void setSmallImportantRdWeek(int smallImportantRdWeek) {
+    void setSmallImportantRdWeek(int smallImportantRdWeek) {
         this.smallImportantRdWeek = smallImportantRdWeek;
     }
 
-    public int getSmallImportantRdDay() {
+    int getSmallImportantRdDay() {
         return smallImportantRdDay;
     }
 
-    public void setSmallImportantRdDay(int smallImportantRdDay) {
+    void setSmallImportantRdDay(int smallImportantRdDay) {
         this.smallImportantRdDay = smallImportantRdDay;
     }
 }

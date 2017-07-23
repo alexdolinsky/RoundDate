@@ -37,12 +37,9 @@ public class NotificationService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        Log.d("MyLog", "Сервис запущен");
-
         // открываем подключение
         DatabaseAdapter adapter = new DatabaseAdapter(this);
         adapter.open();
-
 
         // получаем данные следующего уведомления
 
@@ -52,10 +49,8 @@ public class NotificationService extends Service {
             if ((System.currentTimeMillis() - notifyDate.getNotifyDateAndTime() < MINUTE_30) &&
                     (System.currentTimeMillis() - notifyDate.getNotifyDateAndTime() >= 0)) {
                 setNotification(notifyDate);
-                Log.d("MyLog", "id = " + notifyDate.getId());
                 adapter.deleteNotifyDate(notifyDate.getId());
                 notifyDate = adapter.getNextNotifyDate();
-                Log.d("MyLog", "id = " + notifyDate.getId());
             }
 
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -66,14 +61,9 @@ public class NotificationService extends Service {
             alarmManager.set(AlarmManager.RTC_WAKEUP, t, pending);
             Log.d("MyLog", "Следущий будильник будет - " + DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault()).format(notifyDate.getNotifyDateAndTime()) + " " // дата
                     + DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(notifyDate.getNotifyDateAndTime()));
-
         }
-
         adapter.close();
-
         stopSelf();
-
-        Log.d("MyLog", "Сервис остановлен");
     }
 
     private void setNotification(NotifyDate notifyDate) {
@@ -99,12 +89,10 @@ public class NotificationService extends Service {
                         String.format(Locale.getDefault(), "%,d %s", notifyDate.getValueOf(), RoundDate.getUnit(context, notifyDate.getValueOf(), notifyDate.getUnit())))
                 .setContentText(getString(R.string.since_the_event) + ": " + notifyDate.getNameEvent()); // Текст уведомления
 
-        // Notification notification = builder.getNotification(); // до API 16
         Notification notification = builder.build();
 
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, notification);
     }
-
 }

@@ -12,15 +12,12 @@ class EventGroup {
     // наименования Группы событий
     private String name;
     // источник настроек отслеживания
-    // 0 - общие настройки отслеживания приложения
-    // 1 - индивидуальные настройки отслеживания Группы событий
     private int sourceTrackSettings;
-    // индивидуальные настройки отслеживания Группы событий
-    private TrackSettings trackSettings;
-
+    // константы источников настроек отслеживания
     static final int SOURCE_TRACK_SETTINGS_APP = 0;
     static final int SOURCE_TRACK_SETTINGS_GROUP = 1;
-
+    // индивидуальные настройки отслеживания Группы событий
+    private TrackSettings trackSettings;
 
     // конструктор по умолчанию
     EventGroup() {
@@ -53,19 +50,19 @@ class EventGroup {
         this.name = name;
     }
 
-    public int getSourceTrackSettings() {
+    int getSourceTrackSettings() {
         return sourceTrackSettings;
     }
 
-    public void setSourceTrackSettings(int sourceTrackSettings) {
+    void setSourceTrackSettings(int sourceTrackSettings) {
         this.sourceTrackSettings = sourceTrackSettings;
     }
 
-    public TrackSettings getTrackSettings() {
+    TrackSettings getTrackSettings() {
         return trackSettings;
     }
 
-    public void setTrackSettings(TrackSettings trackSettings) {
+    void setTrackSettings(TrackSettings trackSettings) {
         this.trackSettings = trackSettings;
     }
 

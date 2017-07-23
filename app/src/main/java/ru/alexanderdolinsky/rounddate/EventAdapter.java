@@ -23,7 +23,6 @@ class EventAdapter extends ArrayAdapter<Event> {
     private int layout;
     private List<Event> events;
 
-
     EventAdapter(Context context, int resource, List<Event> events) {
         super(context, resource, events);
         this.events = events;
@@ -43,15 +42,12 @@ class EventAdapter extends ArrayAdapter<Event> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-
         Event event = events.get(position);
 
         viewHolder.tvEventName.setText(event.getName());
         viewHolder.tvEventGroupName.setText(event.getNameEventGroup());
-        viewHolder.tvDate.setText(event.getDate());
         viewHolder.tvDate.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()).format(event.getDateAndTime().getTime()));
         viewHolder.tvTime.setText(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(event.getDateAndTime().getTime()));
-
 
         return convertView;
     }

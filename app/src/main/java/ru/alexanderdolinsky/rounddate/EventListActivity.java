@@ -2,6 +2,7 @@ package ru.alexanderdolinsky.rounddate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -79,7 +80,6 @@ public class EventListActivity extends AppCompatActivity {
                 // получаем выбранное событие
                 Event selectedEvent = (Event) parent.getItemAtPosition(position);
 
-                Toast.makeText(EventListActivity.this, "ID группы =" + selectedEvent.getId(), Toast.LENGTH_SHORT).show();
                 // передаем ID события в активити события
                 Intent intent = new Intent(EventListActivity.this, EventActivity.class);
                 intent.putExtra("ID", selectedEvent.getId());
@@ -112,7 +112,7 @@ public class EventListActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
 
         DialogScreen ds;
-        android.support.v7.app.AlertDialog dialog;
+        AlertDialog dialog;
         Intent intent;
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -128,7 +128,6 @@ public class EventListActivity extends AppCompatActivity {
                 intent.putExtra(RoundDateListActivity.ISEVENT, true);
                 intent.putExtra(RoundDateListActivity.ID, getSelectedEvent().getId());
                 startActivity(intent);
-                //Toast.makeText(this, "Список круглых дат события", Toast.LENGTH_SHORT).show();
                 break;
             case EDIT_EVENT: // Редактировать событие
                 intent = new Intent(EventListActivity.this, AddEditEventActivity.class);
@@ -146,7 +145,6 @@ public class EventListActivity extends AppCompatActivity {
                 intent.putExtra(RoundDateListActivity.ISEVENT, false);
                 intent.putExtra(RoundDateListActivity.ID, getSelectedEvent().getIdEventGroup());
                 startActivity(intent);
-                //Toast.makeText(this, "Список круглых дат группы событий", Toast.LENGTH_SHORT).show();
                 break;
             case EDIT_EVENTSGROUP: // Редактировать группу событий
                 intent = new Intent(EventListActivity.this, EditEventGroupActivity.class);
@@ -195,14 +193,12 @@ public class EventListActivity extends AppCompatActivity {
                 super.onActivityResult(requestCode, resultCode, data);
                 break;
         }
-
-
     }
 
     public void onChoiceEventGroup(View view) {
 
         DialogScreen ds;
-        android.support.v7.app.AlertDialog dialog;
+        AlertDialog dialog;
 
         ds = new DialogScreen(DialogScreen.IDD_CHOICE_EVENT_GROUP);
         dialog = ds.getDialog(this);
@@ -220,6 +216,28 @@ public class EventListActivity extends AppCompatActivity {
             this.eventsGroupName[i] = eventGroup.getName();
             i++;
         }
+    }
+
+
+    public void onDeleteEventsGroup(View view) {
+        DialogScreen ds;
+        AlertDialog dialog;
+        ds = new DialogScreen(DialogScreen.DELETE_EVENTS_GROUP_CONFIRM);
+        dialog = ds.getDialog(this);
+        dialog.show();
+    }
+
+    public void onEditEventsGroup(View view) {
+        Intent intent = new Intent(EventListActivity.this, EditEventGroupActivity.class);
+        intent.putExtra(EditEventGroupActivity.EVENTS_GROUP_ID, getEventsGroup().get((int) getSelectedEventsGroupId()).getId());
+        startActivityForResult(intent, EDITEVENTSGROUP_REQUESTCODE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     public long getSelectedEventsGroupId() {
@@ -244,28 +262,6 @@ public class EventListActivity extends AppCompatActivity {
 
     public void setEvents(List<Event> events) {
         this.events = events;
-    }
-
-
-    public void onDeleteEventsGroup(View view) {
-        DialogScreen ds;
-        android.support.v7.app.AlertDialog dialog;
-        ds = new DialogScreen(DialogScreen.DELETE_EVENTS_GROUP_CONFIRM);
-        dialog = ds.getDialog(this);
-        dialog.show();
-    }
-
-    public void onEditEventsGroup(View view) {
-        Intent intent = new Intent(EventListActivity.this, EditEventGroupActivity.class);
-        intent.putExtra(EditEventGroupActivity.EVENTS_GROUP_ID, getEventsGroup().get((int) getSelectedEventsGroupId()).getId());
-        startActivityForResult(intent, EDITEVENTSGROUP_REQUESTCODE);
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
     }
 
     public Event getSelectedEvent() {

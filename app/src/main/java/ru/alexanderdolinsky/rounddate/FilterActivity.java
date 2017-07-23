@@ -11,12 +11,12 @@ public class FilterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter);
 
 
-        DatabaseAdapter adapter = new DatabaseAdapter(this);
-        adapter.open();
+        //DatabaseAdapter adapter = new DatabaseAdapter(this);
+        //adapter.open();
 
         //adapter.getAllNotify();
-        adapter.getAllRoundDates();
-        adapter.close();
+        //adapter.getAllRoundDates();
+        //adapter.close();
 
     }
 }

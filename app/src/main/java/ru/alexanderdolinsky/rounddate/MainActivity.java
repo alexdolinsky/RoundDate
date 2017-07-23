@@ -37,11 +37,6 @@ public class MainActivity extends AppCompatActivity {
         DatabaseAdapter adapter = new DatabaseAdapter(this);
         adapter.open();
 
-        // Лог
-        adapter.getAllRoundDates();
-        adapter.getAllNotify();
-
-
         // получаем список всех круглых дат
         setRoundDates(adapter.getRoundDates());
         adapter.close();
@@ -127,19 +122,19 @@ public class MainActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         setSelectedRoundDate(getRoundDates().get(info.position));
-        Toast.makeText(this, "ID = " + getSelectedRoundDate().getId(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "ID = " + getSelectedRoundDate().getId(), Toast.LENGTH_SHORT).show();
 
-        DatabaseAdapter adapter = new DatabaseAdapter(this);
-        adapter.open();
-        adapter.deleteRoundDates(5, RoundDate.UNIT_YEARS);
-        adapter.close();
+        //DatabaseAdapter adapter = new DatabaseAdapter(this);
+        //adapter.open();
+        //adapter.deleteRoundDates(5, RoundDate.UNIT_YEARS);
+        //adapter.close();
 
-        this.recreate();
+        //this.recreate();
         return true;
     }
 
     public void onAddEvent(View view) {
-        Intent intent = new Intent(MainActivity.this,AddEditEventActivity.class);
+        Intent intent = new Intent(MainActivity.this, AddEditEventActivity.class);
         intent.putExtra(AddEditEventActivity.ISNEWEVENT, true);
         startActivityForResult(intent, ADDEVENTREQUESTCODE);
     }
@@ -160,8 +155,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
-
-
         }
     }
 

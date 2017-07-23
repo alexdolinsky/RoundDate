@@ -6,7 +6,7 @@ package ru.alexanderdolinsky.rounddate;
  */
 
 class NotifyDate extends RoundDate {
-    public static final long NOT_NOTIFY = -1;
+    static final long NOT_NOTIFY = -1;
     private long id;
     private long notifyDateAndTime;
     private long idRoundDate;
@@ -34,7 +34,7 @@ class NotifyDate extends RoundDate {
         return notifyDateAndTime;
     }
 
-    public void setNotifyDateAndTime(long notifyDateAndTime) {
+    void setNotifyDateAndTime(long notifyDateAndTime) {
         this.notifyDateAndTime = notifyDateAndTime;
     }
 
@@ -52,7 +52,7 @@ class NotifyDate extends RoundDate {
         return idRoundDate;
     }
 
-    public void setIdRoundDate(long idRoundDate) {
+    void setIdRoundDate(long idRoundDate) {
         this.idRoundDate = idRoundDate;
     }
 }

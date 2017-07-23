@@ -11,9 +11,10 @@ import android.widget.TextView;
 
 /**
  * Created by Alexsvet on 08.06.2017.
+ * Диалоговые окна
  */
 
-public class DialogScreen {
+class DialogScreen {
 
     final static int IDD_RD_YEARS = 0;
     final static int IDD_RD_MONTHS = 1;
@@ -38,16 +39,16 @@ public class DialogScreen {
     final static int IDD_RD_SECS_3 = 26;
 
     final static int IDD_CHOICE_EVENT_GROUP = 30;
-    static final int DELETE_EVENT_CONFIRM = 40;
-    static final int DELETE_EVENTS_GROUP_CONFIRM = 41;
-    static final int IDD_CHOICE_IMPORTANT = 42;
-    static final int DELETE_EVENT_CONFIRM_2 = 43;
-    static final int DELETE_EVENTS_GROUP_CONFIRM_2 = 44;
-    static final int IDD_CHOICE_IMPORTANT_2 = 45;
-    static final int IDD_VERY_IMPORTANT_ROUNDDATE = 46;
-    static final int IDD_IMPORTANT_ROUNDDATE = 47;
-    static final int IDD_STANDART_ROUNDDATE = 48;
-    static final int IDD_SMALL_IMPORTANT_ROUNDDATE = 49;
+    final static int DELETE_EVENT_CONFIRM = 40;
+    final static int DELETE_EVENTS_GROUP_CONFIRM = 41;
+    final static int IDD_CHOICE_IMPORTANT = 42;
+    final static int DELETE_EVENT_CONFIRM_2 = 43;
+    final static int DELETE_EVENTS_GROUP_CONFIRM_2 = 44;
+    final static int IDD_CHOICE_IMPORTANT_2 = 45;
+    final static int IDD_VERY_IMPORTANT_ROUNDDATE = 46;
+    final static int IDD_IMPORTANT_ROUNDDATE = 47;
+    final static int IDD_STANDART_ROUNDDATE = 48;
+    final static int IDD_SMALL_IMPORTANT_ROUNDDATE = 49;
 
 
     private final int IDD_dialog;
@@ -62,10 +63,10 @@ public class DialogScreen {
 
         final CharSequence[] rdVariants = activity.getResources().getStringArray(R.array.rd_variants);
         final CharSequence[] importantVariants = activity.getResources().getStringArray(R.array.important_variants);
-        CharSequence[] notificationsVariants = {activity.getString(R.string.one_day), activity.getString(R.string.one_week), activity.getString(R.string.one_month)};
+        final CharSequence[] notificationsVariants = {activity.getString(R.string.one_day), activity.getString(R.string.one_week), activity.getString(R.string.one_month)};
         final boolean[] checkedItemsArray = {false, false, false};
 
-        final AddEditEventActivity aeActivity;// = (AddEditEventActivity) activity;
+        final AddEditEventActivity aeActivity;
         final EventListActivity elActivity;
         final EventActivity eActivity;
         final EditEventGroupActivity eegActivity;
@@ -77,6 +78,7 @@ public class DialogScreen {
         switch (getIDD_dialog()) {
 
             // диалоговые окна настроек отслеживания для события
+
             case IDD_RD_YEARS:
                 aeActivity = (AddEditEventActivity) activity;
                 builder.setTitle(R.string.track)
@@ -494,6 +496,7 @@ public class DialogScreen {
                         });
                 return builder.create();
 
+            // Диалоговое окно выбора группы событий в EventListActivity
 
             case IDD_CHOICE_EVENT_GROUP:
                 elActivity = (EventListActivity) activity;
@@ -526,7 +529,6 @@ public class DialogScreen {
                                     }
                                 }
 
-
                                 // выводим события в список
                                 elActivity.eventsList = (ListView) elActivity.findViewById(R.id.lvEvents);
                                 EventAdapter eventAdapter = new EventAdapter(elActivity, R.layout.event_item, elActivity.getEvents());
@@ -535,6 +537,8 @@ public class DialogScreen {
                             }
                         });
                 return builder.create();
+
+            // Диалоговое окно подтверждения удаления события из EventActivity
 
             case DELETE_EVENT_CONFIRM:
                 eActivity = (EventActivity) activity;
@@ -566,6 +570,8 @@ public class DialogScreen {
                             }
                         });
                 return builder.create();
+
+            // Диалоговое окно подтверждения удаления события из EventListActivity
 
             case DELETE_EVENT_CONFIRM_2:
                 elActivity = (EventListActivity) activity;
@@ -601,6 +607,8 @@ public class DialogScreen {
                         });
                 return builder.create();
 
+            // Диалоговое окно подтверждения удаления группы событий из EventListActivity по кнопке
+
             case DELETE_EVENTS_GROUP_CONFIRM:
                 elActivity = (EventListActivity) activity;
                 builder.setCancelable(false)
@@ -632,6 +640,8 @@ public class DialogScreen {
                         });
                 return builder.create();
 
+            // Диалоговое окно подтверждения удаления группы событий из EventListActivity из контекстного меню
+
             case DELETE_EVENTS_GROUP_CONFIRM_2:
                 elActivity = (EventListActivity) activity;
                 builder.setCancelable(false)
@@ -661,6 +671,8 @@ public class DialogScreen {
                         });
                 return builder.create();
 
+            // Диалоговое окно выбора важности круглой даты в MainActivity
+
             case IDD_CHOICE_IMPORTANT:
                 mActivity = (MainActivity) activity;
                 builder.setTitle(R.string.choice_importan)
@@ -688,6 +700,8 @@ public class DialogScreen {
                             }
                         });
                 return builder.create();
+
+            // Диалоговое окно выбора важности круглой даты в RoundDateListActivity
 
             case IDD_CHOICE_IMPORTANT_2:
                 rdlActivity = (RoundDateListActivity) activity;
@@ -717,6 +731,7 @@ public class DialogScreen {
                         });
                 return builder.create();
 
+            // Диалоговое окно задания настроек уведомления для очень важных дат
 
             case IDD_VERY_IMPORTANT_ROUNDDATE:
                 sActivity = (SettingsActivity) activity;
@@ -779,6 +794,8 @@ public class DialogScreen {
 
                 return builder.create();
 
+            // Диалоговое окно задания настроек уведомления для важных дат
+
             case IDD_IMPORTANT_ROUNDDATE:
                 sActivity = (SettingsActivity) activity;
                 if (sActivity.getNotifySettings().getImportantRdDay() == 1) {
@@ -839,6 +856,8 @@ public class DialogScreen {
                                 });
 
                 return builder.create();
+
+            // Диалоговое окно задания настроек уведомления для стандартных дат
 
             case IDD_STANDART_ROUNDDATE:
                 sActivity = (SettingsActivity) activity;
@@ -901,6 +920,8 @@ public class DialogScreen {
 
                 return builder.create();
 
+            // Диалоговое окно задания настроек уведомления для маловажных дат
+
             case IDD_SMALL_IMPORTANT_ROUNDDATE:
                 sActivity = (SettingsActivity) activity;
                 if (sActivity.getNotifySettings().getSmallImportantRdDay() == 1) {
@@ -951,7 +972,7 @@ public class DialogScreen {
                                 dialog.dismiss();
                             }
                         })
-                        .setNegativeButton("Отмена",
+                        .setNegativeButton(R.string.cancel,
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog,

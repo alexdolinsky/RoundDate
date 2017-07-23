@@ -28,8 +28,6 @@ public class RoundDateListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_round_date_list);
 
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
-
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
@@ -78,7 +76,7 @@ public class RoundDateListActivity extends AppCompatActivity {
             roundDatesList.setOnItemClickListener(itemListener);
 
         } else {
-            Toast.makeText(this, "Ошибка", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
             finish();
         }
     }

@@ -4,7 +4,6 @@
     <string name="save">Сохранить</string>
     <string name="cancel">Отменить</string>
     <string name="add_event">Добавить событие</string>
-    <string name="main">Главная</string>
     <string name="action_event">Событие</string>
 
     <!-- Названия пунктов меню -->
@@ -38,8 +37,6 @@
     <string name="enter_event_name">Введите название события</string>
     <string name="enter_event_comment">Введите комментарий к событию</string>
     <string name="events_group">Группа событий</string>
-    <string name="add_to_events_group">Добавить в группу событий</string>
-    <string name="current_events_group">Мои события</string>
     <string name="new_events_group">Введите название группы событий</string>
     <string name="use_app_settings">Использовать настройки приложения</string>
     <string name="use_events_group_settings">Использовать настройки группы событий</string>
@@ -101,9 +98,9 @@
     <string name="minutes_1">минута</string>
     <string name="minutes_2">минуты</string>
     <string name="minutes_3">минут</string>
-    <string name="secs_1">секунда</string>
-    <string name="secs_2">секунды</string>
-    <string name="secs_3">секунд</string>
+    <string name="secs_1">сек.</string>
+    <string name="secs_2">сек.</string>
+    <string name="secs_3">сек.</string>
     <string name="over">более</string>
     <string name="less">менее</string>
     <string name="already_passed">уже прошло</string>
@@ -113,7 +110,7 @@
     <string name="days_4">дня</string>
     <string name="hours_4">часа</string>
     <string name="minutes_4">минуты</string>
-    <string name="secs_4">секунды</string>
+    <string name="secs_4">сек.</string>
     <string name="editing_event">Редактирование события</string>
     <string name="editing_events_group">Редактирование группы событий</string>
     <string name="event">Событие</string>
@@ -135,6 +132,7 @@
     <string name="one_month">30 дней</string>
     <string name="not_notify">Не уведомлять</string>
     <string name="notice_for">Уведомлять за</string>
+    <string name="error">Ошибка</string>
 
 
 </resources>

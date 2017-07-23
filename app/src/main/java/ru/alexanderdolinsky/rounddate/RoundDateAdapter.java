@@ -14,6 +14,7 @@ import java.util.Locale;
 
 /**
  * Created by Alexsvet on 24.06.2017.
+ * Класс адаптера круглых дат
  */
 
 class RoundDateAdapter extends ArrayAdapter<RoundDate> {
@@ -63,7 +64,6 @@ class RoundDateAdapter extends ArrayAdapter<RoundDate> {
         viewHolder.tvDateAndTime.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()).format(roundDate.getDateAndTime().getTime()) + " " // дата
                 + DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(roundDate.getDateAndTime().getTime())); // время
         viewHolder.tvHaveToWait.setText(RoundDate.getTimeToWait(getContext(), roundDate.getDateAndTime()));
-
 
         return convertView;
     }

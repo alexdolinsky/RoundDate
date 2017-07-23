@@ -5,7 +5,7 @@ package ru.alexanderdolinsky.rounddate;
  * Класс HidSet - скрытые настройки
  */
 
-public  class HidSet {
+class HidSet {
     // периоды расчета в годах, месяцах, ...
     static final long PERIOD_IN_YEARS = 100L;
     static final long PERIOD_IN_MONTHS = PERIOD_IN_YEARS * 12;

@@ -3,6 +3,7 @@ package ru.alexanderdolinsky.rounddate;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
@@ -19,7 +20,6 @@ public class EditEventGroupActivity extends AppCompatActivity {
     static final String EVENTS_GROUP_ID = "events_group_id";
     private EventGroup eventGroup;
     private long eventGroupId;
-    private RadioGroup rgTrackSettings;
     private TextView tvYears, tvMonths, tvWeeks, tvDays, tvHours, tvMinutes, tvSecs;
     private TrackSettings eventGroupTrackSettings, oldEventGroupTrackSettings;
     private int sourceTrackSettings;
@@ -35,7 +35,7 @@ public class EditEventGroupActivity extends AppCompatActivity {
         if (extras != null) {
             setEventGroupId(extras.getLong(EVENTS_GROUP_ID));
         } else {
-            Toast.makeText(this, "Ошибка", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -62,16 +62,16 @@ public class EditEventGroupActivity extends AppCompatActivity {
         }
 
         // Сохраняем начальные настройки отслеживания для последующего сравнения
-        oldEventGroupTrackSettings = new TrackSettings(
+        setOldEventGroupTrackSettings(new TrackSettings(
                 trackSettings.getRdInYears(),
                 trackSettings.getRdInMonths(),
                 trackSettings.getRdInWeeks(),
                 trackSettings.getRdInDays(),
                 trackSettings.getRdInHours(),
                 trackSettings.getRdInMinutes(),
-                trackSettings.getRdInSecs());
+                trackSettings.getRdInSecs()));
 
-        rgTrackSettings = (RadioGroup) findViewById(R.id.rgTracksettings);
+        RadioGroup rgTrackSettings = (RadioGroup) findViewById(R.id.rgTracksettings);
 
 
         // Установка радиобаттона в соответствующее положение
@@ -98,17 +98,18 @@ public class EditEventGroupActivity extends AppCompatActivity {
         tvSecs = (TextView) findViewById(R.id.tvRoundDateInSecs);
 
         final CharSequence[] rdVariants = getResources().getStringArray(R.array.rd_variants);
-        // Установка настроек из события
-        eventGroupTrackSettings = getEventGroup().getTrackSettings();
+
+        // Установка настроек из группы событий
+        setEventGroupTrackSettings(getEventGroup().getTrackSettings());
 
         // Устанавливаем соответствующие настройкам тексты в полях настроек отслеживания
-        tvYears.setText(rdVariants[eventGroupTrackSettings.getRdInYears()]);
-        tvMonths.setText(rdVariants[eventGroupTrackSettings.getRdInMonths()]);
-        tvWeeks.setText(rdVariants[eventGroupTrackSettings.getRdInWeeks()]);
-        tvDays.setText(rdVariants[eventGroupTrackSettings.getRdInDays()]);
-        tvHours.setText(rdVariants[eventGroupTrackSettings.getRdInHours()]);
-        tvMinutes.setText(rdVariants[eventGroupTrackSettings.getRdInMinutes()]);
-        tvSecs.setText(rdVariants[eventGroupTrackSettings.getRdInSecs()]);
+        tvYears.setText(rdVariants[getEventGroupTrackSettings().getRdInYears()]);
+        tvMonths.setText(rdVariants[getEventGroupTrackSettings().getRdInMonths()]);
+        tvWeeks.setText(rdVariants[getEventGroupTrackSettings().getRdInWeeks()]);
+        tvDays.setText(rdVariants[getEventGroupTrackSettings().getRdInDays()]);
+        tvHours.setText(rdVariants[getEventGroupTrackSettings().getRdInHours()]);
+        tvMinutes.setText(rdVariants[getEventGroupTrackSettings().getRdInMinutes()]);
+        tvSecs.setText(rdVariants[getEventGroupTrackSettings().getRdInSecs()]);
 
         // Устанавливаем обработчик на группу радиобаттонов
         rgTrackSettings.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -126,10 +127,8 @@ public class EditEventGroupActivity extends AppCompatActivity {
                         setSourceTrackSettings(EventGroup.SOURCE_TRACK_SETTINGS_APP);
                         break;
                 }
-
             }
         });
-
     }
 
     public void onSaveEventsGroup(View view) {
@@ -140,8 +139,6 @@ public class EditEventGroupActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.events_group_name_not_fill, Toast.LENGTH_SHORT).show();
             return;
         }
-        ;
-
 
         // Связь с БД и ее открытие
         DatabaseAdapter adapter = new DatabaseAdapter(this);
@@ -162,7 +159,7 @@ public class EditEventGroupActivity extends AppCompatActivity {
             getEventGroup().setSourceTrackSettings(getSourceTrackSettings());
             getEventGroup().setTrackSettings(getEventGroupTrackSettings());
 
-            int i = adapter.updateEventGroup(getEventGroup());
+            adapter.updateEventGroup(getEventGroup());
 
 
             //определение действующих настроек слежения
@@ -180,22 +177,21 @@ public class EditEventGroupActivity extends AppCompatActivity {
             }
 
 
-            // Получаем список событий данной группы
+            // Получаем список событий данной группы, исключая события со своими настройками или настройками приложения
             List<Event> events = adapter.getEventsByEventGroupIdAndGroupTrackSettings(getEventGroup().getId(), Event.SOURCE_TRACK_SETTINGS_GROUP);
 
             List<RoundDate> roundDates;
+
             // Перерасчет круглых дат в случае если изменились настройки отслеживания
-            //long start = System.nanoTime();
+
             if (trackSettings.getRdInYears() != getOldEventGroupTrackSettings().getRdInYears()) {
-
                 for (Event event : events) {
-
                     // Удаление из БД текущих круглых дат - года
                     adapter.deleteRoundDates(event.getId(), RoundDate.UNIT_YEARS);
                     if (trackSettings.getRdInYears() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - года
                         roundDates = event.getRoundDates(Event.YEAR, trackSettings.getRdInYears());
-                        // Запись круглых дат в БД
+                        // Запись круглых дат и уведомлений в БД
                         roundDates = adapter.addRoundDates(roundDates);
                         adapter.addNotifyDates(roundDates);
                     }
@@ -209,7 +205,7 @@ public class EditEventGroupActivity extends AppCompatActivity {
                     if (trackSettings.getRdInMonths() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - месяцы
                         roundDates = event.getRoundDates(Event.MONTH, trackSettings.getRdInMonths());
-                        // Запись круглых дат в БД
+                        // Запись круглых дат и уведомлений в БД
                         roundDates = adapter.addRoundDates(roundDates);
                         adapter.addNotifyDates(roundDates);
                     }
@@ -223,7 +219,7 @@ public class EditEventGroupActivity extends AppCompatActivity {
                     if (trackSettings.getRdInWeeks() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - недели
                         roundDates = event.getRoundDates(Event.WEEK, trackSettings.getRdInWeeks());
-                        // Запись круглых дат в БД
+                        // Запись круглых дат и уведомлений в БД
                         roundDates = adapter.addRoundDates(roundDates);
                         adapter.addNotifyDates(roundDates);
                     }
@@ -237,7 +233,7 @@ public class EditEventGroupActivity extends AppCompatActivity {
                     if (trackSettings.getRdInDays() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - дни
                         roundDates = event.getRoundDates(Event.DAY, trackSettings.getRdInDays());
-                        // Запись круглых дат в БД
+                        // Запись круглых дат и уведомлений в БД
                         roundDates = adapter.addRoundDates(roundDates);
                         adapter.addNotifyDates(roundDates);
                     }
@@ -251,7 +247,7 @@ public class EditEventGroupActivity extends AppCompatActivity {
                     if (trackSettings.getRdInHours() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - часы
                         roundDates = event.getRoundDates(Event.HOUR, trackSettings.getRdInHours());
-                        // Запись круглых дат в БД
+                        // Запись круглых дат и уведомлений в БД
                         roundDates = adapter.addRoundDates(roundDates);
                         adapter.addNotifyDates(roundDates);
                     }
@@ -265,7 +261,7 @@ public class EditEventGroupActivity extends AppCompatActivity {
                     if (trackSettings.getRdInMinutes() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - минуты
                         roundDates = event.getRoundDates(Event.MINUTE, trackSettings.getRdInMinutes());
-                        // Запись круглых дат в БД
+                        // Запись круглых дат и уведомлений в БД
                         roundDates = adapter.addRoundDates(roundDates);
                         adapter.addNotifyDates(roundDates);
                     }
@@ -279,16 +275,12 @@ public class EditEventGroupActivity extends AppCompatActivity {
                     if (trackSettings.getRdInSecs() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - секунды
                         roundDates = event.getRoundDates(Event.SEC, trackSettings.getRdInSecs());
-                        // Запись круглых дат в БД
+                        // Запись круглых дат и уведомлений в БД
                         roundDates = adapter.addRoundDates(roundDates);
                         adapter.addNotifyDates(roundDates);
                     }
                 }
             }
-
-            //long finish = System.nanoTime();
-            //long duration = finish - start;
-            //Log.d("MyLog", "Время выполнения = " + duration);
 
             adapter.setTransactionSuccessful();
         } finally {
@@ -304,8 +296,6 @@ public class EditEventGroupActivity extends AppCompatActivity {
 
         setResult(RESULT_OK);
         finish();
-
-
     }
 
     public void onCancel(View view) {
@@ -315,7 +305,7 @@ public class EditEventGroupActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         DialogScreen ds;
-        android.support.v7.app.AlertDialog dialog;
+        AlertDialog dialog;
 
         switch (view.getId()) {
             case R.id.llRoundDateYear:
@@ -353,8 +343,6 @@ public class EditEventGroupActivity extends AppCompatActivity {
                 dialog = ds.getDialog(this);
                 dialog.show();
                 break;
-
-
         }
     }
 

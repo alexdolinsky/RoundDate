@@ -25,8 +25,8 @@ class TrackSettings {
                 rdInMinutes,
                 rdInSecs;
 
-    static final String MY_SETTINGS = "my_settings",
-            MY_SETTINGS_RD_IN_YEARS = "rd_in_years",
+    static final String MY_SETTINGS = "my_settings";
+    private static final String MY_SETTINGS_RD_IN_YEARS = "rd_in_years",
             MY_SETTINGS_RD_IN_MONTHS = "rd_in_months",
             MY_SETTINGS_RD_IN_WEEKS = "rd_in_weeks",
             MY_SETTINGS_RD_IN_DAYS = "rd_in_days",
@@ -67,6 +67,20 @@ class TrackSettings {
         this.rdInMinutes = mSettings.getInt(MY_SETTINGS_RD_IN_MINUTES, Integer.valueOf(context.getString(R.string.rd_in_minutes)));
         this.rdInSecs = mSettings.getInt(MY_SETTINGS_RD_IN_SECS, Integer.valueOf(context.getString(R.string.rd_in_secs)));
 
+    }
+
+    void save(Context context) {
+
+        SharedPreferences mSettings = context.getSharedPreferences(TrackSettings.MY_SETTINGS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSettings.edit();
+        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_YEARS, this.getRdInYears());
+        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_MONTHS, this.getRdInMonths());
+        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_WEEKS, this.getRdInWeeks());
+        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_DAYS, this.getRdInDays());
+        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_HOURS, this.getRdInHours());
+        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_MINUTES, this.getRdInMinutes());
+        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_SECS, this.getRdInSecs());
+        editor.apply();
     }
 
     int getRdInYears() {

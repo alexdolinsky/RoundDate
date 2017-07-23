@@ -1,7 +1,6 @@
 package ru.alexanderdolinsky.rounddate;
 
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -27,16 +26,14 @@ class Event {
     // Дата/время события
     private Calendar dateAndTime;
     // источник настроек отслеживания
-    // 0 - общие настройки отслеживания приложения
-    // 1 - настройки отслеживания Группы событий
-    // 2 - индивидуальные настройки отслеживания События
     private int sourceTrackSettings;
-    // индивидуальные настройки отслеживания События
-    private TrackSettings trackSettings;
-
+    // Константы источников настроек отслеживания
     static final int SOURCE_TRACK_SETTINGS_APP = 0;
     static final int SOURCE_TRACK_SETTINGS_GROUP = 1;
     static final int SOURCE_TRACK_SETTINGS_EVENT = 2;
+
+    // индивидуальные настройки отслеживания События
+    private TrackSettings trackSettings;
 
     static final int YEAR = 0;
     static final int MONTH = 1;
@@ -55,7 +52,7 @@ class Event {
         this.nameEventGroup = "Группа событий по умолчанию";
         this.dateAndTime = new GregorianCalendar();
         this.sourceTrackSettings = 1;
-        this.trackSettings = new TrackSettings(0,0,0,0,0,0,0);
+        this.trackSettings = new TrackSettings(0, 0, 0, 0, 0, 0, 0);
     }
 
     // конструктор при создании нового События
@@ -139,17 +136,6 @@ class Event {
 
     public void setTrackSettings(TrackSettings trackSettings) {
         this.trackSettings = trackSettings;
-    }
-
-    public String getDate() {
-
-        SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
-        return sdfDate.format(this.getDateAndTime().getTime());
-    }
-
-    public String getTime() {
-        SimpleDateFormat sdfTime = new SimpleDateFormat("kk:mm");
-        return sdfTime.format(this.getDateAndTime().getTime());
     }
 
     public List<RoundDate> getRoundDates(int unit, int value) {

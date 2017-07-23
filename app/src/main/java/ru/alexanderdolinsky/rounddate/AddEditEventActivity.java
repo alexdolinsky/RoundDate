@@ -5,9 +5,8 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.util.TimingLogger;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,20 +35,15 @@ public class AddEditEventActivity extends AppCompatActivity {
     private TrackSettings eventGroupTrackSettings;
     private Event event;
 
-    private RadioGroup rgTrackSettings;
     private TextView tvCurrentDate, tvCurrentTime;
     private TextView tvYears, tvMonths, tvWeeks, tvDays, tvHours, tvMinutes, tvSecs;
-    private EditText etEventName, etEventComment;
 
     private EditText etNameEvent, etCommentEvent, etNameNewEventGroup;
 
     static final String ISNEWEVENT = "isNewEvent";
     static final String EVENT_ID = "ID";
 
-    //private DatabaseAdapter adapter;
-
     ArrayAdapter<EventGroup> arrayAdapter;
-    private Spinner eventGroupsSpinner;
     private EventGroup selectedEventGroup;
     private int sourceTrackSettings;
     private boolean isNewEvent;
@@ -59,48 +53,9 @@ public class AddEditEventActivity extends AppCompatActivity {
     public static final String NOTIFICATION_ACTION = "ru.alexanderdolinsky.rounddate.NOTIFICATION_SERVICE";
 
 
-
-    public void setEventTrackSettings(TrackSettings eventTrackSettings) {
-        this.eventTrackSettings = eventTrackSettings;
-    }
-
-    public TrackSettings getEventTrackSettings() {
-        return eventTrackSettings;
-    }
-
-    public void setTvYears(CharSequence rdVariant) {
-        this.tvYears.setText(rdVariant);
-    }
-
-    public void setTvMonths(CharSequence rdVariant) {
-        this.tvMonths.setText(rdVariant);
-    }
-
-    public void setTvWeeks(CharSequence rdVariant) {
-        this.tvWeeks.setText(rdVariant);
-    }
-
-    public void setTvDays(CharSequence rdVariant) {
-        this.tvDays.setText(rdVariant);
-    }
-
-    public void setTvHours(CharSequence rdVariant) {
-        this.tvHours.setText(rdVariant);
-    }
-
-    public void setTvMinutes(CharSequence rdVariant) {
-        this.tvMinutes.setText(rdVariant);
-    }
-
-    public void setTvSecs(CharSequence rdVariant) {
-        this.tvSecs.setText(rdVariant);
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_event);
 
         Bundle extras = getIntent().getExtras();
@@ -130,7 +85,7 @@ public class AddEditEventActivity extends AppCompatActivity {
 
         final List<EventGroup> eventGroups = adapter.getEventGroups(false, true);
         // TODO: 25.06.2017 Сделать нормальный адаптер
-        eventGroupsSpinner = (Spinner) findViewById(R.id.spinnerEventGroups);
+        Spinner eventGroupsSpinner = (Spinner) findViewById(R.id.spinnerEventGroups);
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventGroups);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eventGroupsSpinner.setAdapter(arrayAdapter);
@@ -141,7 +96,6 @@ public class AddEditEventActivity extends AppCompatActivity {
         } else {
             setEvent(new Event());
         }
-
 
 
         eventGroupsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -169,11 +123,11 @@ public class AddEditEventActivity extends AppCompatActivity {
 
         // Определение полей по их ID
 
-        etEventName = (EditText) findViewById(R.id.etEventName);
-        etEventComment = (EditText) findViewById(R.id.etEventComment);
+        EditText etEventName = (EditText) findViewById(R.id.etEventName);
+        EditText etEventComment = (EditText) findViewById(R.id.etEventComment);
         tvCurrentDate = (TextView) findViewById(R.id.tvCurrentEventDate);
         tvCurrentTime = (TextView) findViewById(R.id.tvCurrentEventTime);
-        rgTrackSettings = (RadioGroup) findViewById(R.id.rgTracksettings);
+        RadioGroup rgTrackSettings = (RadioGroup) findViewById(R.id.rgTracksettings);
 
         tvYears = (TextView) findViewById(R.id.tvRoundDateInYears);
         tvMonths = (TextView) findViewById(R.id.tvRoundDateInMonths);
@@ -183,7 +137,7 @@ public class AddEditEventActivity extends AppCompatActivity {
         tvMinutes = (TextView) findViewById(R.id.tvRoundDateInMinutes);
         tvSecs = (TextView) findViewById(R.id.tvRoundDateInSecs);
 
-        //Задание формата вывода даты и времени
+        //Варианты круглых дат
         final CharSequence[] rdVariants = getResources().getStringArray(R.array.rd_variants);
 
 
@@ -201,7 +155,7 @@ public class AddEditEventActivity extends AppCompatActivity {
             tvCurrentTime.setText(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(date.getTime()));
 
             // Установка настроек по умолчанию
-            eventTrackSettings = new TrackSettings(this);
+            setEventTrackSettings(new TrackSettings(this));
 
             // Установка источника настроек отслеживания по умолчанию (по группе событий)
             setSourceTrackSettings(Event.SOURCE_TRACK_SETTINGS_GROUP);
@@ -213,13 +167,11 @@ public class AddEditEventActivity extends AppCompatActivity {
             etEventName.setText(getEvent().getName());
             etEventComment.setText(getEvent().getComment());
 
-            // Вычисляется текущая дата, время выставляется на полдень
+            // Время выставляется из события
             date = new GregorianCalendar();
             date.setTimeInMillis(getEvent().getDateAndTime().getTimeInMillis());
 
             // Устанавливается дата и время из события
-            //tvCurrentDate.setText(sdfDate.format(getEvent().getDateAndTime().getTime()));
-            //tvCurrentTime.setText(sdfTime.format(getEvent().getDateAndTime().getTime()));
             tvCurrentDate.setText(DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault()).format(date.getTime()));
             tvCurrentTime.setText(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(date.getTime()));
 
@@ -227,7 +179,7 @@ public class AddEditEventActivity extends AppCompatActivity {
             setOldDateInMillis(getEvent().getDateAndTime().getTimeInMillis());
 
             // Установка настроек из события
-            eventTrackSettings = getEvent().getTrackSettings();
+            setEventTrackSettings(getEvent().getTrackSettings());
 
             // Определяем начальные настройки слежения
             TrackSettings trackSettings;
@@ -247,14 +199,14 @@ public class AddEditEventActivity extends AppCompatActivity {
             }
 
             // Сохраняем начальные настройки отслеживания для последующего сравнения
-            oldEventTrackSettings = new TrackSettings(
+            setOldEventTrackSettings(new TrackSettings(
                     trackSettings.getRdInYears(),
                     trackSettings.getRdInMonths(),
                     trackSettings.getRdInWeeks(),
                     trackSettings.getRdInDays(),
                     trackSettings.getRdInHours(),
                     trackSettings.getRdInMinutes(),
-                    trackSettings.getRdInSecs());
+                    trackSettings.getRdInSecs()));
 
 
             // Установка источника настроек отслеживания из события
@@ -278,13 +230,13 @@ public class AddEditEventActivity extends AppCompatActivity {
         }
 
         // Устанавливаем соответствующие настройкам тексты в полях настроек отслеживания
-        tvYears.setText(rdVariants[eventTrackSettings.getRdInYears()]);
-        tvMonths.setText(rdVariants[eventTrackSettings.getRdInMonths()]);
-        tvWeeks.setText(rdVariants[eventTrackSettings.getRdInWeeks()]);
-        tvDays.setText(rdVariants[eventTrackSettings.getRdInDays()]);
-        tvHours.setText(rdVariants[eventTrackSettings.getRdInHours()]);
-        tvMinutes.setText(rdVariants[eventTrackSettings.getRdInMinutes()]);
-        tvSecs.setText(rdVariants[eventTrackSettings.getRdInSecs()]);
+        tvYears.setText(rdVariants[getEventTrackSettings().getRdInYears()]);
+        tvMonths.setText(rdVariants[getEventTrackSettings().getRdInMonths()]);
+        tvWeeks.setText(rdVariants[getEventTrackSettings().getRdInWeeks()]);
+        tvDays.setText(rdVariants[getEventTrackSettings().getRdInDays()]);
+        tvHours.setText(rdVariants[getEventTrackSettings().getRdInHours()]);
+        tvMinutes.setText(rdVariants[getEventTrackSettings().getRdInMinutes()]);
+        tvSecs.setText(rdVariants[getEventTrackSettings().getRdInSecs()]);
 
         // Устанавливаем обработчик на группу радиобаттонов
         rgTrackSettings.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -308,7 +260,6 @@ public class AddEditEventActivity extends AppCompatActivity {
                         setSourceTrackSettings(Event.SOURCE_TRACK_SETTINGS_APP);
                         break;
                 }
-
             }
         });
         adapter.close();
@@ -319,16 +270,12 @@ public class AddEditEventActivity extends AppCompatActivity {
         Intent intent;
 
         //  Проверка правильности ввода названия события
-        // TODO: 12.06.2017 Сделать проверку на ввод опасных символов
         EditText etEventName = (EditText) findViewById(R.id.etEventName);
         String eventName = etEventName.getText().toString().trim();
         if (eventName.isEmpty()) {
             Toast.makeText(this, R.string.event_name_not_fill, Toast.LENGTH_SHORT).show();
             return;
         }
-        ;
-
-        // TODO: 12.06.2017 Проверка корректности ввода комментария, Сделать проверку на ввод опасных символов
 
         EditText etEventComment = (EditText) findViewById(R.id.etEventComment);
         String eventComment = etEventComment.getText().toString().trim();
@@ -360,11 +307,8 @@ public class AddEditEventActivity extends AppCompatActivity {
 
         // Если событие добавляется
         if (isNewEvent()) {
-            Log.d("MyLog", "1111");
-            TimingLogger timings = new TimingLogger("MyLog", "Создание круглых дат");
             // начинаем транзакцию
             adapter.beginTransaction();
-            timings.addSplit("Начало транзакции");
             try {
 
                 // Запись группы событий в БД, если выбрана новая группа и название уникально
@@ -372,9 +316,8 @@ public class AddEditEventActivity extends AppCompatActivity {
                     EventGroup eventGroup = new EventGroup(-1, newEventsGroupName, 0, new TrackSettings(this));
                     getSelectedEventGroup().setId(adapter.addEventsGroup(eventGroup));
                 }
-                timings.addSplit("Запись новой группы");
 
-                // Запись события в БД
+                // Установка полей события
                 getEvent().setName(eventName);
                 getEvent().setComment(eventComment);
                 getEvent().setIdEventGroup(getSelectedEventGroup().getId());
@@ -382,9 +325,8 @@ public class AddEditEventActivity extends AppCompatActivity {
                 getEvent().setDateAndTime(getDate());
                 getEvent().setSourceTrackSettings(getSourceTrackSettings());
                 getEvent().setTrackSettings(getEventTrackSettings());
-
-                event.setId(adapter.addEvent(event));
-                timings.addSplit("Запись события");
+                // Запись события в БД
+                getEvent().setId(adapter.addEvent(getEvent()));
 
 
                 List<RoundDate> roundDates;
@@ -410,83 +352,71 @@ public class AddEditEventActivity extends AppCompatActivity {
                         trackSettings = new TrackSettings(this);
                         break;
                 }
-                timings.addSplit("Выбор источника настроек слежения");
+
 
                 // Расчет Круглых дат
-                //long start = System.nanoTime();
+
+
                 if (trackSettings.getRdInYears() != TrackSettings.NOT_TRACK) {
                     // Расчет Круглых дат - года
                     roundDates = event.getRoundDates(Event.YEAR, trackSettings.getRdInYears());
-                    // Запись круглых дат в БД
+                    // Запись круглых дат и уведомлений в БД
                     roundDates = adapter.addRoundDates(roundDates);
                     adapter.addNotifyDates(roundDates);
                 }
-                timings.addSplit("расчет КД в годах");
 
                 if (trackSettings.getRdInMonths() != TrackSettings.NOT_TRACK) {
                     // Расчет Круглых дат - месяцы
                     roundDates = event.getRoundDates(Event.MONTH, trackSettings.getRdInMonths());
-                    // Запись круглых дат в БД
+                    // Запись круглых дат и уведомлений в БД
                     roundDates = adapter.addRoundDates(roundDates);
                     adapter.addNotifyDates(roundDates);
                 }
-                timings.addSplit("расчет КД в месяцах");
 
                 if (trackSettings.getRdInWeeks() != TrackSettings.NOT_TRACK) {
                     // Расчет Круглых дат - недели
                     roundDates = event.getRoundDates(Event.WEEK, trackSettings.getRdInWeeks());
-                    // Запись круглых дат в БД
+                    // Запись круглых дат и уведомлений в БД
                     roundDates = adapter.addRoundDates(roundDates);
                     adapter.addNotifyDates(roundDates);
                 }
-                timings.addSplit("расчет КД в неделях");
 
                 if (trackSettings.getRdInDays() != TrackSettings.NOT_TRACK) {
                     // Расчет Круглых дат - дни
                     roundDates = event.getRoundDates(Event.DAY, trackSettings.getRdInDays());
-                    // Запись круглых дат в БД
+                    // Запись круглых дат и уведомлений в БД
                     roundDates = adapter.addRoundDates(roundDates);
                     adapter.addNotifyDates(roundDates);
                 }
-                timings.addSplit("расчет КД в днях");
 
                 if (trackSettings.getRdInHours() != TrackSettings.NOT_TRACK) {
                     // Расчет Круглых дат - часы
                     roundDates = event.getRoundDates(Event.HOUR, trackSettings.getRdInHours());
-                    // Запись круглых дат в БД
+                    // Запись круглых дат и уведомлений в БД
                     roundDates = adapter.addRoundDates(roundDates);
                     adapter.addNotifyDates(roundDates);
                 }
-                timings.addSplit("расчет КД в часах");
 
                 if (trackSettings.getRdInMinutes() != TrackSettings.NOT_TRACK) {
                     // Расчет Круглых дат - минуты
                     roundDates = event.getRoundDates(Event.MINUTE, trackSettings.getRdInMinutes());
-                    // Запись круглых дат в БД
+                    // Запись круглых дат и уведомлений в БД
                     roundDates = adapter.addRoundDates(roundDates);
                     adapter.addNotifyDates(roundDates);
                 }
-                timings.addSplit("расчет КД в минутах");
 
                 if (trackSettings.getRdInSecs() != TrackSettings.NOT_TRACK) {
                     // Расчет Круглых дат - секунды
                     roundDates = event.getRoundDates(Event.SEC, trackSettings.getRdInSecs());
-                    // Запись круглых дат в БД
+                    // Запись круглых дат и уведомлений в БД
                     roundDates = adapter.addRoundDates(roundDates);
                     adapter.addNotifyDates(roundDates);
                 }
-                timings.addSplit("расчет КД в секундах");
-                timings.dumpToLog();
-
-                //long finish = System.nanoTime();
-                //long duration = finish - start;
-                //Log.d("MyLog", "Время выполнения = " + duration);
 
                 adapter.setTransactionSuccessful();
             } finally {
                 adapter.endTransaction();
             }
-
 
             // Закрытие соединения с БД
             adapter.close();
@@ -510,7 +440,7 @@ public class AddEditEventActivity extends AppCompatActivity {
                     getSelectedEventGroup().setId(adapter.addEventsGroup(eventGroup));
                 }
 
-                // Обновление события в БД
+                // Обновление полей события
                 getEvent().setName(eventName);
                 getEvent().setComment(eventComment);
                 getEvent().setIdEventGroup(getSelectedEventGroup().getId());
@@ -519,8 +449,8 @@ public class AddEditEventActivity extends AppCompatActivity {
                 getEvent().setSourceTrackSettings(getSourceTrackSettings());
                 getEvent().setTrackSettings(getEventTrackSettings());
 
-                int i = adapter.updateEvent(event);
-
+                // Обновление события в БД
+                adapter.updateEvent(getEvent());
 
                 //определение действующих настроек слежения
                 TrackSettings trackSettings;
@@ -554,18 +484,16 @@ public class AddEditEventActivity extends AppCompatActivity {
 
                 List<RoundDate> roundDates;
                 // Перерасчет круглых дат в случае если поменялась дата или изменились настройки отслеживания
-                //long start = System.nanoTime();
                 if (isDateChange || trackSettings.getRdInYears() != getOldEventTrackSettings().getRdInYears()) {
                     // Удаление из БД текущих круглых дат - года
                     adapter.deleteRoundDates(getEvent().getId(), RoundDate.UNIT_YEARS);
                     if (trackSettings.getRdInYears() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - года
-                        roundDates = event.getRoundDates(Event.YEAR, trackSettings.getRdInYears());
-                        // Запись круглых дат в БД
+                        roundDates = getEvent().getRoundDates(Event.YEAR, trackSettings.getRdInYears());
+                        // Запись круглых дат и уведомлений в БД
                         roundDates = adapter.addRoundDates(roundDates);
                         adapter.addNotifyDates(roundDates);
                     }
-
                 }
 
                 if (isDateChange || trackSettings.getRdInMonths() != getOldEventTrackSettings().getRdInMonths()) {
@@ -573,8 +501,8 @@ public class AddEditEventActivity extends AppCompatActivity {
                     adapter.deleteRoundDates(getEvent().getId(), RoundDate.UNIT_MONTHS);
                     if (trackSettings.getRdInMonths() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - месяцы
-                        roundDates = event.getRoundDates(Event.MONTH, trackSettings.getRdInMonths());
-                        // Запись круглых дат в БД
+                        roundDates = getEvent().getRoundDates(Event.MONTH, trackSettings.getRdInMonths());
+                        // Запись круглых дат и уведомлений в БД
                         roundDates = adapter.addRoundDates(roundDates);
                         adapter.addNotifyDates(roundDates);
                     }
@@ -585,8 +513,8 @@ public class AddEditEventActivity extends AppCompatActivity {
                     adapter.deleteRoundDates(getEvent().getId(), RoundDate.UNIT_WEEKS);
                     if (trackSettings.getRdInWeeks() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - недели
-                        roundDates = event.getRoundDates(Event.WEEK, trackSettings.getRdInWeeks());
-                        // Запись круглых дат в БД
+                        roundDates = getEvent().getRoundDates(Event.WEEK, trackSettings.getRdInWeeks());
+                        // Запись круглых дат и уведомлений в БД
                         roundDates = adapter.addRoundDates(roundDates);
                         adapter.addNotifyDates(roundDates);
                     }
@@ -597,8 +525,8 @@ public class AddEditEventActivity extends AppCompatActivity {
                     adapter.deleteRoundDates(getEvent().getId(), RoundDate.UNIT_DAYS);
                     if (trackSettings.getRdInDays() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - дни
-                        roundDates = event.getRoundDates(Event.DAY, trackSettings.getRdInDays());
-                        // Запись круглых дат в БД
+                        roundDates = getEvent().getRoundDates(Event.DAY, trackSettings.getRdInDays());
+                        // Запись круглых дат и уведомлений в БД
                         roundDates = adapter.addRoundDates(roundDates);
                         adapter.addNotifyDates(roundDates);
                     }
@@ -609,8 +537,8 @@ public class AddEditEventActivity extends AppCompatActivity {
                     adapter.deleteRoundDates(getEvent().getId(), RoundDate.UNIT_HOURS);
                     if (trackSettings.getRdInHours() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - часы
-                        roundDates = event.getRoundDates(Event.HOUR, trackSettings.getRdInHours());
-                        // Запись круглых дат в БД
+                        roundDates = getEvent().getRoundDates(Event.HOUR, trackSettings.getRdInHours());
+                        // Запись круглых дат и уведомлений в БД
                         roundDates = adapter.addRoundDates(roundDates);
                         adapter.addNotifyDates(roundDates);
                     }
@@ -621,8 +549,8 @@ public class AddEditEventActivity extends AppCompatActivity {
                     adapter.deleteRoundDates(getEvent().getId(), RoundDate.UNIT_MINUTES);
                     if (trackSettings.getRdInMinutes() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - минуты
-                        roundDates = event.getRoundDates(Event.MINUTE, trackSettings.getRdInMinutes());
-                        // Запись круглых дат в БД
+                        roundDates = getEvent().getRoundDates(Event.MINUTE, trackSettings.getRdInMinutes());
+                        // Запись круглых дат и уведомлений в БД
                         roundDates = adapter.addRoundDates(roundDates);
                         adapter.addNotifyDates(roundDates);
                     }
@@ -633,16 +561,12 @@ public class AddEditEventActivity extends AppCompatActivity {
                     adapter.deleteRoundDates(getEvent().getId(), RoundDate.UNIT_SECS);
                     if (trackSettings.getRdInSecs() != TrackSettings.NOT_TRACK) {
                         // Расчет Круглых дат - секунды
-                        roundDates = event.getRoundDates(Event.SEC, trackSettings.getRdInSecs());
-                        // Запись круглых дат в БД
+                        roundDates = getEvent().getRoundDates(Event.SEC, trackSettings.getRdInSecs());
+                        // Запись круглых дат и уведомлений в БД
                         roundDates = adapter.addRoundDates(roundDates);
                         adapter.addNotifyDates(roundDates);
                     }
                 }
-
-                //long finish = System.nanoTime();
-                //long duration = finish - start;
-                //Log.d("MyLog", "Время выполнения = " + duration);
 
                 adapter.setTransactionSuccessful();
             } finally {
@@ -665,7 +589,6 @@ public class AddEditEventActivity extends AppCompatActivity {
 
     public void onChoiceEventDate(View view) {
         //  диалоговое окно выбора даты
-
         DatePickerDialog dtp = new DatePickerDialog(AddEditEventActivity.this, R.style.TimePickerTheme, d,
                 date.get(Calendar.YEAR),
                 date.get(Calendar.MONTH),
@@ -711,7 +634,7 @@ public class AddEditEventActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         DialogScreen ds;
-        android.support.v7.app.AlertDialog dialog;
+        AlertDialog dialog;
 
         switch (view.getId()) {
             case R.id.llRoundDateYear:
@@ -749,43 +672,7 @@ public class AddEditEventActivity extends AppCompatActivity {
                 dialog = ds.getDialog(this);
                 dialog.show();
                 break;
-
-
         }
-
-    }
-
-
-    public TrackSettings getEventGroupTrackSettings() {
-        return eventGroupTrackSettings;
-    }
-
-    public void setEventGroupTrackSettings(TrackSettings eventGroupTrackSettings) {
-        this.eventGroupTrackSettings = eventGroupTrackSettings;
-    }
-
-    public EditText getEtNameEvent() {
-        return etNameEvent;
-    }
-
-    public void setEtNameEvent(EditText etNameEvent) {
-        this.etNameEvent = etNameEvent;
-    }
-
-    public EditText getEtCommentEvent() {
-        return etCommentEvent;
-    }
-
-    public void setEtCommentEvent(EditText etCommentEvent) {
-        this.etCommentEvent = etCommentEvent;
-    }
-
-    public EditText getEtNameNewEventGroup() {
-        return etNameNewEventGroup;
-    }
-
-    public void setEtNameNewEventGroup(EditText etNameNewEventGroup) {
-        this.etNameNewEventGroup = etNameNewEventGroup;
     }
 
     public EventGroup getSelectedEventGroup() {
@@ -846,5 +733,41 @@ public class AddEditEventActivity extends AppCompatActivity {
 
     public void setOldDateInMillis(long oldDateInMillis) {
         this.oldDateInMillis = oldDateInMillis;
+    }
+
+    public void setEventTrackSettings(TrackSettings eventTrackSettings) {
+        this.eventTrackSettings = eventTrackSettings;
+    }
+
+    public TrackSettings getEventTrackSettings() {
+        return eventTrackSettings;
+    }
+
+    public void setTvYears(CharSequence rdVariant) {
+        this.tvYears.setText(rdVariant);
+    }
+
+    public void setTvMonths(CharSequence rdVariant) {
+        this.tvMonths.setText(rdVariant);
+    }
+
+    public void setTvWeeks(CharSequence rdVariant) {
+        this.tvWeeks.setText(rdVariant);
+    }
+
+    public void setTvDays(CharSequence rdVariant) {
+        this.tvDays.setText(rdVariant);
+    }
+
+    public void setTvHours(CharSequence rdVariant) {
+        this.tvHours.setText(rdVariant);
+    }
+
+    public void setTvMinutes(CharSequence rdVariant) {
+        this.tvMinutes.setText(rdVariant);
+    }
+
+    public void setTvSecs(CharSequence rdVariant) {
+        this.tvSecs.setText(rdVariant);
     }
 }

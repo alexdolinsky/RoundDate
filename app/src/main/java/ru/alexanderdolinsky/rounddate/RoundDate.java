@@ -3,7 +3,6 @@ package ru.alexanderdolinsky.rounddate;
 
 import android.content.Context;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -12,49 +11,48 @@ import java.util.GregorianCalendar;
  * Класс Круглая дата
  */
 
-class RoundDate {
+public class RoundDate {
     // id Круглой даты
     private long id;
     // значение Круглой даты
-    protected long valueOf;
+    long valueOf;
     // размерность Круглой даты
-    protected int unit;
+    int unit;
     // дата/время Круглой даты
-    protected Calendar dateAndTime;
+    Calendar dateAndTime;
     // id События
-    protected long idEvent;
+    long idEvent;
     // название События
-    protected String nameEvent;
+    String nameEvent;
     /* редкость Круглой даты
     0 - обычная Курглая дата
     1 - редкая Круглая дата
     2 - очень редкая Круглая дата
     */
-    protected int rare;
+    int rare;
     /* важность Круглой даты
     0 - обычная Круглая дата
     1 - важная Круглой даты
     2 - очень важная Круглая дата
     3 - неважная Круглая дат
      */
-    protected int important;
+    int important;
 
     // константы размерностей Круглой даты
-    public final static int UNIT_YEARS = 1;
-    public final static int UNIT_MONTHS = 2;
-    public final static int UNIT_WEEKS = 3;
-    public final static int UNIT_DAYS = 4;
-    public final static int UNIT_HOURS = 5;
-    public final static int UNIT_MINUTES = 6;
-    public final static int UNIT_SECS = 7;
+    final static int UNIT_YEARS = 1;
+    final static int UNIT_MONTHS = 2;
+    final static int UNIT_WEEKS = 3;
+    final static int UNIT_DAYS = 4;
+    final static int UNIT_HOURS = 5;
+    final static int UNIT_MINUTES = 6;
+    final static int UNIT_SECS = 7;
 
-    public final static int STANDART = 0;
-    public final static int RARE = 1;
-    public final static int VERY_RARE = 2;
-    public final static int IMPORTANT = 1;
-    public final static int VERY_IMPORTANT = 2;
-    public final static int NOT_IMPORTANT = 3;
-
+    final static int STANDART = 0;
+    final static int RARE = 1;
+    final static int VERY_RARE = 2;
+    final static int IMPORTANT = 1;
+    final static int VERY_IMPORTANT = 2;
+    final static int NOT_IMPORTANT = 3;
 
 
     RoundDate() {
@@ -94,31 +92,31 @@ class RoundDate {
         this.id = id;
     }
 
-    public long getValueOf() {
+    long getValueOf() {
         return valueOf;
     }
 
-    public void setValueOf(long valueOf) {
+    void setValueOf(long valueOf) {
         this.valueOf = valueOf;
     }
 
-    public int getUnit() {
+    int getUnit() {
         return unit;
     }
 
-    public void setUnit(int unit) {
+    void setUnit(int unit) {
         this.unit = unit;
     }
 
-    public Calendar getDateAndTime() {
+    Calendar getDateAndTime() {
         return dateAndTime;
     }
 
-    public void setDateAndTime(Calendar dateAndTime) {
+    void setDateAndTime(Calendar dateAndTime) {
         this.dateAndTime = dateAndTime;
     }
 
-    public long getIdEvent() {
+    long getIdEvent() {
         return idEvent;
     }
 
@@ -126,31 +124,31 @@ class RoundDate {
         this.idEvent = idEvent;
     }
 
-    public String getNameEvent() {
+    String getNameEvent() {
         return nameEvent;
     }
 
-    public void setNameEvent(String nameEvent) {
+    void setNameEvent(String nameEvent) {
         this.nameEvent = nameEvent;
     }
 
-    public int getRare() {
+    int getRare() {
         return rare;
     }
 
-    public void setRare(int rare) {
+    void setRare(int rare) {
         this.rare = rare;
     }
 
-    public int getImportant() {
+    int getImportant() {
         return important;
     }
 
-    public void setImportant(int important) {
+    void setImportant(int important) {
         this.important = important;
     }
 
-    public static String getUnit(Context context, long value, int unit) {
+    static String getUnit(Context context, long value, int unit) {
 
         int value10 = (int) value % 10;
         int value100 = (int) value % 100;
@@ -203,12 +201,7 @@ class RoundDate {
         }
     }
 
-    public static String getStringOfDateAndTime(Calendar dateAndTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy kk:mm");
-        return sdf.format(dateAndTime.getTime());
-    }
-
-    public static String getTimeToWait(Context context, Calendar dateAndTime) {
+    static String getTimeToWait(Context context, Calendar dateAndTime) {
         Calendar currentDateAndTime = new GregorianCalendar();
         long duration = dateAndTime.getTimeInMillis() - currentDateAndTime.getTimeInMillis();
 

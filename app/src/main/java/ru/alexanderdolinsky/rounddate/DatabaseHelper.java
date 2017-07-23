@@ -115,11 +115,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        // включаем внешние ключи
-        db.execSQL("PRAGMA foreign_keys=on;");
-        //db.setForeignKeyConstraintsEnabled(true);
-
-
         db.execSQL("CREATE TABLE " + TABLE_EVENT_GROUPS + " ("
                 + COLUMN_EVENTGROUPS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_EVENTGROUPS_NAME + " TEXT UNIQUE, "
