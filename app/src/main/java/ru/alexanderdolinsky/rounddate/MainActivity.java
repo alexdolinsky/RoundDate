@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -54,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // получаем выбранное событие
                 setSelectedRoundDate((RoundDate) parent.getItemAtPosition(position));
-                Toast.makeText(MainActivity.this, "ID = " + getSelectedRoundDate().getId(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "ID = " + getSelectedRoundDate().getId(), Toast.LENGTH_SHORT).show();
                 setPositionSelectedRoundDate(position);
                 // диалоговое окно с выбором важности круглой даты по ID
 
@@ -95,10 +93,10 @@ public class MainActivity extends AppCompatActivity {
                 intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivityForResult(intent, SETTINGSREQUESTCODE);
                 return true;
-            case R.id.action_filter:
+            /*case R.id.action_filter:
                 intent = new Intent(MainActivity.this, FilterActivity.class);
                 startActivity(intent);
-                return true;
+                return true;*/
             case R.id.action_about:
                 intent = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(intent);
@@ -110,13 +108,13 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
+    /*
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.lvRoundDates) {
             menu.add(Menu.NONE, 0, 0, "Удалить круглую дату");
         }
-    }
+    }*/
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
