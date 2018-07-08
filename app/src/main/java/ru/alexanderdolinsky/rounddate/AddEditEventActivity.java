@@ -3,6 +3,7 @@ package ru.alexanderdolinsky.rounddate;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
@@ -50,6 +51,7 @@ public class AddEditEventActivity extends AppCompatActivity {
     private long eventId = -1;
     private long oldDateInMillis = 0;
 
+    private NotificationReceiver notificationReceiver;
     public static final String NOTIFICATION_ACTION = "ru.alexanderdolinsky.rounddate.NOTIFICATION_SERVICE";
 
 
@@ -263,6 +265,8 @@ public class AddEditEventActivity extends AppCompatActivity {
             }
         });
         adapter.close();
+
+
     }
 
     public void onSaveEvent(View view) {
@@ -586,6 +590,28 @@ public class AddEditEventActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // регистрируем ресивер
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(NOTIFICATION_ACTION);
+        filter.addAction("android.intent.action.BOOT_COMPLETED");
+
+        notificationReceiver = new NotificationReceiver();
+        registerReceiver(notificationReceiver, filter);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (notificationReceiver != null) {
+            unregisterReceiver(notificationReceiver);
+            notificationReceiver = null;
+        }
+        super.onDestroy();
+    }
 
     public void onChoiceEventDate(View view) {
         //  диалоговое окно выбора даты

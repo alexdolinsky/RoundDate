@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="25" />
+        android:targetSdkVersion="28" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -82,9 +82,9 @@
         </activity>
 
         <receiver
-            android:name=".NotificationReceiver"
+            android:name="ru.alexanderdolinsky.rounddate.NotificationReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="ru.alexanderdolinsky.rounddate.NOTIFICATION_SERVICE" />
