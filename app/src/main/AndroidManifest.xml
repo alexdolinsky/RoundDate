@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,58 +31,58 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddEditEventActivity"
+            android:name=".activities.AddEditEventActivity"
             android:label="@string/adding_event"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".EditEventGroupActivity"
+            android:name=".activities.EditEventGroupActivity"
             android:label="@string/editing_events_group"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".EventListActivity"
+            android:name=".activities.EventListActivity"
             android:label="@string/action_event_list"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".EventActivity"
+            android:name=".activities.EventActivity"
             android:label="@string/action_event"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".EventListActivity" />
+                android:value=".activities.EventListActivity" />
         </activity>
         <activity
-            android:name=".AboutActivity"
+            android:name=".activities.AboutActivity"
             android:label="@string/action_about"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".FilterActivity"
+            android:name=".activities.FilterActivity"
             android:label="@string/action_filter"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="@string/action_settings"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <receiver
-            android:name="ru.alexanderdolinsky.rounddate.NotificationReceiver"
+            android:name="ru.alexanderdolinsky.rounddate.notifications.NotificationReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -91,12 +91,12 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".NotificationService" />
+        <service android:name=".notifications.NotificationService" />
 
-        <activity android:name=".RoundDateListActivity">
+        <activity android:name=".activities.RoundDateListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".EventListActivity" />
+                android:value=".activities.EventListActivity" />
         </activity>
     </application>
 

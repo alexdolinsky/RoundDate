@@ -1,7 +1,9 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import ru.alexanderdolinsky.rounddate.R;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -10,7 +12,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Класс Настройки отслеживания
  */
 
-class TrackSettings {
+public class TrackSettings {
     /* настройки отслеживания
     0 - стандартный набор
     1 - только редкие
@@ -25,7 +27,7 @@ class TrackSettings {
                 rdInMinutes,
                 rdInSecs;
 
-    static final String MY_SETTINGS = "my_settings";
+    public static final String MY_SETTINGS = "my_settings";
     private static final String MY_SETTINGS_RD_IN_YEARS = "rd_in_years",
             MY_SETTINGS_RD_IN_MONTHS = "rd_in_months",
             MY_SETTINGS_RD_IN_WEEKS = "rd_in_weeks",
@@ -34,14 +36,14 @@ class TrackSettings {
             MY_SETTINGS_RD_IN_MINUTES = "rd_in_minutes",
             MY_SETTINGS_RD_IN_SECS = "rd_in_secs";
 
-    static final int STANDART = 0,
-            RARE = 1,
-            VERY_RARE = 2,
-            NOT_TRACK = 3;
+    public static final int STANDART = 0;
+    public static final int RARE = 1;
+    public static final int VERY_RARE = 2;
+    public static final int NOT_TRACK = 3;
 
 
     // конструкторы
-    TrackSettings(int rdInYears,
+    public TrackSettings(int rdInYears,
                   int rdInMonths,
                   int rdInWeeks,
                   int rdInDays,
@@ -57,7 +59,7 @@ class TrackSettings {
         this.rdInSecs = rdInSecs;
     }
 
-    TrackSettings(Context context) {
+    public TrackSettings(Context context) {
         SharedPreferences mSettings = context.getSharedPreferences(MY_SETTINGS, MODE_PRIVATE);
         this.rdInYears = mSettings.getInt(MY_SETTINGS_RD_IN_YEARS, Integer.valueOf(context.getString(R.string.rd_in_years)));
         this.rdInMonths = mSettings.getInt(MY_SETTINGS_RD_IN_MONTHS, Integer.valueOf(context.getString(R.string.rd_in_months)));
@@ -69,7 +71,7 @@ class TrackSettings {
 
     }
 
-    void save(Context context) {
+    public void save(Context context) {
 
         SharedPreferences mSettings = context.getSharedPreferences(TrackSettings.MY_SETTINGS, MODE_PRIVATE);
         SharedPreferences.Editor editor = mSettings.edit();
@@ -83,59 +85,59 @@ class TrackSettings {
         editor.apply();
     }
 
-    int getRdInYears() {
+    public int getRdInYears() {
         return rdInYears;
     }
 
-    void setRdInYears(int rdInYears) {
+    public void setRdInYears(int rdInYears) {
         this.rdInYears = rdInYears;
     }
 
-    int getRdInMonths() {
+    public int getRdInMonths() {
         return rdInMonths;
     }
 
-    void setRdInMonths(int rdInMonths) {
+    public void setRdInMonths(int rdInMonths) {
         this.rdInMonths = rdInMonths;
     }
 
-    int getRdInWeeks() {
+    public int getRdInWeeks() {
         return rdInWeeks;
     }
 
-    void setRdInWeeks(int rdInWeeks) {
+    public void setRdInWeeks(int rdInWeeks) {
         this.rdInWeeks = rdInWeeks;
     }
 
-    int getRdInDays() {
+    public int getRdInDays() {
         return rdInDays;
     }
 
-    void setRdInDays(int rdInDays) {
+    public void setRdInDays(int rdInDays) {
         this.rdInDays = rdInDays;
     }
 
-    int getRdInHours() {
+    public int getRdInHours() {
         return rdInHours;
     }
 
-    void setRdInHours(int rdInHours) {
+    public void setRdInHours(int rdInHours) {
         this.rdInHours = rdInHours;
     }
 
-    int getRdInMinutes() {
+    public int getRdInMinutes() {
         return rdInMinutes;
     }
 
-    void setRdInMinutes(int rdInMinutes) {
+    public void setRdInMinutes(int rdInMinutes) {
         this.rdInMinutes = rdInMinutes;
     }
 
-    int getRdInSecs() {
+    public int getRdInSecs() {
         return rdInSecs;
     }
 
-    void setRdInSecs(int rdInSecs) {
+    public void setRdInSecs(int rdInSecs) {
         this.rdInSecs = rdInSecs;
     }
 }

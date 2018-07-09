@@ -1,4 +1,4 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.data;
 
 
 import java.util.ArrayList;
@@ -6,12 +6,14 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import ru.alexanderdolinsky.rounddate.appsettings.HidSet;
+
 /**
  * Created by Alexsvet on 04.06.2017.
  * Класс Событие
  */
 
-class Event {
+public class Event {
     // идентификатор События в БД
     // - 1 - значение не определено
     private long id;
@@ -28,23 +30,23 @@ class Event {
     // источник настроек отслеживания
     private int sourceTrackSettings;
     // Константы источников настроек отслеживания
-    static final int SOURCE_TRACK_SETTINGS_APP = 0;
-    static final int SOURCE_TRACK_SETTINGS_GROUP = 1;
-    static final int SOURCE_TRACK_SETTINGS_EVENT = 2;
+    public static final int SOURCE_TRACK_SETTINGS_APP = 0;
+    public static final int SOURCE_TRACK_SETTINGS_GROUP = 1;
+    public static final int SOURCE_TRACK_SETTINGS_EVENT = 2;
 
     // индивидуальные настройки отслеживания События
     private TrackSettings trackSettings;
 
-    static final int YEAR = 0;
-    static final int MONTH = 1;
-    static final int WEEK = 2;
-    static final int DAY = 3;
-    static final int HOUR = 4;
-    static final int MINUTE = 5;
-    static final int SEC = 6;
+    public static final int YEAR = 0;
+    public static final int MONTH = 1;
+    public static final int WEEK = 2;
+    public static final int DAY = 3;
+    public static final int HOUR = 4;
+    public static final int MINUTE = 5;
+    public static final int SEC = 6;
 
     // конструктор по умолчанию
-    Event() {
+    public Event() {
         this.id = -1; // - 1 - значение не определено
         this.name = "Событие по умолчанию";
         this.comment = "Комментарий по умолчанию";
@@ -56,7 +58,7 @@ class Event {
     }
 
     // конструктор при создании нового События
-    Event(long id,
+    public Event(long id,
           String name,
           String comment,
           long idEventGroup,

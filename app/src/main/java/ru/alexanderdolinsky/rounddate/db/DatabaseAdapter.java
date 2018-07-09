@@ -1,4 +1,4 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.db;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,14 +11,23 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import ru.alexanderdolinsky.rounddate.R;
+import ru.alexanderdolinsky.rounddate.activities.RoundDateListActivity;
+import ru.alexanderdolinsky.rounddate.data.Event;
+import ru.alexanderdolinsky.rounddate.data.EventGroup;
+import ru.alexanderdolinsky.rounddate.data.NotifyDate;
+import ru.alexanderdolinsky.rounddate.data.NotifySettings;
+import ru.alexanderdolinsky.rounddate.data.RoundDate;
+import ru.alexanderdolinsky.rounddate.data.TrackSettings;
+
 /**
  * Created by Alexsvet on 06.06.2017.
  * Класс DatabaseAdapter
  */
 
 public class DatabaseAdapter {
-    final static int FIRST_ELEMENT_ID = -2;
-    final static int LAST_ELEMENT_ID = -1;
+    public final static int FIRST_ELEMENT_ID = -2;
+    public final static int LAST_ELEMENT_ID = -1;
     private DatabaseHelper dbHelper;
     private SQLiteDatabase database;
     private Context context;
@@ -42,20 +51,20 @@ public class DatabaseAdapter {
         dbHelper.close();
     }
 
-    void beginTransaction() {
+    public void beginTransaction() {
         database.beginTransaction();
     }
 
-    void endTransaction() {
+    public void endTransaction() {
         database.endTransaction();
     }
 
-    void setTransactionSuccessful() {
+    public void setTransactionSuccessful() {
         database.setTransactionSuccessful();
     }
 
 
-    List<EventGroup> getEventGroups(boolean firstElement, boolean lastElement) {
+    public List<EventGroup> getEventGroups(boolean firstElement, boolean lastElement) {
         ArrayList<EventGroup> eventGroups = new ArrayList<>();
         String[] columns = new String[]{DatabaseHelper.COLUMN_EVENTGROUPS_ID,
                 DatabaseHelper.COLUMN_EVENTGROUPS_NAME,
@@ -103,7 +112,7 @@ public class DatabaseAdapter {
         return context;
     }
 
-    long addEventsGroup(EventGroup eventGroup) {
+    public long addEventsGroup(EventGroup eventGroup) {
 
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.COLUMN_EVENTGROUPS_NAME, eventGroup.getName());
@@ -119,7 +128,7 @@ public class DatabaseAdapter {
         return database.insert(DatabaseHelper.TABLE_EVENT_GROUPS, null, cv);
     }
 
-    long addEvent(Event event) {
+    public long addEvent(Event event) {
 
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.COLUMN_EVENTS_NAME, event.getName());
@@ -139,7 +148,7 @@ public class DatabaseAdapter {
 
     }
 
-    boolean isEventGroupExists(String eventsGroupName, long id) {
+    public boolean isEventGroupExists(String eventsGroupName, long id) {
 
         String selection = DatabaseHelper.COLUMN_EVENTGROUPS_NAME + "= '" + eventsGroupName + "' AND " +
                 DatabaseHelper.COLUMN_EVENTGROUPS_ID + "<>" + id;
@@ -156,7 +165,7 @@ public class DatabaseAdapter {
         return b;
     }
 
-    boolean isEventExists(String eventName, long id) {
+    public boolean isEventExists(String eventName, long id) {
 
         String selection = DatabaseHelper.COLUMN_EVENTS_NAME + "= '" + eventName + "' AND " +
                 DatabaseHelper.COLUMN_EVENTS_ID + "<>" + id;
@@ -175,7 +184,7 @@ public class DatabaseAdapter {
     }
 
 
-    List<Event> getAllEvents() {
+    public List<Event> getAllEvents() {
         ArrayList<Event> events = new ArrayList<>();
 
         Cursor cursor = database.query(DatabaseHelper.VIEW_EVENTS, null, null, null, null, null, null);
@@ -206,7 +215,7 @@ public class DatabaseAdapter {
         return events;
     }
 
-    List<Event> getEventsByEventGroupId(long idEventsGroup) {
+    public List<Event> getEventsByEventGroupId(long idEventsGroup) {
 
         ArrayList<Event> events = new ArrayList<>();
 
@@ -240,7 +249,7 @@ public class DatabaseAdapter {
         return events;
     }
 
-    Event getEventById(long idEvent) {
+    public Event getEventById(long idEvent) {
         Event event = new Event();
         String selection = "" + DatabaseHelper.COLUMN_VIEWEVENTS_ID + "=" + idEvent;
 
@@ -268,7 +277,7 @@ public class DatabaseAdapter {
         return event;
     }
 
-    List<Event> getEventsByEventGroupIdAndGroupTrackSettings(long idEG, int sourceTrackSettingsGroup) {
+    public List<Event> getEventsByEventGroupIdAndGroupTrackSettings(long idEG, int sourceTrackSettingsGroup) {
 
         ArrayList<Event> events = new ArrayList<>();
 
@@ -304,7 +313,7 @@ public class DatabaseAdapter {
         return events;
     }
 
-    List<Event> getEventsWithAppTrackSettings() {
+    public List<Event> getEventsWithAppTrackSettings() {
         ArrayList<Event> events = new ArrayList<>();
 
         String selection = DatabaseHelper.COLUMN_VIEWEVENTS_SOURCETRACKSETTINGS + "=" + Event.SOURCE_TRACK_SETTINGS_APP + " OR (" +
@@ -341,7 +350,7 @@ public class DatabaseAdapter {
     }
 
 
-    TrackSettings getGroupTrackSettingsById(long idEventGroup) {
+    public TrackSettings getGroupTrackSettingsById(long idEventGroup) {
         TrackSettings trackSettings;
         String selection = DatabaseHelper.COLUMN_EVENTGROUPS_ID + "=" + idEventGroup;
 
@@ -359,7 +368,7 @@ public class DatabaseAdapter {
         return trackSettings;
     }
 
-    List<RoundDate> addRoundDates(List<RoundDate> roundDates) {
+    public List<RoundDate> addRoundDates(List<RoundDate> roundDates) {
 
         if (!roundDates.isEmpty()) {
 
@@ -378,7 +387,7 @@ public class DatabaseAdapter {
         } else return null;
     }
 
-    void addNotifyDates(List<RoundDate> roundDates) {
+    public void addNotifyDates(List<RoundDate> roundDates) {
 
         if (!roundDates.isEmpty()) {
 
@@ -472,7 +481,7 @@ public class DatabaseAdapter {
     }
 
 
-    List<RoundDate> getRoundDates() {
+    public List<RoundDate> getRoundDates() {
         ArrayList<RoundDate> roundDates = new ArrayList<>();
 
         Calendar currentDateAndTime = new GregorianCalendar();
@@ -500,7 +509,7 @@ public class DatabaseAdapter {
         return roundDates;
     }
 
-    List<RoundDate> getRoundDates(int i, long id) {
+    public List<RoundDate> getRoundDates(int i, long id) {
         ArrayList<RoundDate> roundDates = new ArrayList<>();
 
         Calendar currentDateAndTime = new GregorianCalendar();
@@ -537,23 +546,23 @@ public class DatabaseAdapter {
     }
 
 
-    List<RoundDate> getAllRoundDates() {
+    public List<RoundDate> getAllRoundDates() {
         ArrayList<RoundDate> roundDates = new ArrayList<>();
 
         Cursor cursor = database.query(DatabaseHelper.TABLE_ROUNDDATES, null, null, null, null, null, null);
-        Log.d("MyLog", "Количество круглых дат = " + cursor.getCount());
+        //Log.d("MyLog", "Количество круглых дат = " + cursor.getCount());
 
         cursor.close();
         return roundDates;
     }
 
-    void deleteNotifyDate(long id) {
+    public void deleteNotifyDate(long id) {
         String table = DatabaseHelper.TABLE_NOTIFYDATES;
         String where = DatabaseHelper.COLUMN_NOTIFYDATES_ID + "=" + id;
         database.delete(table, where, null);
     }
 
-    NotifyDate getNextNotifyDate() {
+    public NotifyDate getNextNotifyDate() {
         NotifyDate notifyDate = new NotifyDate();
 
         Cursor cursor = database.query(DatabaseHelper.VIEW_NOTIFYDATES, null, null, null, null, null, null);
@@ -580,7 +589,7 @@ public class DatabaseAdapter {
         }
     }
 
-    void updateNotifyDate(RoundDate roundDate) {
+    public void updateNotifyDate(RoundDate roundDate) {
 
         NotifySettings notifySettings = new NotifySettings(getContext());
         // удаялем старые уведомления
@@ -673,7 +682,7 @@ public class DatabaseAdapter {
     }
 
 
-    int updateEvent(Event event) {
+    public int updateEvent(Event event) {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.COLUMN_EVENTS_NAME, event.getName());
         cv.put(DatabaseHelper.COLUMN_EVENTS_COMMENT, event.getComment());
@@ -691,31 +700,31 @@ public class DatabaseAdapter {
         return database.update(DatabaseHelper.TABLE_EVENTS, cv, where, null);
     }
 
-    void deleteAllNotifyDates() {
+    public void deleteAllNotifyDates() {
         String table = DatabaseHelper.TABLE_NOTIFYDATES;
         database.delete(table, null, null);
     }
 
-    void deleteRoundDates(long id, int unit) {
+    public void deleteRoundDates(long id, int unit) {
         String table = DatabaseHelper.TABLE_ROUNDDATES;
         String where = DatabaseHelper.COLUMN_ROUNDDATES_ID_EVENT + "=" + id + " AND " +
                 DatabaseHelper.COLUMN_ROUNDDATES_UNIT + "=" + unit;
         database.delete(table, where, null);
     }
 
-    void deleteEvent(long id) {
+    public void deleteEvent(long id) {
         String table = DatabaseHelper.TABLE_EVENTS;
         String where = DatabaseHelper.COLUMN_EVENTS_ID + "=" + id;
         database.delete(table, where, null);
     }
 
-    void deleteEventsGroup(long id) {
+    public void deleteEventsGroup(long id) {
         String table = DatabaseHelper.TABLE_EVENT_GROUPS;
         String where = DatabaseHelper.COLUMN_EVENTGROUPS_ID + "=" + id;
         database.delete(table, where, null);
     }
 
-    EventGroup getEventGroupById(long id) {
+    public EventGroup getEventGroupById(long id) {
 
         String selection = DatabaseHelper.COLUMN_EVENTGROUPS_ID + "=" + id;
         Cursor cursor = database.query(DatabaseHelper.TABLE_EVENT_GROUPS, null, selection, null, null, null, null);
@@ -738,7 +747,7 @@ public class DatabaseAdapter {
         }
     }
 
-    int updateEventGroup(EventGroup eventGroup) {
+    public int updateEventGroup(EventGroup eventGroup) {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.COLUMN_EVENTGROUPS_NAME, eventGroup.getName());
         cv.put(DatabaseHelper.COLUMN_EVENTGROUPS_SOURCETRACKSETTINGS, eventGroup.getSourceTrackSettings());
@@ -753,14 +762,14 @@ public class DatabaseAdapter {
         return database.update(DatabaseHelper.TABLE_EVENT_GROUPS, cv, where, null);
     }
 
-    int updateRoundDateImportant(long id, int important) {
+    public int updateRoundDateImportant(long id, int important) {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.COLUMN_ROUNDDATES_IMPORTANT, important);
         String where = DatabaseHelper.COLUMN_ROUNDDATES_ID + "=" + id;
         return database.update(DatabaseHelper.TABLE_ROUNDDATES, cv, where, null);
     }
 
-    void getAllNotify() {
+    public void getAllNotify() {
         Cursor cursor = database.query(DatabaseHelper.TABLE_NOTIFYDATES, null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             Log.d("MyLog", "Количество уведомлений = " + cursor.getCount());

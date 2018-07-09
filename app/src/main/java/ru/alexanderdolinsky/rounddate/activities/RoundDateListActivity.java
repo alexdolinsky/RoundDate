@@ -1,4 +1,4 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -9,6 +9,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.List;
+
+import ru.alexanderdolinsky.rounddate.adapters.RoundDateAdapter;
+import ru.alexanderdolinsky.rounddate.db.DatabaseAdapter;
+import ru.alexanderdolinsky.rounddate.dialogs.DialogScreen;
+import ru.alexanderdolinsky.rounddate.R;
+import ru.alexanderdolinsky.rounddate.data.RoundDate;
 
 public class RoundDateListActivity extends AppCompatActivity {
 
@@ -21,7 +27,7 @@ public class RoundDateListActivity extends AppCompatActivity {
     private int positionSelectedRoundDate;
 
     ListView roundDatesList;
-    RoundDateAdapter roundDateAdapter;
+    public RoundDateAdapter roundDateAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

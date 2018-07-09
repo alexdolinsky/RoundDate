@@ -1,10 +1,12 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.data;
 
 
 import android.content.Context;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import ru.alexanderdolinsky.rounddate.R;
 
 /**
  * Created by Alexsvet on 04.06.2017.
@@ -39,23 +41,23 @@ public class RoundDate {
     int important;
 
     // константы размерностей Круглой даты
-    final static int UNIT_YEARS = 1;
-    final static int UNIT_MONTHS = 2;
-    final static int UNIT_WEEKS = 3;
-    final static int UNIT_DAYS = 4;
-    final static int UNIT_HOURS = 5;
-    final static int UNIT_MINUTES = 6;
-    final static int UNIT_SECS = 7;
+    public final static int UNIT_YEARS = 1;
+    public final static int UNIT_MONTHS = 2;
+    public final static int UNIT_WEEKS = 3;
+    public final static int UNIT_DAYS = 4;
+    public final static int UNIT_HOURS = 5;
+    public final static int UNIT_MINUTES = 6;
+    public final static int UNIT_SECS = 7;
 
-    final static int STANDART = 0;
-    final static int RARE = 1;
-    final static int VERY_RARE = 2;
-    final static int IMPORTANT = 1;
-    final static int VERY_IMPORTANT = 2;
-    final static int NOT_IMPORTANT = 3;
+    public final static int STANDART = 0;
+    public final static int RARE = 1;
+    public final static int VERY_RARE = 2;
+    public final static int IMPORTANT = 1;
+    public final static int VERY_IMPORTANT = 2;
+    public final static int NOT_IMPORTANT = 3;
 
 
-    RoundDate() {
+    public RoundDate() {
         this.id = -1;
         this.valueOf = 1;
         this.unit = 4;
@@ -66,7 +68,7 @@ public class RoundDate {
         this.important = 0;
     }
 
-    RoundDate(long id,
+    public RoundDate(long id,
               long valueOf,
               int unit,
               Calendar dateAndTime,
@@ -92,31 +94,31 @@ public class RoundDate {
         this.id = id;
     }
 
-    long getValueOf() {
+    public long getValueOf() {
         return valueOf;
     }
 
-    void setValueOf(long valueOf) {
+    public void setValueOf(long valueOf) {
         this.valueOf = valueOf;
     }
 
-    int getUnit() {
+    public int getUnit() {
         return unit;
     }
 
-    void setUnit(int unit) {
+    public void setUnit(int unit) {
         this.unit = unit;
     }
 
-    Calendar getDateAndTime() {
+    public Calendar getDateAndTime() {
         return dateAndTime;
     }
 
-    void setDateAndTime(Calendar dateAndTime) {
+    public void setDateAndTime(Calendar dateAndTime) {
         this.dateAndTime = dateAndTime;
     }
 
-    long getIdEvent() {
+    public long getIdEvent() {
         return idEvent;
     }
 
@@ -124,31 +126,31 @@ public class RoundDate {
         this.idEvent = idEvent;
     }
 
-    String getNameEvent() {
+    public String getNameEvent() {
         return nameEvent;
     }
 
-    void setNameEvent(String nameEvent) {
+    public void setNameEvent(String nameEvent) {
         this.nameEvent = nameEvent;
     }
 
-    int getRare() {
+    public int getRare() {
         return rare;
     }
 
-    void setRare(int rare) {
+    public void setRare(int rare) {
         this.rare = rare;
     }
 
-    int getImportant() {
+    public int getImportant() {
         return important;
     }
 
-    void setImportant(int important) {
+    public void setImportant(int important) {
         this.important = important;
     }
 
-    static String getUnit(Context context, long value, int unit) {
+    public static String getUnit(Context context, long value, int unit) {
 
         int value10 = (int) value % 10;
         int value100 = (int) value % 100;
@@ -201,7 +203,7 @@ public class RoundDate {
         }
     }
 
-    static String getTimeToWait(Context context, Calendar dateAndTime) {
+    public static String getTimeToWait(Context context, Calendar dateAndTime) {
         Calendar currentDateAndTime = new GregorianCalendar();
         long duration = dateAndTime.getTimeInMillis() - currentDateAndTime.getTimeInMillis();
 
@@ -213,7 +215,7 @@ public class RoundDate {
             return context.getString(R.string.over) + " " + value + " " + getGenitiveUnit(context, value, RoundDate.UNIT_MONTHS);
         } else if (duration > 86400000L) { //если разница более 1 дня
             long value = duration / 86400000L;
-            return value + " " + getGenitiveUnit(context, value, RoundDate.UNIT_DAYS);
+            return value + " " + getUnit(context, value, RoundDate.UNIT_DAYS);
         } else if (duration > 3600000L) { //если разница более 1 часа
             long value = duration / 3600000L;
             return value + " " + getUnit(context, value, RoundDate.UNIT_HOURS);

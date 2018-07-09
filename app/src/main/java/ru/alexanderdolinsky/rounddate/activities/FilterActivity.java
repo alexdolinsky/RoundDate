@@ -1,7 +1,9 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import ru.alexanderdolinsky.rounddate.R;
 
 public class FilterActivity extends AppCompatActivity {
 

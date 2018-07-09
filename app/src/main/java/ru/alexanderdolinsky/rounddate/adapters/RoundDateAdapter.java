@@ -1,4 +1,4 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,19 +12,22 @@ import java.text.DateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import ru.alexanderdolinsky.rounddate.R;
+import ru.alexanderdolinsky.rounddate.data.RoundDate;
+
 /**
  * Created by Alexsvet on 24.06.2017.
  * Класс адаптера круглых дат
  */
 
-class RoundDateAdapter extends ArrayAdapter<RoundDate> {
+public class RoundDateAdapter extends ArrayAdapter<RoundDate> {
 
     private LayoutInflater inflater;
     private int layout;
     private List<RoundDate> roundDates;
     private Context context;
 
-    RoundDateAdapter(Context context, int resource, List<RoundDate> roundDates) {
+    public RoundDateAdapter(Context context, int resource, List<RoundDate> roundDates) {
         super(context, resource, roundDates);
         this.roundDates = roundDates;
         this.layout = resource;

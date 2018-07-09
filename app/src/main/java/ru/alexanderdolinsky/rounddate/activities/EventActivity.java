@@ -1,4 +1,4 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,12 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import ru.alexanderdolinsky.rounddate.data.Event;
+import ru.alexanderdolinsky.rounddate.db.DatabaseAdapter;
+import ru.alexanderdolinsky.rounddate.R;
+import ru.alexanderdolinsky.rounddate.data.RoundDate;
+import ru.alexanderdolinsky.rounddate.dialogs.DialogScreen;
 
 public class EventActivity extends AppCompatActivity {
 

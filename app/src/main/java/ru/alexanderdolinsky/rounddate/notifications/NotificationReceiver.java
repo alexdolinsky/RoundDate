@@ -1,10 +1,10 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.notifications;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.os.Build;
 
 import static android.support.v4.content.ContextCompat.startForegroundService;
 
@@ -14,10 +14,9 @@ public class NotificationReceiver extends BroadcastReceiver {
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("MyLog", "1");
         Intent service = new Intent(context, NotificationService.class);
-        Log.d("MyLog", "2");
-        //context.startService(service);
-        startForegroundService(context, service);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(context, service);
+        } else {context.startService(service);}
     }
 }

@@ -1,4 +1,4 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.activities;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -26,6 +26,15 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+
+import ru.alexanderdolinsky.rounddate.data.Event;
+import ru.alexanderdolinsky.rounddate.data.EventGroup;
+import ru.alexanderdolinsky.rounddate.db.DatabaseAdapter;
+import ru.alexanderdolinsky.rounddate.dialogs.DialogScreen;
+import ru.alexanderdolinsky.rounddate.notifications.NotificationReceiver;
+import ru.alexanderdolinsky.rounddate.R;
+import ru.alexanderdolinsky.rounddate.data.RoundDate;
+import ru.alexanderdolinsky.rounddate.data.TrackSettings;
 
 
 public class AddEditEventActivity extends AppCompatActivity {

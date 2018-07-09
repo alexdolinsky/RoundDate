@@ -1,8 +1,13 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import ru.alexanderdolinsky.rounddate.notifications.NotificationService;
+import ru.alexanderdolinsky.rounddate.R;
+import ru.alexanderdolinsky.rounddate.data.EventGroup;
+import ru.alexanderdolinsky.rounddate.data.TrackSettings;
 
 
 /**
@@ -10,7 +15,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Класс DatabaseHelper
  */
 
-class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "RoundDate.db"; // название базы данных
     private static final int SCHEMA = 1; // версия базы данных

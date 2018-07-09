@@ -1,4 +1,4 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,18 +12,21 @@ import java.text.DateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import ru.alexanderdolinsky.rounddate.R;
+import ru.alexanderdolinsky.rounddate.data.Event;
+
 /**
  * Created by Alexsvet on 17.06.2017.
  * Класс адаптер списка событий
  */
 
-class EventAdapter extends ArrayAdapter<Event> {
+public class EventAdapter extends ArrayAdapter<Event> {
 
     private LayoutInflater inflater;
     private int layout;
     private List<Event> events;
 
-    EventAdapter(Context context, int resource, List<Event> events) {
+    public EventAdapter(Context context, int resource, List<Event> events) {
         super(context, resource, events);
         this.events = events;
         this.layout = resource;

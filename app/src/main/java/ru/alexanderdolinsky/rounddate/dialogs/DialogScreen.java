@@ -1,4 +1,4 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.dialogs;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -9,56 +9,67 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import ru.alexanderdolinsky.rounddate.R;
+import ru.alexanderdolinsky.rounddate.activities.AddEditEventActivity;
+import ru.alexanderdolinsky.rounddate.activities.EditEventGroupActivity;
+import ru.alexanderdolinsky.rounddate.activities.EventActivity;
+import ru.alexanderdolinsky.rounddate.activities.EventListActivity;
+import ru.alexanderdolinsky.rounddate.activities.MainActivity;
+import ru.alexanderdolinsky.rounddate.activities.RoundDateListActivity;
+import ru.alexanderdolinsky.rounddate.activities.SettingsActivity;
+import ru.alexanderdolinsky.rounddate.adapters.EventAdapter;
+import ru.alexanderdolinsky.rounddate.db.DatabaseAdapter;
+
 /**
  * Created by Alexsvet on 08.06.2017.
  * Диалоговые окна
  */
 
-class DialogScreen {
+public class DialogScreen {
 
-    final static int IDD_RD_YEARS = 0;
-    final static int IDD_RD_MONTHS = 1;
-    final static int IDD_RD_WEEKS = 2;
-    final static int IDD_RD_DAYS = 3;
-    final static int IDD_RD_HOURS = 4;
-    final static int IDD_RD_MINUTES = 5;
-    final static int IDD_RD_SECS = 6;
-    final static int IDD_RD_YEARS_2 = 10;
-    final static int IDD_RD_MONTHS_2 = 11;
-    final static int IDD_RD_WEEKS_2 = 12;
-    final static int IDD_RD_DAYS_2 = 13;
-    final static int IDD_RD_HOURS_2 = 14;
-    final static int IDD_RD_MINUTES_2 = 15;
-    final static int IDD_RD_SECS_2 = 16;
-    final static int IDD_RD_YEARS_3 = 20;
-    final static int IDD_RD_MONTHS_3 = 21;
-    final static int IDD_RD_WEEKS_3 = 22;
-    final static int IDD_RD_DAYS_3 = 23;
-    final static int IDD_RD_HOURS_3 = 24;
-    final static int IDD_RD_MINUTES_3 = 25;
-    final static int IDD_RD_SECS_3 = 26;
+    public final static int IDD_RD_YEARS = 0;
+    public final static int IDD_RD_MONTHS = 1;
+    public final static int IDD_RD_WEEKS = 2;
+    public final static int IDD_RD_DAYS = 3;
+    public final static int IDD_RD_HOURS = 4;
+    public final static int IDD_RD_MINUTES = 5;
+    public final static int IDD_RD_SECS = 6;
+    public final static int IDD_RD_YEARS_2 = 10;
+    public final static int IDD_RD_MONTHS_2 = 11;
+    public final static int IDD_RD_WEEKS_2 = 12;
+    public final static int IDD_RD_DAYS_2 = 13;
+    public final static int IDD_RD_HOURS_2 = 14;
+    public final static int IDD_RD_MINUTES_2 = 15;
+    public final static int IDD_RD_SECS_2 = 16;
+    public final static int IDD_RD_YEARS_3 = 20;
+    public final static int IDD_RD_MONTHS_3 = 21;
+    public final static int IDD_RD_WEEKS_3 = 22;
+    public final static int IDD_RD_DAYS_3 = 23;
+    public final static int IDD_RD_HOURS_3 = 24;
+    public final static int IDD_RD_MINUTES_3 = 25;
+    public final static int IDD_RD_SECS_3 = 26;
 
-    final static int IDD_CHOICE_EVENT_GROUP = 30;
-    final static int DELETE_EVENT_CONFIRM = 40;
-    final static int DELETE_EVENTS_GROUP_CONFIRM = 41;
-    final static int IDD_CHOICE_IMPORTANT = 42;
-    final static int DELETE_EVENT_CONFIRM_2 = 43;
-    final static int DELETE_EVENTS_GROUP_CONFIRM_2 = 44;
-    final static int IDD_CHOICE_IMPORTANT_2 = 45;
-    final static int IDD_VERY_IMPORTANT_ROUNDDATE = 46;
-    final static int IDD_IMPORTANT_ROUNDDATE = 47;
-    final static int IDD_STANDART_ROUNDDATE = 48;
-    final static int IDD_SMALL_IMPORTANT_ROUNDDATE = 49;
+    public final static int IDD_CHOICE_EVENT_GROUP = 30;
+    public final static int DELETE_EVENT_CONFIRM = 40;
+    public final static int DELETE_EVENTS_GROUP_CONFIRM = 41;
+    public final static int IDD_CHOICE_IMPORTANT = 42;
+    public final static int DELETE_EVENT_CONFIRM_2 = 43;
+    public final static int DELETE_EVENTS_GROUP_CONFIRM_2 = 44;
+    public final static int IDD_CHOICE_IMPORTANT_2 = 45;
+    public final static int IDD_VERY_IMPORTANT_ROUNDDATE = 46;
+    public final static int IDD_IMPORTANT_ROUNDDATE = 47;
+    public final static int IDD_STANDART_ROUNDDATE = 48;
+    public final static int IDD_SMALL_IMPORTANT_ROUNDDATE = 49;
 
 
     private final int IDD_dialog;
 
 
-    DialogScreen(int ID) {
+    public DialogScreen(int ID) {
         this.IDD_dialog = ID;
     }
 
-    AlertDialog getDialog(final Activity activity) {
+    public AlertDialog getDialog(final Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         final CharSequence[] rdVariants = activity.getResources().getStringArray(R.array.rd_variants);

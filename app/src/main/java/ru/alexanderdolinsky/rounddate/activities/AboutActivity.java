@@ -1,4 +1,4 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.activities;
 
 import android.app.AlarmManager;
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Locale;
+
+import ru.alexanderdolinsky.rounddate.R;
 
 
 public class AboutActivity extends AppCompatActivity {

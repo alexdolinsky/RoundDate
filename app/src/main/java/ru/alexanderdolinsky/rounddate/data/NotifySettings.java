@@ -1,7 +1,9 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import ru.alexanderdolinsky.rounddate.R;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -10,7 +12,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Настройки уведомлений
  */
 
-class NotifySettings {
+public class NotifySettings {
     private int veryImportantRdMonth,
             veryImportantRdWeek,
             veryImportantRdDay,
@@ -38,7 +40,7 @@ class NotifySettings {
     private static final String MY_SETTINGS_SMALL_IMPORTANT_RD_DAY = "small_important_rd_day";
 
 
-    NotifySettings(Context context) {
+    public NotifySettings(Context context) {
         SharedPreferences mSettings = context.getSharedPreferences(TrackSettings.MY_SETTINGS, MODE_PRIVATE);
         this.veryImportantRdMonth = mSettings.getInt(MY_SETTINGS_VERY_IMPORTANT_RD_MONTH, Integer.valueOf(context.getString(R.string.very_important_rd_month)));
         this.veryImportantRdWeek = mSettings.getInt(MY_SETTINGS_VERY_IMPORTANT_RD_WEEK, Integer.valueOf(context.getString(R.string.very_important_rd_week)));
@@ -54,7 +56,7 @@ class NotifySettings {
         this.smallImportantRdDay = mSettings.getInt(MY_SETTINGS_SMALL_IMPORTANT_RD_DAY, Integer.valueOf(context.getString(R.string.small_important_rd_day)));
     }
 
-    void save(Context context) {
+    public void save(Context context) {
 
         SharedPreferences mSettings = context.getSharedPreferences(TrackSettings.MY_SETTINGS, MODE_PRIVATE);
         SharedPreferences.Editor editor = mSettings.edit();
@@ -75,7 +77,7 @@ class NotifySettings {
     }
 
 
-    boolean comparedWith(NotifySettings notifySettings) {
+    public boolean comparedWith(NotifySettings notifySettings) {
         return (this.getVeryImportantRdDay() == notifySettings.getVeryImportantRdDay() &&
                 this.getVeryImportantRdWeek() == notifySettings.getVeryImportantRdWeek() &&
                 this.getVeryImportantRdMonth() == notifySettings.getVeryImportantRdMonth() &&
@@ -90,99 +92,99 @@ class NotifySettings {
                 this.getSmallImportantRdMonth() == notifySettings.getSmallImportantRdMonth());
     }
 
-    int getVeryImportantRdMonth() {
+    public int getVeryImportantRdMonth() {
         return veryImportantRdMonth;
     }
 
-    void setVeryImportantRdMonth(int veryImportantRdMonth) {
+    public void setVeryImportantRdMonth(int veryImportantRdMonth) {
         this.veryImportantRdMonth = veryImportantRdMonth;
     }
 
-    int getVeryImportantRdWeek() {
+    public int getVeryImportantRdWeek() {
         return veryImportantRdWeek;
     }
 
-    void setVeryImportantRdWeek(int veryImportantRdWeek) {
+    public void setVeryImportantRdWeek(int veryImportantRdWeek) {
         this.veryImportantRdWeek = veryImportantRdWeek;
     }
 
-    int getVeryImportantRdDay() {
+    public int getVeryImportantRdDay() {
         return veryImportantRdDay;
     }
 
-    void setVeryImportantRdDay(int veryImportantRdDay) {
+    public void setVeryImportantRdDay(int veryImportantRdDay) {
         this.veryImportantRdDay = veryImportantRdDay;
     }
 
-    int getImportantRdMonth() {
+    public int getImportantRdMonth() {
         return importantRdMonth;
     }
 
-    void setImportantRdMonth(int importantRdMonth) {
+    public void setImportantRdMonth(int importantRdMonth) {
         this.importantRdMonth = importantRdMonth;
     }
 
-    int getImportantRdWeek() {
+    public int getImportantRdWeek() {
         return importantRdWeek;
     }
 
-    void setImportantRdWeek(int importantRdWeek) {
+    public void setImportantRdWeek(int importantRdWeek) {
         this.importantRdWeek = importantRdWeek;
     }
 
-    int getImportantRdDay() {
+    public int getImportantRdDay() {
         return importantRdDay;
     }
 
-    void setImportantRdDay(int importantRdDay) {
+    public void setImportantRdDay(int importantRdDay) {
         this.importantRdDay = importantRdDay;
     }
 
-    int getStandartRdMonth() {
+    public int getStandartRdMonth() {
         return standartRdMonth;
     }
 
-    void setStandartRdMonth(int standartRdMonth) {
+    public void setStandartRdMonth(int standartRdMonth) {
         this.standartRdMonth = standartRdMonth;
     }
 
-    int getStandartRdWeek() {
+    public int getStandartRdWeek() {
         return standartRdWeek;
     }
 
-    void setStandartRdWeek(int standartRdWeek) {
+    public void setStandartRdWeek(int standartRdWeek) {
         this.standartRdWeek = standartRdWeek;
     }
 
-    int getStandartRdDay() {
+    public int getStandartRdDay() {
         return standartRdDay;
     }
 
-    void setStandartRdDay(int standartRdDay) {
+    public void setStandartRdDay(int standartRdDay) {
         this.standartRdDay = standartRdDay;
     }
 
-    int getSmallImportantRdMonth() {
+    public int getSmallImportantRdMonth() {
         return smallImportantRdMonth;
     }
 
-    void setSmallImportantRdMonth(int smallImportantRdMonth) {
+    public void setSmallImportantRdMonth(int smallImportantRdMonth) {
         this.smallImportantRdMonth = smallImportantRdMonth;
     }
 
-    int getSmallImportantRdWeek() {
+    public int getSmallImportantRdWeek() {
         return smallImportantRdWeek;
     }
 
-    void setSmallImportantRdWeek(int smallImportantRdWeek) {
+    public void setSmallImportantRdWeek(int smallImportantRdWeek) {
         this.smallImportantRdWeek = smallImportantRdWeek;
     }
 
-    int getSmallImportantRdDay() {
+    public int getSmallImportantRdDay() {
         return smallImportantRdDay;
     }
 
-    void setSmallImportantRdDay(int smallImportantRdDay) {
+    public void setSmallImportantRdDay(int smallImportantRdDay) {
         this.smallImportantRdDay = smallImportantRdDay;
     }
 }

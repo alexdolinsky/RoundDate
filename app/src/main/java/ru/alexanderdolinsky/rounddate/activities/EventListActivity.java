@@ -1,4 +1,4 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+
+import ru.alexanderdolinsky.rounddate.adapters.EventAdapter;
+import ru.alexanderdolinsky.rounddate.data.Event;
+import ru.alexanderdolinsky.rounddate.data.EventGroup;
+import ru.alexanderdolinsky.rounddate.db.DatabaseAdapter;
+import ru.alexanderdolinsky.rounddate.R;
+import ru.alexanderdolinsky.rounddate.dialogs.DialogScreen;
 
 public class EventListActivity extends AppCompatActivity {
 
@@ -33,7 +40,7 @@ public class EventListActivity extends AppCompatActivity {
     private List<Event> events;
     private Event selectedEvent;
 
-    ListView eventsList;
+    public ListView eventsList;
 
 
     @Override

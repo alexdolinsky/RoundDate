@@ -1,17 +1,17 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.data;
 
 /**
  * Created by Alexsvet on 16.07.2017.
  * класс Уведомления
  */
 
-class NotifyDate extends RoundDate {
-    static final long NOT_NOTIFY = -1;
+public class NotifyDate extends RoundDate {
+    public static final long NOT_NOTIFY = -1;
     private long id;
     private long notifyDateAndTime;
     private long idRoundDate;
 
-    NotifyDate(long id, long notifyDateAndTime, RoundDate roundDate) {
+    public NotifyDate(long id, long notifyDateAndTime, RoundDate roundDate) {
         this.id = id;
         this.valueOf = roundDate.valueOf;
         this.unit = roundDate.unit;
@@ -23,18 +23,18 @@ class NotifyDate extends RoundDate {
         this.important = roundDate.important;
     }
 
-    NotifyDate() {
+    public NotifyDate() {
         super();
         this.id = NOT_NOTIFY;
         this.notifyDateAndTime = 0;
         this.idRoundDate = -1;
     }
 
-    long getNotifyDateAndTime() {
+    public long getNotifyDateAndTime() {
         return notifyDateAndTime;
     }
 
-    void setNotifyDateAndTime(long notifyDateAndTime) {
+    public void setNotifyDateAndTime(long notifyDateAndTime) {
         this.notifyDateAndTime = notifyDateAndTime;
     }
 
@@ -52,7 +52,7 @@ class NotifyDate extends RoundDate {
         return idRoundDate;
     }
 
-    void setIdRoundDate(long idRoundDate) {
+    public void setIdRoundDate(long idRoundDate) {
         this.idRoundDate = idRoundDate;
     }
 }

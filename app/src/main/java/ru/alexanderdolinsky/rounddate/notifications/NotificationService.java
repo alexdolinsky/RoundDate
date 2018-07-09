@@ -1,7 +1,6 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.notifications;
 
 import android.app.AlarmManager;
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,17 +8,22 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Locale;
+import java.util.Objects;
+
+import ru.alexanderdolinsky.rounddate.R;
+import ru.alexanderdolinsky.rounddate.activities.MainActivity;
+import ru.alexanderdolinsky.rounddate.data.NotifyDate;
+import ru.alexanderdolinsky.rounddate.data.RoundDate;
+import ru.alexanderdolinsky.rounddate.db.DatabaseAdapter;
 
 
 /**
@@ -29,7 +33,7 @@ import java.util.Locale;
 
 public class NotificationService extends Service {
 
-    static final long MINUTE_30 = 30 * 60 * 1000L;
+    public static final long MINUTE_30 = 30 * 60 * 1000L;
     private static final int NOTIFICATION_ID = 0;
     private static final String CHANNEL_ID = "My channel ID";
 
@@ -46,60 +50,55 @@ public class NotificationService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        if (Build.VERSION.SDK_INT >= 26) {
-            String CHANNEL_ID = "my_channel_01";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String CHANNEL_ID = "foreground_channel";
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                     "Channel human readable title",
                     NotificationManager.IMPORTANCE_DEFAULT);
 
-            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+            ((NotificationManager) Objects.requireNonNull(getSystemService(Context.NOTIFICATION_SERVICE))).createNotificationChannel(channel);
 
-            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setContentTitle("")
-                    .setContentText("").build();
+                    .setContentText("");
+            Notification notification = builder.build();
 
             startForeground(1, notification);
         }
 
-        //startForeground(101, new Notification.Builder(this).build());
-        Log.d("MyLog", "3");
+
         // открываем подключение
         DatabaseAdapter adapter = new DatabaseAdapter(this);
         adapter.open();
 
-        Log.d("MyLog", "4");
         // получаем данные следующего уведомления
 
         NotifyDate notifyDate = adapter.getNextNotifyDate();
 
-        Log.d("MyLog", "5");
         if (notifyDate != null) {
             if ((System.currentTimeMillis() - notifyDate.getNotifyDateAndTime() < MINUTE_30) &&
                     (System.currentTimeMillis() - notifyDate.getNotifyDateAndTime() >= 0)) {
-                Log.d("MyLog", "6");
                 setNotification(notifyDate);
-                Log.d("MyLog", "7");
                 adapter.deleteNotifyDate(notifyDate.getId());
-                Log.d("MyLog", "8");
                 notifyDate = adapter.getNextNotifyDate();
             }
 
-            Log.d("MyLog", "9");
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             Intent i = new Intent(this, NotificationReceiver.class);
 
-            Log.d("MyLog", "10");
             PendingIntent pending = PendingIntent.getBroadcast(this, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
-            Log.d("MyLog", "11");
             long t = notifyDate.getNotifyDateAndTime();
-            Log.d("MyLog", "12");
-            alarmManager.set(AlarmManager.RTC_WAKEUP, t, pending);
+            if (alarmManager != null) {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, t, pending);
+            }
             Log.d("MyLog", "Следущий будильник будет - " + DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault()).format(notifyDate.getNotifyDateAndTime()) + " " // дата
                     + DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault()).format(notifyDate.getNotifyDateAndTime()));
         }
         adapter.close();
 
-        stopForeground(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            stopForeground(true);
+        }
         stopSelf();
     }
 

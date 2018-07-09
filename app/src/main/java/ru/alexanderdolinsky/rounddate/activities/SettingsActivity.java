@@ -1,4 +1,4 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +9,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.util.List;
+
+import ru.alexanderdolinsky.rounddate.db.DatabaseAdapter;
+import ru.alexanderdolinsky.rounddate.dialogs.DialogScreen;
+import ru.alexanderdolinsky.rounddate.data.Event;
+import ru.alexanderdolinsky.rounddate.data.NotifySettings;
+import ru.alexanderdolinsky.rounddate.R;
+import ru.alexanderdolinsky.rounddate.data.RoundDate;
+import ru.alexanderdolinsky.rounddate.data.TrackSettings;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -86,30 +94,6 @@ public class SettingsActivity extends AppCompatActivity {
         // Сохраняем настройки отслеживания и уведомлений
         getTrackSettings().save(this);
         getNotifySettings().save(this);
-/*        SharedPreferences mSettings = getSharedPreferences(TrackSettings.MY_SETTINGS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = mSettings.edit();
-        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_YEARS, trackSettings.getRdInYears());
-        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_MONTHS, trackSettings.getRdInMonths());
-        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_WEEKS, trackSettings.getRdInWeeks());
-        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_DAYS, trackSettings.getRdInDays());
-        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_HOURS, trackSettings.getRdInHours());
-        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_MINUTES, trackSettings.getRdInMinutes());
-        editor.putInt(TrackSettings.MY_SETTINGS_RD_IN_SECS, trackSettings.getRdInSecs());
-        editor.apply();
-
-        editor.putInt(NotifySettings.MY_SETTINGS_VERY_IMPORTANT_RD_MONTH, notifySettings.getVeryImportantRdMonth());
-        editor.putInt(NotifySettings.MY_SETTINGS_VERY_IMPORTANT_RD_WEEK, notifySettings.getVeryImportantRdWeek());
-        editor.putInt(NotifySettings.MY_SETTINGS_VERY_IMPORTANT_RD_DAY, notifySettings.getVeryImportantRdDay());
-        editor.putInt(NotifySettings.MY_SETTINGS_IMPORTANT_RD_MONTH, notifySettings.getImportantRdMonth());
-        editor.putInt(NotifySettings.MY_SETTINGS_IMPORTANT_RD_WEEK, notifySettings.getImportantRdWeek());
-        editor.putInt(NotifySettings.MY_SETTINGS_IMPORTANT_RD_DAY, notifySettings.getImportantRdDay());
-        editor.putInt(NotifySettings.MY_SETTINGS_STANDART_RD_MONTH, notifySettings.getStandartRdMonth());
-        editor.putInt(NotifySettings.MY_SETTINGS_STANDART_RD_WEEK, notifySettings.getStandartRdWeek());
-        editor.putInt(NotifySettings.MY_SETTINGS_STANDART_RD_DAY, notifySettings.getStandartRdDay());
-        editor.putInt(NotifySettings.MY_SETTINGS_SMALL_IMPORTANT_RD_MONTH, notifySettings.getSmallImportantRdMonth());
-        editor.putInt(NotifySettings.MY_SETTINGS_SMALL_IMPORTANT_RD_WEEK, notifySettings.getSmallImportantRdWeek());
-        editor.putInt(NotifySettings.MY_SETTINGS_SMALL_IMPORTANT_RD_DAY, notifySettings.getSmallImportantRdDay());*/
-
 
         // Связь с БД и ее открытие
         DatabaseAdapter adapter = new DatabaseAdapter(this);

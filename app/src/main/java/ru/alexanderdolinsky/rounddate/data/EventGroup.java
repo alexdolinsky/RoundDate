@@ -1,11 +1,11 @@
-package ru.alexanderdolinsky.rounddate;
+package ru.alexanderdolinsky.rounddate.data;
 
 /**
  * Created by Alexsvet on 04.06.2017.
  * Класс Группа событий
  */
 
-class EventGroup {
+public class EventGroup {
     // Идентификатор Группы событий и БД
     // -1 - значение не определено
     private long id;
@@ -14,20 +14,20 @@ class EventGroup {
     // источник настроек отслеживания
     private int sourceTrackSettings;
     // константы источников настроек отслеживания
-    static final int SOURCE_TRACK_SETTINGS_APP = 0;
-    static final int SOURCE_TRACK_SETTINGS_GROUP = 1;
+    public static final int SOURCE_TRACK_SETTINGS_APP = 0;
+    public static final int SOURCE_TRACK_SETTINGS_GROUP = 1;
     // индивидуальные настройки отслеживания Группы событий
     private TrackSettings trackSettings;
 
     // конструктор по умолчанию
-    EventGroup() {
+    public EventGroup() {
         this.id = -1;
         this.name = "Мои события";
         this.sourceTrackSettings = SOURCE_TRACK_SETTINGS_APP;
         this.trackSettings = new TrackSettings(0,0,0,0,0,0,0);
     }
     // конструктор при создании новой Группы событий
-    EventGroup(long id, String name, int sourceTrackSettings, TrackSettings trackSettings) {
+    public EventGroup(long id, String name, int sourceTrackSettings, TrackSettings trackSettings) {
         this.id = id;
         this.name = name;
         this.sourceTrackSettings = sourceTrackSettings;
@@ -50,19 +50,19 @@ class EventGroup {
         this.name = name;
     }
 
-    int getSourceTrackSettings() {
+    public int getSourceTrackSettings() {
         return sourceTrackSettings;
     }
 
-    void setSourceTrackSettings(int sourceTrackSettings) {
+    public void setSourceTrackSettings(int sourceTrackSettings) {
         this.sourceTrackSettings = sourceTrackSettings;
     }
 
-    TrackSettings getTrackSettings() {
+    public TrackSettings getTrackSettings() {
         return trackSettings;
     }
 
-    void setTrackSettings(TrackSettings trackSettings) {
+    public void setTrackSettings(TrackSettings trackSettings) {
         this.trackSettings = trackSettings;
     }
 
